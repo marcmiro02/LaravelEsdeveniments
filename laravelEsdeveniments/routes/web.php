@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\UsersController;
 
 
 Route::get('/', function () {
@@ -18,9 +19,9 @@ Route::get('/dashboard', function () {
 
 
 //--------------------------------------- USERS ---------------------------------------//
-//Route::resource('users', UsersController::class)->parameters([
-//    'users' => 'id_usuari'
-//])->middleware(['auth', 'verified']);
+Route::resource('users', UsersController::class)->parameters([
+   'users' => 'id_usuari'
+])->middleware(['auth', 'verified']);
 
 
 //-------------------------------------- EMPRESES --------------------------------------//

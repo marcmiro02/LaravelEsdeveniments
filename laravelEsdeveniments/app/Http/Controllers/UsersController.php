@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Empreses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 
 class UsersController extends Controller
@@ -12,10 +14,40 @@ class UsersController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        // Si el usuario es Admin
+        if (Auth::user()->rol == 1) { // 1 = Admin
+            // Filtrado por empresa
+            $empresas = Empreses::all();
+            $empresaId = $request->get('empresa_id', null); // Obtener el ID de la empresa si se ha filtrado
+
+            if ($empresaId) {
+                // Si se selecciona una empresa, mostramos solo los usuarios de esa empresa
+                $users = User::where('id_empresa', $empresaId)->get();
+            } else {
+                // Si no se selecciona ninguna empresa, mostramos todos los usuarios
+                $users = User::all();
+            }
+
+            return view('users.index', compact('users', 'empresas', 'empresaId'));
+        }
+
+        // Si el usuario es Subadmin
+        if (Auth::user()->rol == 2) { // 2 = Subadmin
+            // Solo mostramos los trabajadores de la misma empresa
+            $empresaId = Auth::user()->id_empresa;
+
+            // Mostrar trabajadores
+            $users = User::where('id_empresa', $empresaId)->where('rol', 3) // 3 = Trabajador
+                        ->orWhere('rol', 2) // También se incluyen los subadmins
+                        ->get();
+
+            return view('users.index', compact('users', 'empresaId'));
+        }
+
+        // Si el usuario es otro rol, no debe poder ver esta vista
+        return redirect()->route('dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 
     /**
@@ -23,7 +55,13 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        // Si el usuario autenticado es Admin, pasa las empresas
+        if (Auth::user()->rol == 1) { // 1 = Admin
+            $empresas = Empreses::all();
+            return view('users.create', compact('empresas'));
+        } else {
+            return view('users.create');
+        }
     }
 
     /**
@@ -31,7 +69,10 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $userRole = Auth::user()->rol;  // Obtenemos el rol del usuario autenticado
+
+        // Validaciones comunes
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'nom_usuari' => ['required', 'string', 'max:255', 'unique:users,nom_usuari'],
@@ -42,22 +83,30 @@ class UsersController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'rol' => ['required', 'integer'],
-            'id_empresa' => ['required', 'integer'],
         ]);
 
+        // Si es Admin, se valida el campo id_empresa
+        if ($userRole == 1) { // Admin
+            $validatedData['id_empresa'] = $request->id_empresa;
+        } else {  // Si es Subadmin, asignar automáticamente la empresa
+            $validatedData['id_empresa'] = Auth::user()->id_empresa;
+        }
+
+        // Crear el nuevo usuario
         $user = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'nom_usuari' => $request->nom_usuari,
-            'email' => $request->email,
-            'adreca' => $request->adreca,
-            'targeta_bancaria' => $request->targeta_bancaria,
-            'data_naixement' => $request->data_naixement,
-            'password' => Hash::make($request->password),
-            'rol' => $request->rol,
-            'id_empresa' => $request->id_empresa,
+            'name' => $validatedData['name'],
+            'surname' => $validatedData['surname'],
+            'nom_usuari' => $validatedData['nom_usuari'],
+            'email' => $validatedData['email'],
+            'adreca' => $validatedData['adreca'],
+            'targeta_bancaria' => $validatedData['targeta_bancaria'],
+            'data_naixement' => $validatedData['data_naixement'],
+            'password' => Hash::make($validatedData['password']),
+            'rol' => $validatedData['rol'],
+            'id_empresa' => $validatedData['id_empresa'],
         ]);
 
+        // Si el usuario sube una imagen de perfil
         if ($request->hasFile('foto_perfil')) {
             $image = $request->file('foto_perfil');
             $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
@@ -81,7 +130,22 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        // Si el usuario autenticado es Admin, pasa las empresas
+        if (Auth::user()->rol == 1) { // 1 = Admin
+            $empresas = Empreses::all();
+            return view('users.edit', compact('user', 'empresas'));
+        }
+    
+        // Si es Subadmin, solo puede editar usuarios de su empresa
+        if (Auth::user()->rol == 2) { // 2 = Subadmin
+            if (Auth::user()->id_empresa != $user->id_empresa) {
+                return redirect()->route('users.index')->with('error', 'No tienes permisos para editar este usuario.');
+            }
+            return view('users.edit', compact('user'));
+        }
+    
+        // Otros roles no deben poder acceder a la edición de usuarios
+        return redirect()->route('home')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 
     /**
@@ -89,6 +153,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Validaciones
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
@@ -102,7 +167,13 @@ class UsersController extends Controller
             'rol' => ['required', 'integer'],
             'id_empresa' => ['required', 'integer'],
         ]);
-
+    
+        // Si es Subadmin, verificar que no puede cambiar el rol o la empresa
+        if (Auth::user()->rol == 2 && $user->id_empresa != Auth::user()->id_empresa) {
+            return redirect()->route('users.index')->with('error', 'No puedes modificar usuarios de otras empresas.');
+        }
+    
+        // Actualizar usuario
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
@@ -115,14 +186,15 @@ class UsersController extends Controller
             'rol' => $request->rol,
             'id_empresa' => $request->id_empresa,
         ]);
-
+    
+        // Actualización de foto de perfil
         if ($request->hasFile('foto_perfil')) {
             $image = $request->file('foto_perfil');
             $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('public/avatars', $imageName);
             $user->update(['foto_perfil' => $imagePath]);
         }
-
+    
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
@@ -131,6 +203,11 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        // Si es Subadmin, solo puede eliminar usuarios de su empresa
+        if (Auth::user()->rol == 2 && $user->id_empresa != Auth::user()->id_empresa) {
+            return redirect()->route('users.index')->with('error', 'No tienes permisos para eliminar este usuario.');
+        }
+    
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
