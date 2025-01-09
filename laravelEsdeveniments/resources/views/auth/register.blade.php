@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -9,6 +9,20 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Surname -->
+        <div class="mt-4">
+            <x-input-label for="surname" :value="__('Surname')" />
+            <x-text-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" required autocomplete="surname" />
+            <x-input-error :messages="$errors->get('surname')" class="mt-2" />
+        </div>
+
+        <!-- Username -->
+        <div class="mt-4">
+            <x-input-label for="nom_usuari" :value="__('Username')" />
+            <x-text-input id="nom_usuari" class="block mt-1 w-full" type="text" name="nom_usuari" :value="old('nom_usuari')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('nom_usuari')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
@@ -16,26 +30,50 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Address -->
+        <div class="mt-4">
+            <x-input-label for="adreca" :value="__('Address')" />
+            <x-text-input id="adreca" class="block mt-1 w-full" type="text" name="adreca" :value="old('adreca')" required autocomplete="address" />
+            <x-input-error :messages="$errors->get('adreca')" class="mt-2" />
+        </div>
+
+        <!-- Bank Card -->
+        <div class="mt-4">
+            <x-input-label for="targeta_bancaria" :value="__('Bank Card')" />
+            <x-text-input id="targeta_bancaria" class="block mt-1 w-full" type="text" name="targeta_bancaria" :value="old('targeta_bancaria')" required autocomplete="cc-number" />
+            <x-input-error :messages="$errors->get('targeta_bancaria')" class="mt-2" />
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="mt-4">
+            <x-input-label for="data_naixament" :value="__('Date of Birth')" />
+            <x-text-input id="data_naixament" class="block mt-1 w-full" type="date" name="data_naixament" :value="old('data_naixament')" required autocomplete="bday" />
+            <x-input-error :messages="$errors->get('data_naixament')" class="mt-2" />
+        </div>
+
+        <!-- Profile Photo -->
+        <div class="mt-4">
+            <x-input-label for="foto_perfil" :value="__('Profile Photo')" />
+            <input id="foto_perfil" class="block mt-1 w-full" type="file" name="foto_perfil" accept="image/*" required />
+            <x-input-error :messages="$errors->get('foto_perfil')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
                             name="password_confirmation" required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 

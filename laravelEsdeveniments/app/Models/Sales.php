@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Sales extends Model
 {
     use HasFactory;
-    protected $connection = 'servidor_connection';
     /**
      * The table associated with the model.
      *

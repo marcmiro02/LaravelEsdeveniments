@@ -21,6 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'surname',
+        'adreca',
+        'nom_usuari',
+        'targeta_bancaria',
+        'data_naixement',
+        'foto_perfil',
+        'rol',
+        'id_empresa',
     ];
 
     /**
@@ -34,7 +42,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
      * @return array<string, string>
      */
@@ -43,6 +51,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'foto_perfil' => 'binary',
         ];
+    }
+
+    /**
+     * Relationship with the RolsUsuaris model.
+     */
+    public function rol()
+    {
+        return $this->belongsTo(RolsUsuaris::class, 'rol', 'id_rol');
+    }
+
+    /**
+     * Relationship with the Empreses model.
+     */
+    public function empresa()
+    {
+        return $this->belongsTo(Empreses::class, 'id_empresa', 'id_empresa');
     }
 }

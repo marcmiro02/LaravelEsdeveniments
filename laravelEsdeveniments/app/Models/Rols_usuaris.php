@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Rols_usuaris extends Model
 {
     use HasFactory;
-    protected $connection = 'servidor_connection';
     /**
      * The table associated with the model.
      *
