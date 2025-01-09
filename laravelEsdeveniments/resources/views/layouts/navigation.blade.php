@@ -24,7 +24,7 @@
                         {{ __('Categories') }}
                     </x-nav-link>
                 </div>
-                @endcan
+              
 
                 @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -42,7 +42,7 @@
                 </div>
                 @endcan
 
-                @can('isAdmin')
+           
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales')">
                         {{ __('Sales') }}
