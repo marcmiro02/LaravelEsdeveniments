@@ -45,11 +45,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', '100.115.30.79'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'laravel_esdeveniments'),
+            'username' => env('DB_USERNAME', 'DAMTASY'),
+            'password' => env('DB_PASSWORD', 'hola123'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
@@ -62,25 +62,7 @@ return [
             ]) : [],
         ],
 
-        'servidor_connection' => [
-            'driver' => 'mysql',
-            'url' => null,
-            'host' => env('SERVIDOR_HOST', '100.115.30.79'),
-            'port' => env('SERVIDOR_PORT', '3306'),
-            'database' => env('SERVIDOR_DATABASE', 'laravel_esdeveniments'),
-            'username' => env('SERVIDOR_USERNAME', 'DAMTASY'),
-            'password' => env('SERVIDOR_PASSWORD', 'hola123'),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => env('DB_CHARSET', 'utf8mb4'),
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
+        
 
         'mariadb' => [
             'driver' => 'mariadb',

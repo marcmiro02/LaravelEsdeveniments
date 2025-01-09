@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Empreses extends Model
 {
     use HasFactory;
-    protected $connection = 'servidor_connection';
+
     /**
      * The table associated with the model.
      *
