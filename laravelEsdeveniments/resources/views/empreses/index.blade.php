@@ -55,12 +55,6 @@
                                         <!-- Editar Empresa -->
                                         <a href="{{ route('empreses.edit', ['id_empresa' => $empresa->id_empresa]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Editar</a>
 
-                                        <!-- Eliminar Empresa -->
-                                        <form action="{{ route('empreses.destroy', ['id_empresa' => $empresa->id_empresa]) }}" method="POST" style="display:inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
-                                        </form>
 
                                     </td>
                                 </tr>

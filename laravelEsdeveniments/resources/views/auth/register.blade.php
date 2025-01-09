@@ -2,6 +2,12 @@
     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
+        @if ($errors->has('error'))
+            <div class="mt-4">
+                <span class="text-red-500">{{ $errors->first('error') }}</span>
+            </div>
+        @endif
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -46,15 +52,15 @@
 
         <!-- Date of Birth -->
         <div class="mt-4">
-            <x-input-label for="data_naixament" :value="__('Date of Birth')" />
-            <x-text-input id="data_naixament" class="block mt-1 w-full" type="date" name="data_naixament" :value="old('data_naixament')" required autocomplete="bday" />
-            <x-input-error :messages="$errors->get('data_naixament')" class="mt-2" />
+            <x-input-label for="data_naixement" :value="__('Date of Birth')" />
+            <x-text-input id="data_naixement" class="block mt-1 w-full" type="date" name="data_naixement" :value="old('data_naixement')" required autocomplete="bday" />
+            <x-input-error :messages="$errors->get('data_naixement')" class="mt-2" />
         </div>
 
         <!-- Profile Photo -->
         <div class="mt-4">
-            <x-input-label for="foto_perfil" :value="__('Profile Photo')" />
-            <input id="foto_perfil" class="block mt-1 w-full" type="file" name="foto_perfil" accept="image/*" required />
+            <label for="foto_perfil">Foto de perfil</label>
+            <input type="file" name="foto_perfil" id="foto_perfil" accept="image/*">
             <x-input-error :messages="$errors->get('foto_perfil')" class="mt-2" />
         </div>
 

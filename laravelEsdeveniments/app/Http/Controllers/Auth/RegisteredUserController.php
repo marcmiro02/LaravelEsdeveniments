@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -31,20 +32,44 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'surname' => ['required', 'string', 'max:255'],
+            'nom_usuari' => ['required', 'string', 'max:255', 'unique:users,nom_usuari'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'adreca' => ['required', 'string', 'max:255'],
+            'targeta_bancaria' => ['required', 'string', 'max:255'],
+            'data_naixement' => ['required', 'date'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            // Create the user
+            $user = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'nom_usuari' => $request->nom_usuari,
+                'email' => $request->email,
+                'adreca' => $request->adreca,
+                'targeta_bancaria' => $request->targeta_bancaria,
+                'data_naixement' => $request->data_naixement,
+                'password' => Hash::make($request->password),
+            ]);
 
-        event(new Registered($user));
+            // Handle the profile photo
+            if ($request->hasFile('foto_perfil')) {
+                $image = $request->file('foto_perfil');
+                $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('public/avatars', $imageName);
+                $user->update(['foto_perfil' => $imagePath]);
+            }
 
-        Auth::login($user);
+            // Log in the user after registration
+            Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+            return redirect(route('dashboard'));
+        } catch (\Exception $e) {
+            Log::error('Error during registration: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'An error occurred during registration. Please try again.']);
+        }
     }
 }
