@@ -5,11 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SalesController;
-<<<<<<< HEAD
 use App\Http\Controllers\SeientsController;
-=======
 use App\Http\Controllers\UsersController;
->>>>>>> 522be8b6bc1238fac2be2ef1428822afe415f9ba
 
 
 Route::get('/', function () {
