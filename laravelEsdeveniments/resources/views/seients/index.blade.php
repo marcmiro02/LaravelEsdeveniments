@@ -32,6 +32,7 @@
                             <tr>
                                 <th class="px-4 py-2">Fila</th>
                                 <th class="px-4 py-2">Columna</th>
+                                <th class="px-4 py-2">Preu</th>
                                 <th class="px-4 py-2">Estat del Seient</th>
                                 <th class="px-4 py-2">ID de la Sala</th>
                                 <th class="px-4 py-2">Accions</th>
@@ -42,6 +43,7 @@
                                 <tr>
                                     <td class="border px-4 py-2">{{ $seient->fila }}</td>
                                     <td class="border px-4 py-2">{{ $seient->columna }}</td>
+                                    <td class="border px-4 py-2">{{ $seient->preu }}</td>
                                     <td class="border px-4 py-2">{{ $seient->estat_seient }}</td>
                                     <td class="border px-4 py-2">{{ $seient->id_sala }}</td>
                                     <td class="border px-4 py-2">

@@ -11,6 +11,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-medium text-black">Fila: {{ $seient->fila }}</h3>
                     <p class="text-black"><strong>Columna:</strong> {{ $seient->columna }}</p>
+                    <p class="text-black"><strong>Preu:</strong> {{ $seient->preu }}</p>
                     <p class="text-black"><strong>Estat del Seient:</strong> {{ $seient->estat_seient }}</p>
                     <p class="text-black"><strong>ID de la Sala:</strong> {{ $seient->id_sala }}</p>
 

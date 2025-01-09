@@ -23,6 +23,7 @@ class Seients extends Model
     protected $fillable = [
         'fila',
         'columna',
+        'preu',
         'estat_seient',
         'id_sala',
     ];

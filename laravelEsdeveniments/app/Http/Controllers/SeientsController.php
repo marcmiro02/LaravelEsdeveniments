@@ -29,6 +29,7 @@ class SeientsController extends Controller
         $request->validate([
             'fila' => 'required',
             'columna' => 'required',
+            'preu' => 'required',
             'estat_seient' => 'required',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
@@ -49,6 +50,7 @@ class SeientsController extends Controller
         $request->validate([
             'fila' => 'required',
             'columna' => 'required',
+            'preu' => 'required',
             'estat_seient' => 'required',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);

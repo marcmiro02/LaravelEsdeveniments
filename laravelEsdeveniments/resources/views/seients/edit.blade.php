@@ -22,6 +22,10 @@
                             <input type="text" id="columna" name="columna" value="{{ $seient->columna }}" class="mt-1 block w-full text-black" required>
                         </div>
                         <div class="mb-4">
+                            <label for="preu" class="block text-sm font-medium text-gray-700">Preu</label>
+                            <input type="text" id="preu" name="preu" value="{{ $seient->preu }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        <div class="mb-4">
                             <label for="estat_seient" class="block text-sm font-medium text-gray-700">Estat del Seient</label>
                             <input type="text" id="estat_seient" name="estat_seient" value="{{ $seient->estat_seient }}" class="mt-1 block w-full text-black" required>
                         </div>
