@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UsersController;
 
 
@@ -67,9 +68,9 @@ Route::resource('categories', CategoriesController::class)->parameters([
 
 
 //------------------------------------ SALES ------------------------------------//
-//Route::resource('sales', SalesController::class)->parameters([
-//    'sales' => 'id_sala'
-//])->middleware(['auth', 'verified']);
+Route::resource('sales', SalesController::class)->parameters([
+    'sales' => 'id_sala'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------ TIPUS_ESDEVENIMENTS ------------------------------------//
