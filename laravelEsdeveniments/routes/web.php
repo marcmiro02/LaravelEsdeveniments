@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresesController;
+use App\Http\Controllers\CategoriesController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,7 +19,7 @@ Route::get('/dashboard', function () {
 
 //--------------------------------------- USERS ---------------------------------------//
 //Route::resource('users', UsersController::class)->parameters([
-//    'users' => 'id'
+//    'users' => 'id_usuari'
 //])->middleware(['auth', 'verified']);
 
 
@@ -34,9 +36,9 @@ Route::resource('empreses', EmpresesController::class)->parameters([
 
 
 //------------------------------------- CATEGORIES -------------------------------------//
-//Route::resource('categories', CategoriesController::class)->parameters([
-//    'categories' => 'id_categoria'
-//])->middleware(['auth', 'verified']);
+Route::resource('categories', CategoriesController::class)->parameters([
+    'categories' => 'id_categoria'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------ ESTAT_SEIENTS ------------------------------------//
