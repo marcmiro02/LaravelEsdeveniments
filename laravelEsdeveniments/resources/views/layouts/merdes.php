@@ -14,14 +14,6 @@
                 </div>
                 -->
 
-                <!--                 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('seients')" :active="request()->routeIs('seients')">
-                        {{ __('Seients') }}
-                    </x-nav-link>
-                </div>
-                -->
-
                 <!-- 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('qr')" :active="request()->routeIs('qr')">
@@ -46,3 +38,19 @@
                 </div> 
                 -->
 
+<<<<<<< HEAD
+                <!--
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('tipus_seients')" :active="request()->routeIs('tipus_seients')">
+                        {{ __('Tipus_seients') }}
+                    </x-nav-link>
+                </div> 
+                -->
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                </div>
+=======
+>>>>>>> 522be8b6bc1238fac2be2ef1428822afe415f9ba

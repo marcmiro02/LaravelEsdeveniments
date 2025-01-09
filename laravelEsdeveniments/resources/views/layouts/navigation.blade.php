@@ -16,8 +16,9 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                             
                 
-                @can('isAdmin')
+                          
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories')">
                         {{ __('Categories') }}
@@ -47,7 +48,9 @@
                         {{ __('Sales') }}
                     </x-nav-link>
                 </div>
-                @endcan
+                
+
+            
             </div>
 
             <!-- Settings Dropdown -->
