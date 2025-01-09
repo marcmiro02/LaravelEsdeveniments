@@ -4,17 +4,22 @@
 <div class="container">
     <h1>Listado de Usuarios</h1>
 
-
-
-@if(Auth::check() && (Auth::user()->rol == 1 || (Auth::user()->rol == 2 && $user->rol == 3)))
-    <!-- Admin puede editar/eliminar a cualquier usuario, Subadmin puede editar/eliminar solo trabajadores -->
-    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Editar</a>
-    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger">Eliminar</button>
-    </form>
-@endif
+    @can('isAdmin')
+        <form method="GET" action="{{ route('users.index') }}">
+            <div class="form-group">
+                <label for="empresa_id">Filtrar por Empresa:</label>
+                <select name="empresa_id" id="empresa_id" class="form-control">
+                    <option value="">Todas las Empresas</option>
+                    @foreach($empresas as $empresa)
+                        <option value="{{ $empresa->id_empresa }}" {{ $empresaId == $empresa->id_empresa ? 'selected' : '' }}>
+                            {{ $empresa->nom_empresa }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+    @endcan
 
     <div class="row mt-4">
         @foreach($users as $user)
@@ -25,18 +30,17 @@
                         <h5 class="card-title">{{ $user->name }} {{ $user->surname }}</h5>
                         <p class="card-text">
                             <strong>Rol:</strong> {{ $user->rol == 1 ? 'Admin' : ($user->rol == 2 ? 'Subadmin' : 'Trabajador') }}<br>
-                            <strong>Empresa:</strong> {{ $empresa->nom_empresa }}
+                            <strong>Empresa:</strong> {{ $user->empresa->nom_empresa ?? 'N/A' }}
                         </p>
                         
-                        @if(Auth::user()->rol == 1 || (Auth::user()->rol == 2 && $user->rol == 3))
-                            <!-- Admin puede editar/eliminar a cualquier usuario, Subadmin puede editar/eliminar solo trabajadores -->
+                        @can('isAdmin')
                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Editar</a>
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
-                        @endif
+                        @endcan
                     </div>
                 </div>
             </div>

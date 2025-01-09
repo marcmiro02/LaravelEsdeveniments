@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         // Si el usuario es Admin
-        if (Auth::user()->rol == 1) { // 1 = Admin
+        if (Auth::user()->can('isAdmin')) {
             // Filtrado por empresa
             $empresas = Empreses::all();
             $empresaId = $request->get('empresa_id', null); // Obtener el ID de la empresa si se ha filtrado
@@ -34,7 +34,7 @@ class UsersController extends Controller
         }
 
         // Si el usuario es Subadmin
-        if (Auth::user()->rol == 2) { // 2 = Subadmin
+        if (Auth::user()->can('isSubadmin')) {
             // Solo mostramos los trabajadores de la misma empresa
             $empresaId = Auth::user()->id_empresa;
 
@@ -56,7 +56,7 @@ class UsersController extends Controller
     public function create()
     {
         // Si el usuario autenticado es Admin, pasa las empresas
-        if (Auth::user()->rol == 1) { // 1 = Admin
+        if (Auth::user()->can('isAdmin')) {
             $empresas = Empreses::all();
             return view('users.create', compact('empresas'));
         } else {
@@ -131,16 +131,13 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         // Si el usuario autenticado es Admin, pasa las empresas
-        if (Auth::user()->rol == 1) { // 1 = Admin
+        if (Auth::user()->can('isAdmin')) {
             $empresas = Empreses::all();
             return view('users.edit', compact('user', 'empresas'));
         }
     
         // Si es Subadmin, solo puede editar usuarios de su empresa
-        if (Auth::user()->rol == 2) { // 2 = Subadmin
-            if (Auth::user()->id_empresa != $user->id_empresa) {
-                return redirect()->route('users.index')->with('error', 'No tienes permisos para editar este usuario.');
-            }
+        if (Auth::user()->can('isSubadmin') && Auth::user()->id_empresa == $user->id_empresa) {
             return view('users.edit', compact('user'));
         }
     
@@ -169,7 +166,7 @@ class UsersController extends Controller
         ]);
     
         // Si es Subadmin, verificar que no puede cambiar el rol o la empresa
-        if (Auth::user()->rol == 2 && $user->id_empresa != Auth::user()->id_empresa) {
+        if (Auth::user()->can('isSubadmin') && $user->id_empresa != Auth::user()->id_empresa) {
             return redirect()->route('users.index')->with('error', 'No puedes modificar usuarios de otras empresas.');
         }
     
@@ -204,7 +201,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         // Si es Subadmin, solo puede eliminar usuarios de su empresa
-        if (Auth::user()->rol == 2 && $user->id_empresa != Auth::user()->id_empresa) {
+        if (Auth::user()->can('isSubadmin') && $user->id_empresa != Auth::user()->id_empresa) {
             return redirect()->route('users.index')->with('error', 'No tienes permisos para eliminar este usuario.');
         }
     
