@@ -38,6 +38,7 @@
                 </div> 
                 -->
 
+<<<<<<< HEAD
                 <!--
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('tipus_seients')" :active="request()->routeIs('tipus_seients')">
@@ -51,3 +52,5 @@
                         {{ __('Users') }}
                     </x-nav-link>
                 </div>
+=======
+>>>>>>> 522be8b6bc1238fac2be2ef1428822afe415f9ba
