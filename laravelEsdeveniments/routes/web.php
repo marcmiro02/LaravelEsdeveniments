@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SeientsController;
 use App\Http\Controllers\UsersController;
 
 
@@ -49,10 +50,15 @@ Route::resource('categories', CategoriesController::class)->parameters([
 //])->middleware(['auth', 'verified']);
 
 
-//-------------------------------------- SEIENTS --------------------------------------//
-//Route::resource('seients', SeientsController::class)->parameters([
-//    'seients' => 'id_seient'
+//-------------------------------------- TIPUS_SEIENTS --------------------------------------//
+//Route::resource('tipus_seients', TipusSeientsController::class)->parameters([
+//    'tipus_seients' => 'id_tipus_seient'
 //])->middleware(['auth', 'verified']);
+
+//-------------------------------------- SEIENTS --------------------------------------//
+Route::resource('seients', SeientsController::class)->parameters([
+    'seients' => 'id_seient'
+])->middleware(['auth', 'verified']);
 
 
 //---------------------------------------- qr ----------------------------------------//
