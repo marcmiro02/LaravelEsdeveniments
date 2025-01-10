@@ -24,13 +24,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Definir un gate para verificar si el usuario es Admin
+        Gate::define('isSuperadmin', function ($user) {
+            return $user->rol === 1; // 1 = SuperAdmin
+        });
         Gate::define('isAdmin', function ($user) {
-            return $user->rol === 1; // 1 = Admin
+            return $user->rol === 2; // 1 = Admin
         });
 
         // Definir un gate para verificar si el usuario es Subadmin
         Gate::define('isSubadmin', function ($user) {
-            return $user->rol === 2; // 2 = Subadmin
+            return $user->rol === 3; // 2 = Subadmin
         });
 
         // Definir un gate para verificar si el usuario pertenece a la misma empresa

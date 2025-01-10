@@ -32,4 +32,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the empresa that owns the user.
+     */
+    public function empresa()
+    {
+        return $this->belongsTo(Empreses::class, 'id_empresa');
+    }
 }

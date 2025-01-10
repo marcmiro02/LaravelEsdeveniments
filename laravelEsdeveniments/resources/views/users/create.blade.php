@@ -1,98 +1,116 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Crear Usuario') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container">
-    <h1>Crear Usuario</h1>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h1 class="mb-4">Crear Usuario</h1>
 
-    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
 
-        <!-- Nombre -->
-        <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
-        </div>
+                        <!-- Nombre -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" name="name" id="name" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('name') }}" required>
+                        </div>
 
-        <!-- Apellido -->
-        <div class="form-group">
-            <label for="surname">Apellido</label>
-            <input type="text" name="surname" id="surname" class="form-control" value="{{ old('surname') }}" required>
-        </div>
+                        <!-- Apellido -->
+                        <div class="mb-4">
+                            <label for="surname" class="form-label">Apellido</label>
+                            <input type="text" name="surname" id="surname" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('surname') }}" required>
+                        </div>
 
-        <!-- Nombre de usuario -->
-        <div class="form-group">
-            <label for="nom_usuari">Nombre de usuario</label>
-            <input type="text" name="nom_usuari" id="nom_usuari" class="form-control" value="{{ old('nom_usuari') }}" required>
-        </div>
+                        <!-- Nombre de usuario -->
+                        <div class="mb-4">
+                            <label for="nom_usuari" class="form-label">Nombre de usuario</label>
+                            <input type="text" name="nom_usuari" id="nom_usuari" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('nom_usuari') }}" required>
+                        </div>
 
-        <!-- Email -->
-        <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
-        </div>
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="email" name="email" id="email" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('email') }}" required>
+                        </div>
 
-        <!-- Dirección -->
-        <div class="form-group">
-            <label for="adreca">Dirección</label>
-            <input type="text" name="adreca" id="adreca" class="form-control" value="{{ old('adreca') }}" required>
-        </div>
+                        <!-- Dirección -->
+                        <div class="mb-4">
+                            <label for="adreca" class="form-label">Dirección</label>
+                            <input type="text" name="adreca" id="adreca" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('adreca') }}" required>
+                        </div>
 
-        <!-- Tarjeta bancaria -->
-        <div class="form-group">
-            <label for="targeta_bancaria">Tarjeta bancaria</label>
-            <input type="text" name="targeta_bancaria" id="targeta_bancaria" class="form-control" value="{{ old('targeta_bancaria') }}" required>
-        </div>
+                        <!-- Tarjeta bancaria -->
+                        <div class="mb-4">
+                            <label for="targeta_bancaria" class="form-label">Tarjeta bancaria</label>
+                            <input type="text" name="targeta_bancaria" id="targeta_bancaria" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('targeta_bancaria') }}" required>
+                        </div>
 
-        <!-- Fecha de nacimiento -->
-        <div class="form-group">
-            <label for="data_naixement">Fecha de nacimiento</label>
-            <input type="date" name="data_naixement" id="data_naixement" class="form-control" value="{{ old('data_naixement') }}" required>
-        </div>
+                        <!-- Fecha de nacimiento -->
+                        <div class="mb-4">
+                            <label for="data_naixement" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" name="data_naixement" id="data_naixement" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('data_naixement') }}" required>
+                        </div>
 
-        <!-- Contraseña -->
-        <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" name="password" id="password" class="form-control" required>
-        </div>
+                        <!-- Contraseña -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" name="password" id="password" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
+                        </div>
 
-        <!-- Confirmar contraseña -->
-        <div class="form-group">
-            <label for="password_confirmation">Confirmar contraseña</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-        </div>
+                        <!-- Confirmar contraseña -->
+                        <div class="mb-4">
+                            <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
+                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
+                        </div>
 
-        <!-- Foto de perfil -->
-        <div class="form-group">
-            <label for="foto_perfil">Foto de perfil</label>
-            <input type="file" name="foto_perfil" id="foto_perfil" class="form-control">
-        </div>
+                        <!-- Foto de perfil -->
+                        <div class="mb-4">
+                            <label for="foto_perfil" class="form-label">Foto de perfil</label>
+                            <input type="file" name="foto_perfil" id="foto_perfil" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white">
+                        </div>
 
-        <!-- Rol -->
-        <div class="form-group">
-            <label for="rol">Rol</label>
-            <select name="rol" id="rol" class="form-control" required>
-                <option value="1" {{ old('rol') == 1 ? 'selected' : '' }}>Admin</option>
-                <option value="2" {{ old('rol') == 2 ? 'selected' : '' }}>Subadmin</option>
-            </select>
-        </div>
+                        <!-- Rol -->
+                        <div class="mb-4">
+                            <label for="rol" class="form-label">Rol</label>
+                            <select name="rol" id="rol" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
+                                @if(Auth::user()->rol == 1) <!-- SuperAdmin -->
+                                    <option value="2" {{ old('rol') == 2 ? 'selected' : '' }}>Admin</option>
+                                    <option value="3" {{ old('rol') == 3 ? 'selected' : '' }}>Subadmin</option>
+                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
+                                @elseif(Auth::user()->rol == 2) <!-- Admin -->
+                                    <option value="3" {{ old('rol') == 3 ? 'selected' : '' }}>Subadmin</option>
+                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
+                                @elseif(Auth::user()->rol == 3) <!-- Subadmin -->
+                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
+                                @endif
+                            </select>
+                        </div>
 
-        <!-- Campo de empresa (solo visible para Admin) -->
-        @if(Auth::user()->rol == 1)  <!-- Solo Admins pueden ver este campo -->
-            <div class="form-group">
-                <label for="id_empresa">Empresa</label>
-                <select name="id_empresa" id="id_empresa" class="form-control" required>
-                    @foreach($empresas as $empresa)
-                        <option value="{{ $empresa->id_empresa }}" {{ old('id_empresa') == $empresa->id_empresa ? 'selected' : '' }}>
-                            {{ $empresa->nom_empresa }}
-                        </option>
-                    @endforeach
-                </select>
+                        <!-- Campo de empresa (solo visible para SuperAdmin) -->
+                        @if(Auth::user()->rol == 1)  <!-- Solo SuperAdmins pueden ver este campo -->
+                            <div class="mb-4">
+                                <label for="id_empresa" class="form-label">Empresa</label>
+                                <select name="id_empresa" id="id_empresa" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
+                                    @foreach($empresas as $empresa)
+                                        <option value="{{ $empresa->id_empresa }}" {{ old('id_empresa') == $empresa->id_empresa ? 'selected' : '' }}>
+                                            {{ $empresa->nom_empresa }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
+                        @endif
+
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    </form>
+                </div>
             </div>
-        @else
-            <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
-        @endif
-
-        <button type="submit" class="btn btn-primary">Crear Usuario</button>
-    </form>
-</div>
-@endsection
+        </div>
+    </div>
+</x-app-layout>

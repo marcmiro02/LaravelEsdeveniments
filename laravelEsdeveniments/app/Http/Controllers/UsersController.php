@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         // Si el usuario es Admin
-        if (Auth::user()->can('isAdmin')) {
+        if (Auth::user()->can('isSuperadmin')) {
             // Filtrado por empresa
             $empresas = Empreses::all();
             $empresaId = $request->get('empresa_id', null); // Obtener el ID de la empresa si se ha filtrado
@@ -33,8 +33,8 @@ class UsersController extends Controller
             return view('users.index', compact('users', 'empresas', 'empresaId'));
         }
 
-        // Si el usuario es Subadmin
-        if (Auth::user()->can('isSubadmin')) {
+        // Si el usuario es Admin
+        if (Auth::user()->can('isAdmin')) {
             // Solo mostramos los trabajadores de la misma empresa
             $empresaId = Auth::user()->id_empresa;
 
@@ -55,8 +55,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        // Si el usuario autenticado es Admin, pasa las empresas
-        if (Auth::user()->can('isAdmin')) {
+        // Si el usuario autenticado es SuperAdmin, pasa las empresas
+        if (Auth::user()->rol == 1) {
             $empresas = Empreses::all();
             return view('users.create', compact('empresas'));
         } else {
@@ -85,10 +85,10 @@ class UsersController extends Controller
             'rol' => ['required', 'integer'],
         ]);
 
-        // Si es Admin, se valida el campo id_empresa
-        if ($userRole == 1) { // Admin
+        // Si es SuperAdmin, se valida el campo id_empresa
+        if ($userRole == 1) { // SuperAdmin
             $validatedData['id_empresa'] = $request->id_empresa;
-        } else {  // Si es Subadmin, asignar automáticamente la empresa
+        } else {  // Si es Admin o Subadmin, asignar automáticamente la empresa
             $validatedData['id_empresa'] = Auth::user()->id_empresa;
         }
 
