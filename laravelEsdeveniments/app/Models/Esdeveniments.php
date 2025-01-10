@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Esdeveniments extends Model
 {
     use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -64,37 +65,5 @@ class Esdeveniments extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
-
-    /**
-     * Get the tipus_esdeveniment that owns the esdeveniment.
-     */
-    public function tipusEsdeveniment()
-    {
-        return $this->belongsTo(Tipus_esdeveniment::class, 'id_tipus');
-    }
-
-    /**
-     * Get the categoria that owns the esdeveniment.
-     */
-    public function categoria()
-    {
-        return $this->belongsTo(Categories::class, 'id_categoria');
-    }
-
-    /**
-     * Get the sala that owns the esdeveniment.
-     */
-    public function sala()
-    {
-        return $this->belongsTo(Sales::class, 'id_sala');
-    }
-
-    /**
-     * Get the empresa that owns the esdeveniment.
-     */
-    public function empresa()
-    {
-        return $this->belongsTo(Empreses::class, 'id_empresa');
-    }
+    public $timestamps = true;
 }
