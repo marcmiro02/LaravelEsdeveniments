@@ -16,7 +16,7 @@
                         <div class="mb-4">
                             <label for="nom_tipus" class="block text-sm font-medium text-gray-700">Nom del Tipus d'Esdeveniment</label>
                             <input type="text" id="nom_tipus" name="nom_tipus" value="{{ $tipusEsdeveniment->nom_tipus }}" class="mt-1 block w-full text-black" required>
-                        </div>s
+                        </div>
 
                         <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">Actualitzar</button>
                     </form>
