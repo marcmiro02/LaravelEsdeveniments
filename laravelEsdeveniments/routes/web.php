@@ -1,12 +1,18 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SeientsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\RolsUsuarisController;
+use App\Http\Controllers\EstatSeientsController;
+use App\Http\Controllers\CodisPromocionalsController;
+use App\Http\Controllers\TipusSeientController;
+use App\Http\Controllers\EsdevenimentsController;
+use App\Http\Controllers\EntradesController;
 
 
 Route::get('/', function () {
@@ -33,9 +39,9 @@ Route::resource('empreses', EmpresesController::class)->parameters([
 
 
 //----------------------------------- ESDEVENIMENTS -----------------------------------//
-//Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
-//    'esdeveniments' => 'id_esdeveniment'
-//])->middleware(['auth', 'verified']);
+Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
+    'esdeveniments' => 'id_esdeveniment'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------- CATEGORIES -------------------------------------//
@@ -45,15 +51,16 @@ Route::resource('categories', CategoriesController::class)->parameters([
 
 
 //------------------------------------ ESTAT_SEIENTS ------------------------------------//
-//Route::resource('estat_seients', EstatSeientsController::class)->parameters([
-//    'estat_seients' => 'id_estat_seient'
-//])->middleware(['auth', 'verified']);
+Route::resource('estat_seients', EstatSeientsController::class)->parameters([
+    'estat_seients' => 'id_estat_seient'
+])->middleware(['auth', 'verified']);
 
 
 //-------------------------------------- TIPUS_SEIENTS --------------------------------------//
-//Route::resource('tipus_seients', TipusSeientsController::class)->parameters([
-//    'tipus_seients' => 'id_tipus_seient'
-//])->middleware(['auth', 'verified']);
+Route::resource('tipus_seients', TipusSeientController::class)->parameters([
+    'tipus_seients' => 'id_tipus_seient'
+])->middleware(['auth', 'verified']);
+
 
 //-------------------------------------- SEIENTS --------------------------------------//
 Route::resource('seients', SeientsController::class)->parameters([
@@ -68,9 +75,9 @@ Route::resource('seients', SeientsController::class)->parameters([
 
 
 //------------------------------------ ROLS_USUARIS ------------------------------------//
-//Route::resource('rols_usuaris', RolsUsuarisController::class)->parameters([
-//    'rols_usuaris' => 'id_rol'
-//])->middleware(['auth', 'verified']);
+Route::resource('rols_usuaris', RolsUsuarisController::class)->parameters([
+    'rols_usuaris' => 'id_rol'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------ SALES ------------------------------------//
@@ -83,6 +90,18 @@ Route::resource('sales', SalesController::class)->parameters([
 //Route::resource('tipus_esdeveniments', TipusEsdevenimentsController::class)->parameters([
 //    'tipus_esdeveniments' => 'id_tipus'
 //])->middleware(['auth', 'verified']);
+
+
+//------------------------------------ CODIS PROMOCIONALS ------------------------------------//
+Route::resource('codis_promocionals', CodisPromocionalsController::class)->parameters([
+    'codis_promocionals' => 'id_codi'
+])->middleware(['auth', 'verified']);
+
+
+//------------------------------------ ENTRADES ------------------------------------//
+Route::resource('entrades', EntradesController::class)->parameters([
+    'entrades' => 'id_entrada'
+])->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {

@@ -16,41 +16,101 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-                             
-                
-                          
+
+                <!-- Esdeveniments Dropdown -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories')">
-                        {{ __('Categories') }}
-                    </x-nav-link>
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ __('Esdeveniments') }}</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('esdeveniments.index')">
+                                {{ __('Esdeveniments') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('entrades.index')">
+                                {{ __('Entrades') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('categories.index')">
+                                {{ __('Categories') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('tipus_esdeveniments.index')">
+                                {{ __('Tipus Esdeveniments') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('qr.index')">
+                                {{ __('QR') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('codis_promocionals.index')">
+                                {{ __('Codis Promocionals') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
-              
+
+                <!-- Sales Dropdown -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ __('Sales') }}</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('sales.index')">
+                                {{ __('Sales') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('seients.index')">
+                                {{ __('Seients') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('tipus_seients.index')">
+                                {{ __('Tipus Seients') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('estat_seients.index')">
+                                {{ __('Estat Seients') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
 
                 @can('isAdmin')
+                <!-- Usuaris Dropdown -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('empreses.index')" :active="request()->routeIs('empreses')">
-                        {{ __('Empreses') }}
-                    </x-nav-link>
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ __('Usuaris') }}</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('users.index')">
+                                {{ __('Users') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('empreses.index')">
+                                {{ __('Empreses') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('rols_usuaris.index')">
+                                {{ __('Rols Usuaris') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
                 @endcan
-
-                @can('isAdmin')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
-                        {{ __('Users') }}
-                    </x-nav-link>
-                </div>
-                @endcan
-
-           
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales')">
-                        {{ __('Sales') }}
-                    </x-nav-link>
-                </div>
-                
-
-            
             </div>
 
             <!-- Settings Dropdown -->

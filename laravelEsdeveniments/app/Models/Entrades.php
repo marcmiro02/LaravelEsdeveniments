@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Esdeveniments extends Model
+class Entrades extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Esdeveniments extends Model
      *
      * @var string
      */
-    protected $table = 'esdeveniments';
+    protected $table = 'entrades';
 
     /**
      * The attributes that are mass assignable.
@@ -22,21 +22,8 @@ class Esdeveniments extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'nom',
-        'foto_portada',
-        'foto_fons',
-        'duracio',
-        'dies_dates',
-        'sinopsis',
-        'trailer',
-        'director',
-        'actors',
-        'data_estrena',
-        'edats',
-        'id_tipus',
-        'id_categoria',
-        'id_sala',
-        'id_empresa',
+        'tipus_entrada',
+        'descompte',
     ];
 
     /**
@@ -44,7 +31,7 @@ class Esdeveniments extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id_esdeveniment';
+    protected $primaryKey = 'id_entrada';
 
     /**
      * Indicates if the IDs are auto-incrementing.
