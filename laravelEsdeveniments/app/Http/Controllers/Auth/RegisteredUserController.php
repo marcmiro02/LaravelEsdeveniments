@@ -54,18 +54,19 @@ class RegisteredUserController extends Controller
                 'data_naixement' => $request->data_naixement,
                 'password' => Hash::make($request->password),
             ]);
-
+        
             // Handle the profile photo
             if ($request->hasFile('foto_perfil')) {
                 $image = $request->file('foto_perfil');
                 $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('public/avatars', $imageName);
+                $imagePath = 'resources/img/avatars/' . $imageName;
+                $image->move(public_path('resources/img/avatars'), $imageName);
                 $user->update(['foto_perfil' => $imagePath]);
             }
-
+        
             // Log in the user after registration
             Auth::login($user);
-
+        
             return redirect(route('dashboard'));
         } catch (\Exception $e) {
             Log::error('Error during registration: ' . $e->getMessage());
