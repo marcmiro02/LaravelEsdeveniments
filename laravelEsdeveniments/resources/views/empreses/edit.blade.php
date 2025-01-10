@@ -1,90 +1,77 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
-        @csrf
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Editar Empresa') }}
+        </h2>
+    </x-slot>
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form action="{{ route('empreses.update', $empresa->id_empresa) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        
+                        <div class="mb-4">
+                            <label for="nom_empresa" class="block text-sm font-medium text-gray-700">Nom Empresa</label>
+                            <input type="text" id="nom_empresa" name="nom_empresa" value="{{ $empresa->nom_empresa }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="nif" class="block text-sm font-medium text-gray-700">NIF</label>
+                            <input type="text" id="nif" name="nif" value="{{ $empresa->nif }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="compte_bancari" class="block text-sm font-medium text-gray-700">Compte Bancari</label>
+                            <input type="text" id="compte_bancari" name="compte_bancari" value="{{ $empresa->compte_bancari }}" class="mt-1 block w-full text-black">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="adreca" class="block text-sm font-medium text-gray-700">Adreça</label>
+                            <input type="text" id="adreca" name="adreca" value="{{ $empresa->adreca }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="ciutat" class="block text-sm font-medium text-gray-700">Ciutat</label>
+                            <input type="text" id="ciutat" name="ciutat" value="{{ $empresa->ciutat }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="codi_postal" class="block text-sm font-medium text-gray-700">Codi Postal</label>
+                            <input type="number" id="codi_postal" name="codi_postal" value="{{ $empresa->codi_postal }}" class="mt-1 block w-full text-black" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
+                            <input type="text" id="telefon" name="telefon" value="{{ $empresa->telefon }}" class="mt-1 block w-full text-black">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" value="{{ $empresa->email }}" class="mt-1 block w-full text-black">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="web" class="block text-sm font-medium text-gray-700">Web</label>
+                            <input type="text" id="web" name="web" value="{{ $empresa->web }}" class="mt-1 block w-full text-black">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="horari" class="block text-sm font-medium text-gray-700">Horari</label>
+                            <input type="text" id="horari" name="horari" value="{{ $empresa->horari }}" class="mt-1 block w-full text-black">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
+                            <input type="file" id="logo" name="logo" class="mt-1 block w-full text-black">
+                        </div>
+
+                        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">Actualitzar</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Surname -->
-        <div class="mt-4">
-            <x-input-label for="surname" :value="__('Surname')" />
-            <x-text-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" required autocomplete="surname" />
-            <x-input-error :messages="$errors->get('surname')" class="mt-2" />
-        </div>
-
-        <!-- Username -->
-        <div class="mt-4">
-            <x-input-label for="nom_usuari" :value="__('Username')" />
-            <x-text-input id="nom_usuari" class="block mt-1 w-full" type="text" name="nom_usuari" :value="old('nom_usuari')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('nom_usuari')" class="mt-2" />
-        </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Address -->
-        <div class="mt-4">
-            <x-input-label for="adreca" :value="__('Address')" />
-            <x-text-input id="adreca" class="block mt-1 w-full" type="text" name="adreca" :value="old('adreca')" required autocomplete="address" />
-            <x-input-error :messages="$errors->get('adreca')" class="mt-2" />
-        </div>
-
-        <!-- Bank Card -->
-        <div class="mt-4">
-            <x-input-label for="targeta_bancaria" :value="__('Bank Card')" />
-            <x-text-input id="targeta_bancaria" class="block mt-1 w-full" type="text" name="targeta_bancaria" :value="old('targeta_bancaria')" required autocomplete="cc-number" />
-            <x-input-error :messages="$errors->get('targeta_bancaria')" class="mt-2" />
-        </div>
-
-        <!-- Date of Birth -->
-        <div class="mt-4">
-            <x-input-label for="data_naixament" :value="__('Date of Birth')" />
-            <x-text-input id="data_naixament" class="block mt-1 w-full" type="date" name="data_naixament" :value="old('data_naixament')" required autocomplete="bday" />
-            <x-input-error :messages="$errors->get('data_naixament')" class="mt-2" />
-        </div>
-
-        <!-- Profile Photo -->
-        <div class="mt-4">
-            <x-input-label for="foto_perfil" :value="__('Profile Photo')" />
-            <input id="foto_perfil" class="block mt-1 w-full" type="file" name="foto_perfil" accept="image/*" required />
-            <x-input-error :messages="$errors->get('foto_perfil')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+</x-app-layout>
