@@ -69,6 +69,6 @@ class Qr extends Model
      */
     public function usuari()
     {
-        return $this->belongsTo(Usuaris::class, 'id_usuari');
+        return $this->belongsTo(User::class, 'id');
     }
 }
