@@ -20,7 +20,7 @@ class User extends Authenticatable
         'data_naixement',
         'password',
         'foto_perfil',  // Solo guardaremos la ruta de la imagen
-        'rol',
+        'rol_id',
         'id_empresa',
     ];
 
@@ -39,5 +39,13 @@ class User extends Authenticatable
     public function empresa()
     {
         return $this->belongsTo(Empreses::class, 'id_empresa');
+    }
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'rol_id');
     }
 }

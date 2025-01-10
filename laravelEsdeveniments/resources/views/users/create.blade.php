@@ -76,18 +76,13 @@
 
                         <!-- Rol -->
                         <div class="mb-4">
-                            <label for="rol" class="form-label">Rol</label>
-                            <select name="rol" id="rol" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
-                                @if(Auth::user()->rol == 1) <!-- SuperAdmin -->
-                                    <option value="2" {{ old('rol') == 2 ? 'selected' : '' }}>Admin</option>
-                                    <option value="3" {{ old('rol') == 3 ? 'selected' : '' }}>Subadmin</option>
-                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
-                                @elseif(Auth::user()->rol == 2) <!-- Admin -->
-                                    <option value="3" {{ old('rol') == 3 ? 'selected' : '' }}>Subadmin</option>
-                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
-                                @elseif(Auth::user()->rol == 3) <!-- Subadmin -->
-                                    <option value="4" {{ old('rol') == 4 ? 'selected' : '' }}>Trabajador</option>
-                                @endif
+                            <label for="rol_id" class="form-label">Rol</label>
+                            <select name="rol_id" id="rol_id" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Empreses;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -55,12 +56,14 @@ class UsersController extends Controller
      */
     public function create()
     {
+        $roles = Role::all(); // Obtener todos los roles
+
         // Si el usuario autenticado es SuperAdmin, pasa las empresas
         if (Auth::user()->rol == 1) {
             $empresas = Empreses::all();
-            return view('users.create', compact('empresas'));
+            return view('users.create', compact('empresas', 'roles'));
         } else {
-            return view('users.create');
+            return view('users.create', compact('roles'));
         }
     }
 
@@ -82,7 +85,7 @@ class UsersController extends Controller
             'data_naixement' => ['required', 'date'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
-            'rol' => ['required', 'integer'],
+            'rol_id' => ['required', 'integer'],
         ]);
 
         // Si es SuperAdmin, se valida el campo id_empresa
@@ -102,7 +105,7 @@ class UsersController extends Controller
             'targeta_bancaria' => $validatedData['targeta_bancaria'],
             'data_naixement' => $validatedData['data_naixement'],
             'password' => Hash::make($validatedData['password']),
-            'rol' => $validatedData['rol'],
+            'rol_id' => $validatedData['rol_id'],
             'id_empresa' => $validatedData['id_empresa'],
         ]);
 
