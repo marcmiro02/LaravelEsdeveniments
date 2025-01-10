@@ -72,7 +72,7 @@
                                         {{ $user->name }} {{ $user->surname }}
                                     </td>
                                     <td class="px-4 py-2">
-                                        {{ $user->rol == 1 ? 'Admin' : ($user->rol == 2 ? 'Subadmin' : 'Trabajador') }}
+                                        {{ $user->role->name ?? 'N/A' }}
                                     </td>
                                     <td class="px-4 py-2">
                                         {{ $user->empresa->nom_empresa ?? 'N/A' }}
