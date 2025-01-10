@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tipus_esdeveniment extends Model
+class Entrades extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Tipus_esdeveniment extends Model
      *
      * @var string
      */
-    protected $table = 'tipus_esdeveniments';
+    protected $table = 'entrades';
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +22,8 @@ class Tipus_esdeveniment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'nom_tipus',
+        'tipus_entrada',
+        'descompte',
     ];
 
     /**
@@ -30,7 +31,7 @@ class Tipus_esdeveniment extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id_tipus';
+    protected $primaryKey = 'id_entrada';
 
     /**
      * Indicates if the IDs are auto-incrementing.
