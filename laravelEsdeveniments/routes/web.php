@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmpresesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SalesController;
@@ -11,6 +11,7 @@ use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
 use App\Http\Controllers\TipusSeientController;
+use App\Http\Controllers\EsdevenimentsController;
 
 
 Route::get('/', function () {
@@ -37,9 +38,9 @@ Route::resource('empreses', EmpresesController::class)->parameters([
 
 
 //----------------------------------- ESDEVENIMENTS -----------------------------------//
-//Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
-//    'esdeveniments' => 'id_esdeveniment'
-//])->middleware(['auth', 'verified']);
+Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
+    'esdeveniments' => 'id_esdeveniment'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------- CATEGORIES -------------------------------------//
