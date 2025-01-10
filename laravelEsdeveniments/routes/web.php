@@ -13,6 +13,7 @@ use App\Http\Controllers\CodisPromocionalsController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
+use App\Http\Controllers\TipusEsdevenimentsController;
 
 
 Route::get('/', function () {
@@ -87,9 +88,9 @@ Route::resource('sales', SalesController::class)->parameters([
 
 
 //------------------------------------ TIPUS_ESDEVENIMENTS ------------------------------------//
-//Route::resource('tipus_esdeveniments', TipusEsdevenimentsController::class)->parameters([
-//    'tipus_esdeveniments' => 'id_tipus'
-//])->middleware(['auth', 'verified']);
+Route::resource('tipus_esdeveniments', TipusEsdevenimentsController::class)->parameters([
+    'tipus_esdeveniments' => 'id_tipus'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------ CODIS PROMOCIONALS ------------------------------------//
