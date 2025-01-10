@@ -119,7 +119,6 @@
                 </div>
                 @endcan
 
-<<<<<<< HEAD
                 @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('tipus_seients.index')" :active="request()->routeIs('tipus_seients')">
@@ -133,12 +132,17 @@
                     <x-nav-link :href="route('esdeveniments.index')" :active="request()->routeIs('esdeveniments')">
                         {{ __('Esdeveniments') }}
                     </x-nav-link>
-                </div>
+                </div>       
+                @endcan    
                 
-                @endcan           
-=======
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('entrades.index')" :active="request()->routeIs('entrades')">
+                        {{ __('Entrades') }}
+                    </x-nav-link>
+                </div>
+                @endcan
             
->>>>>>> f4d43659d963bc3a11aa2188c8499b215d59102a
             </div>
 
             <!-- Settings Dropdown -->

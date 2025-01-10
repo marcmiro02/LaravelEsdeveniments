@@ -12,6 +12,7 @@ use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
+use App\Http\Controllers\EntradesController;
 
 
 Route::get('/', function () {
@@ -96,6 +97,11 @@ Route::resource('codis_promocionals', CodisPromocionalsController::class)->param
     'codis_promocionals' => 'id_codi'
 ])->middleware(['auth', 'verified']);
 
+
+//------------------------------------ ENTRADES ------------------------------------//
+Route::resource('entrades', EntradesController::class)->parameters([
+    'entrades' => 'id_entrada'
+])->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {
