@@ -19,7 +19,7 @@
                         </a>
                     </div>
 
-                    @can('isAdmin')
+                    @can('isSuperadmin')
                         <form method="GET" action="{{ route('users.index') }}" class="mb-6">
                             <div class="flex items-center space-x-4">
                                 <label for="empresa_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
