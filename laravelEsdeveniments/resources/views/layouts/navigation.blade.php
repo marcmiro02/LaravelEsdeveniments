@@ -48,7 +48,24 @@
                         {{ __('Sales') }}
                     </x-nav-link>
                 </div>
+
                 
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('rols_usuaris.index')" :active="request()->routeIs('rols_usuaris')">
+                        {{ __('Rols_usuaris') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+
+                
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('estat_seients.index')" :active="request()->routeIs('estat_seients')">
+                        {{ __('Estat_seients') }}
+                    </x-nav-link>
+                </div>
+                @endcan
 
             
             </div>

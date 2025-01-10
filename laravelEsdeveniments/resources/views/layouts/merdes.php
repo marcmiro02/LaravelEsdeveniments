@@ -6,13 +6,7 @@
                 </div>
                 -->
 
-                <!--                 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('estat_seients')" :active="request()->routeIs('estat_seients')">
-                        {{ __('Estat_seients') }}
-                    </x-nav-link>
-                </div>
-                -->
+                
 
                 <!-- 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -22,13 +16,6 @@
                 </div>
                 -->
 
-                <!-- 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('rols_usuaris')" :active="request()->routeIs('rols_usuaris')">
-                        {{ __('Rols_usuaris') }}
-                    </x-nav-link>
-                </div>
-                -->
 
                 <!-- 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -38,7 +25,6 @@
                 </div> 
                 -->
 
-<<<<<<< HEAD
                 <!--
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('tipus_seients')" :active="request()->routeIs('tipus_seients')">
@@ -46,11 +32,3 @@
                     </x-nav-link>
                 </div> 
                 -->
-
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
-                        {{ __('Users') }}
-                    </x-nav-link>
-                </div>
-=======
->>>>>>> 522be8b6bc1238fac2be2ef1428822afe415f9ba
