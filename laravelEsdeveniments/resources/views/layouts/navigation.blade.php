@@ -16,8 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-                             
-                
+                                            
                           
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories')">
@@ -70,7 +69,7 @@
 
                 @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('codis_promocionals.index')" :active="request()->routeIs('seients')">
+                    <x-nav-link :href="route('codis_promocionals.index')" :active="request()->routeIs('codis_promocionals')">
                         {{ __('Codis_Promocionals') }}
                     </x-nav-link>
                 </div>
@@ -85,6 +84,13 @@
                 </div>
                 @endcan
 
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('tipus_seient.index')" :active="request()->routeIs('tipus_seient')">
+                        {{ __('Tipus del pinche seient') }}
+                    </x-nav-link>
+                </div>
+                @endcan
             
             </div>
 
