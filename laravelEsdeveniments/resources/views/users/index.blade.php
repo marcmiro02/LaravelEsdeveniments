@@ -72,7 +72,7 @@
                                         {{ $user->name }} {{ $user->surname }}
                                     </td>
                                     <td class="px-4 py-2">
-                                        {{ $user->role->name ?? 'N/A' }}
+                                        {{ $user->role->nom_rol ?? 'N/A' }}
                                     </td>
                                     <td class="px-4 py-2">
                                         {{ $user->empresa->nom_empresa ?? 'N/A' }}

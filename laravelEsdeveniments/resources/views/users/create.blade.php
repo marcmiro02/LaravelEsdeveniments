@@ -79,8 +79,8 @@
                             <label for="rol_id" class="form-label">Rol</label>
                             <select name="rol_id" id="rol_id" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ old('rol_id') == $role->id ? 'selected' : '' }}>
-                                        {{ $role->name }}
+                                    <option value="{{ $role->id_rol }}" {{ old('rol_id') == $role->id_rol ? 'selected' : '' }}>
+                                        {{ $role->nom_rol }}
                                     </option>
                                 @endforeach
                             </select>

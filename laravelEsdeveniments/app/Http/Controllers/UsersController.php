@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Empreses;
-use App\Models\Role;
+use App\Models\Rols_usuaris;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        // Si el usuario es Admin
+        // Si el usuario es Superadmin
         if (Auth::user()->can('isSuperadmin')) {
             // Filtrado por empresa
             $empresas = Empreses::all();
@@ -25,10 +25,10 @@ class UsersController extends Controller
 
             if ($empresaId) {
                 // Si se selecciona una empresa, mostramos solo los usuarios de esa empresa
-                $users = User::where('id_empresa', $empresaId)->get();
+                $users = User::with('role')->where('id_empresa', $empresaId)->get();
             } else {
                 // Si no se selecciona ninguna empresa, mostramos todos los usuarios
-                $users = User::all();
+                $users = User::with('role')->get();
             }
 
             return view('users.index', compact('users', 'empresas', 'empresaId'));
@@ -40,9 +40,7 @@ class UsersController extends Controller
             $empresaId = Auth::user()->id_empresa;
 
             // Mostrar trabajadores
-            $users = User::where('id_empresa', $empresaId)->where('rol', 3) // 3 = Trabajador
-                        ->orWhere('rol', 2) // También se incluyen los subadmins
-                        ->get();
+            $users = User::with('role')->where('id_empresa', $empresaId)->whereIn('rol_id', [2, 3, 4])->get();
 
             return view('users.index', compact('users', 'empresaId'));
         }
@@ -56,7 +54,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $roles = Role::all(); // Obtener todos los roles
+        $roles = Rols_usuaris::all(); // Obtener todos los roles
 
         // Si el usuario autenticado es SuperAdmin, pasa las empresas
         if (Auth::user()->rol == 1) {
