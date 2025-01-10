@@ -43,7 +43,7 @@
                             <x-dropdown-link :href="route('tipus_esdeveniments.index')">
                                 {{ __('Tipus Esdeveniments') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('qr.index')">
+                            <x-dropdown-link :href="route('qrs.index')">
                                 {{ __('QR') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('codis_promocionals.index')">
