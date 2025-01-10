@@ -86,8 +86,8 @@
 
                 @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('tipus_seient.index')" :active="request()->routeIs('tipus_seient')">
-                        {{ __('Tipus del pinche seient') }}
+                    <x-nav-link :href="route('tipus_seients.index')" :active="request()->routeIs('tipus_seients')">
+                        {{ __('Tipus seient') }}
                     </x-nav-link>
                 </div>
                 @endcan
