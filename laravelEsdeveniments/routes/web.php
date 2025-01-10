@@ -9,6 +9,7 @@ use App\Http\Controllers\SeientsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
+use App\Http\Controllers\CodisPromocionalsController;
 
 
 Route::get('/', function () {
@@ -57,6 +58,7 @@ Route::resource('estat_seients', EstatSeientsController::class)->parameters([
 //    'tipus_seients' => 'id_tipus_seient'
 //])->middleware(['auth', 'verified']);
 
+
 //-------------------------------------- SEIENTS --------------------------------------//
 Route::resource('seients', SeientsController::class)->parameters([
     'seients' => 'id_seient'
@@ -85,6 +87,13 @@ Route::resource('sales', SalesController::class)->parameters([
 //Route::resource('tipus_esdeveniments', TipusEsdevenimentsController::class)->parameters([
 //    'tipus_esdeveniments' => 'id_tipus'
 //])->middleware(['auth', 'verified']);
+
+
+//------------------------------------ CODIS PROMOCIONALS ------------------------------------//
+Route::resource('codis_promocionals', CodisPromocionalsController::class)->parameters([
+    'codis_promocionals' => 'id_codi'
+])->middleware(['auth', 'verified']);
+
 
 
 Route::middleware('auth')->group(function () {

@@ -67,6 +67,24 @@
                 </div>
                 @endcan
 
+
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('codis_promocionals.index')" :active="request()->routeIs('seients')">
+                        {{ __('Codis_Promocionals') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+
+
+                @can('isAdmin')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('seients.index')" :active="request()->routeIs('seients')">
+                        {{ __('Seients') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+
             
             </div>
 
