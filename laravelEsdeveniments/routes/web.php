@@ -10,6 +10,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
+use App\Http\Controllers\TipusSeientController;
 
 
 Route::get('/', function () {
@@ -54,9 +55,9 @@ Route::resource('estat_seients', EstatSeientsController::class)->parameters([
 
 
 //-------------------------------------- TIPUS_SEIENTS --------------------------------------//
-//Route::resource('tipus_seients', TipusSeientsController::class)->parameters([
-//    'tipus_seients' => 'id_tipus_seient'
-//])->middleware(['auth', 'verified']);
+Route::resource('tipus_seients', TipusSeientController::class)->parameters([
+    'tipus_seients' => 'id_tipus_seient'
+])->middleware(['auth', 'verified']);
 
 
 //-------------------------------------- SEIENTS --------------------------------------//
