@@ -13,7 +13,8 @@ use App\Http\Controllers\CodisPromocionalsController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
-use App\Http\Controllers\TipusEsdevenimentsController;
+use App\Http\Controllers\TipusEsdevenimentController;
+use App\Http\Controllers\QrController;
 
 
 Route::get('/', function () {
@@ -70,9 +71,9 @@ Route::resource('seients', SeientsController::class)->parameters([
 
 
 //---------------------------------------- qr ----------------------------------------//
-//Route::resource('qr', QrController::class)->parameters([
-//    'qr' => 'id_qr'
-//])->middleware(['auth', 'verified']);
+Route::resource('qrs', QrController::class)->parameters([
+    'qr' => 'id_qr'
+])->middleware(['auth', 'verified']);
 
 
 //------------------------------------ ROLS_USUARIS ------------------------------------//
@@ -88,7 +89,7 @@ Route::resource('sales', SalesController::class)->parameters([
 
 
 //------------------------------------ TIPUS_ESDEVENIMENTS ------------------------------------//
-Route::resource('tipus_esdeveniments', TipusEsdevenimentsController::class)->parameters([
+Route::resource('tipus_esdeveniments', TipusEsdevenimentController::class)->parameters([
     'tipus_esdeveniments' => 'id_tipus'
 ])->middleware(['auth', 'verified']);
 
