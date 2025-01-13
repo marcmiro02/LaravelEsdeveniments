@@ -22,21 +22,18 @@
                     <h2 class="text-2xl font-bold mb-4">Pel·lícules Més Noves</h2>
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
-                            <!-- Slide 1 -->
-                            <div class="swiper-slide">
-                                <img src="{{ asset('img/Esdeveniment/esdeveniment1.jpg') }}" alt="Esdeveniment 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                                <h3 class="text-xl font-bold mb-2">Títol de la Pel·lícula 1</h3>
-                                <p class="mb-4">Descripció breu de la pel·lícula.</p>
-                                <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
-                            </div>
-                            <!-- Repeat for other movies -->
-                            <div class="swiper-slide">
-                                <img src="{{ asset('img/Esdeveniment/esdeveniment2.jpg') }}" alt="Esdeveniment 2" class="w-full h-48 object-cover rounded-lg mb-4">
-                                <h3 class="text-xl font-bold mb-2">Títol de la Pel·lícula 2</h3>
-                                <p class="mb-4">Descripció breu de la pel·lícula.</p>
-                                <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
-                            </div>
-                            <!-- Add more slides as needed -->
+                            @foreach($esdeveniments->sortByDesc('created_at')->take(6) as $esdeveniment)
+                                <div class="swiper-slide">
+                                    <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
+                                        <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
+                                            <img src="{{ asset($esdeveniment->foto_fons) }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <h3 class="text-2xl font-bold mb-2">{{ $esdeveniment->nom }}</h3>
+                                        <p class="mb-4">{{ $esdeveniment->sinopsis }}</p>
+                                        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                         <!-- Add Pagination -->
                         <div class="swiper-pagination"></div>
@@ -51,15 +48,18 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-2xl font-bold mb-4">Pel·lícules en Cartellera</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                         <!-- Movie Card -->
-                        <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
-                            <img src="{{ asset('img/movies/movie1.jpg') }}" alt="Movie 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                            <h3 class="text-xl font-bold mb-2">Títol de la Pel·lícula 1</h3>
-                            <p class="mb-4">Descripció breu de la pel·lícula.</p>
-                            <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
-                        </div>
-                        <!-- Repeat Movie Card for other movies -->
+                        @foreach($esdeveniments as $esdeveniment)
+                            <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
+                                <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
+                                    <img src="{{ asset($esdeveniment->foto_portada) }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2">{{ $esdeveniment->nom }}</h3>
+                                <p class="mb-4">{{ $esdeveniment->sinopsis }}</p>
+                                <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -68,11 +68,13 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-2xl font-bold mb-4">Esdeveniments Especials</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                         <!-- Event Card -->
-                        <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
-                            <img src="{{ asset('img/events/event1.jpg') }}" alt="Event 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                            <h3 class="text-xl font-bold mb-2">Títol de l'Esdeveniment 1</h3>
+                        <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
+                            <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
+                                <img src="{{ asset('img/events/event1.jpg') }}" alt="Event 1" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Títol de l'Esdeveniment 1</h3>
                             <p class="mb-4">Descripció breu de l'esdeveniment.</p>
                             <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Més Informació</a>
                         </div>
@@ -97,17 +99,21 @@
                     el: '.swiper-pagination',
                     clickable: true,
                 },
+                autoplay: {
+                    delay: 5000, // Cambia cada 5 segundos
+                    disableOnInteraction: false,
+                },
                 breakpoints: {
                     640: {
-                        slidesPerView: 2,
+                        slidesPerView: 1,
                         spaceBetween: 20,
                     },
                     768: {
-                        slidesPerView: 3,
+                        slidesPerView: 2,
                         spaceBetween: 30,
                     },
                     1024: {
-                        slidesPerView: 4,
+                        slidesPerView: 2,
                         spaceBetween: 40,
                     },
                 },

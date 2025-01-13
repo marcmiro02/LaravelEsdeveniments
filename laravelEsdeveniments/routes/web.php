@@ -10,6 +10,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
@@ -23,10 +24,7 @@ Route::get('/', function () {
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
@@ -110,4 +108,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
