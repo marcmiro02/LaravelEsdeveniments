@@ -73,30 +73,38 @@ class QrController extends Controller
         return redirect()->route('qrs.index')->with('success', 'QR eliminat correctament');
     }
 
-    public function generarQr($id)
+    public function generarQr()
     {
         $codigo = Str::random(12);
         $id_esdeveniment = rand(2, 5);
-        $qrContent = "Código: $codigo, Evento: $id_esdeveniment";
-        $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
-        $qrImageBlob = base64_encode($qrImage);
+        if($id_esdeveniment == 2) {
+            $nom_esdeveniment = 'Ive Got the Cimex';
+        }
+        if($id_esdeveniment == 3) {
+            $nom_esdeveniment = 'Manole del Flow';
+        }
+        if($id_esdeveniment == 4) {
+            $nom_esdeveniment = 'Tinc caca';
+        }
+        if($id_esdeveniment == 5) {
+            $nom_esdeveniment = 'Berlingo is not pipolian';
+        }
 
         $qr = new Qr();
         $qr->codi_qr = $codigo;
         $qr->data_generacio = Carbon::now();
         $qr->data_expiracio = Carbon::now()->addDays(7);
         $qr->id_esdeveniment = $id_esdeveniment;
-        $qr->id_usuari = 4;
+        $qr->id_usuari = 4; // Ajusta según corresponda
+
+        $qrContent = "$codigo\n$nom_esdeveniment";
+        $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
+        $qrImageBlob = base64_encode($qrImage);
+
         $qr->dibuix_qr = $qrImageBlob;
         $qr->save();
 
-        $contenidoQR = [
-            'codi' => $qr->codi,
-            'evento' => $qr->id_esdeveniment,
-            'usuario' => $qr->id_usuari,
-            'expiracion' => $qr->data_expiracio
-        ];
-    
-        return response()->json($contenidoQR);   
+        return $qr; // Devolver el modelo de QR
     }
+
 }

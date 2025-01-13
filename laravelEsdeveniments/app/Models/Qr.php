@@ -23,9 +23,9 @@ class Qr extends Model
         'codi_qr',
         'data_generacio',
         'data_expiracio',
+        'dibuix_qr',
         'id_esdeveniment',
         'id_usuari',
-        'dibuix_qr',
     ];
 
     public function esdeveniment()
