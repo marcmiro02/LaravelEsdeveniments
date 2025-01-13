@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -131,10 +132,10 @@ class UsersController extends Controller
 
         // Si el usuario sube una imagen de perfil
         if ($request->hasFile('foto_perfil')) {
-            $image = $request->file('foto_perfil');
-            $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/img/Avatars', $imageName);
-            $user->update(['foto_perfil' => 'img/Avatars/' . $imageName]);
+            $fotoPerfil = $request->file('foto_perfil');
+            $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
+            $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
+            $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
         }
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
@@ -212,10 +213,10 @@ class UsersController extends Controller
     
         // Actualización de foto de perfil
         if ($request->hasFile('foto_perfil')) {
-            $image = $request->file('foto_perfil');
-            $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/avatars', $imageName);
-            $user->update(['foto_perfil' => $imagePath]);
+            $fotoPerfil = $request->file('foto_perfil');
+            $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
+            $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
+            $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
         }
     
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
