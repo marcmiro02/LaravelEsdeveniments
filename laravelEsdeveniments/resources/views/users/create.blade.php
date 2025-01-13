@@ -11,6 +11,17 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1 class="mb-4">Crear Usuario</h1>
 
+                    @if ($errors->any())
+                        <div class="mb-4">
+                            <div class="font-medium text-red-600">{{ __('Whoops! Something went wrong.') }}</div>
+                            <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 

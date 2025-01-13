@@ -60,7 +60,7 @@ class UsersController extends Controller
     {
         // Obtener roles basados en el rol del usuario autenticado
         if (Auth::user()->rol == 1) { // SuperAdmin
-            $roles = Rols_usuaris::whereIn('id_rol', [2])->get(); // SuperAdmin puede crear Admins
+            $roles = Rols_usuaris::all(); // SuperAdmin puede crear cualquier rol
             $empresas = Empreses::all();
             return view('users.create', compact('empresas', 'roles'));
         } elseif (Auth::user()->rol == 2) { // Admin
@@ -97,10 +97,7 @@ class UsersController extends Controller
 
         // Validar el rol basado en el rol del usuario autenticado
         if ($userRole == 1) { // SuperAdmin
-            // SuperAdmin puede crear Admins
-            if (!in_array($validatedData['rol_id'], [2])) {
-                return redirect()->back()->withErrors(['rol_id' => 'SuperAdmin solo puede crear Admins.']);
-            }
+            // SuperAdmin puede crear cualquier rol
             $validatedData['id_empresa'] = $request->id_empresa;
         } elseif ($userRole == 2) { // Admin
             // Admin puede crear Subadmins y Trabajadores
@@ -136,8 +133,8 @@ class UsersController extends Controller
         if ($request->hasFile('foto_perfil')) {
             $image = $request->file('foto_perfil');
             $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/avatars', $imageName);
-            $user->update(['foto_perfil' => $imagePath]);
+            $imagePath = $image->storeAs('public/img/Avatars', $imageName);
+            $user->update(['foto_perfil' => 'img/Avatars/' . $imageName]);
         }
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
@@ -159,8 +156,8 @@ class UsersController extends Controller
     {
         $roles = Rols_usuaris::all(); // Obtener todos los roles
 
-        // Si el usuario autenticado es Admin, pasa las empresas
-        if (Auth::user()->can('isAdmin')) {
+        // Si el usuario autenticado es SuperAdmin o Admin, pasa las empresas
+        if (Auth::user()->can('isSuperadmin') || Auth::user()->can('isAdmin')) {
             $empresas = Empreses::all();
             return view('users.edit', compact('user', 'empresas', 'roles'));
         }
@@ -171,7 +168,7 @@ class UsersController extends Controller
         }
     
         // Otros roles no deben poder acceder a la edición de usuarios
-        return redirect()->route('home')->with('error', 'No tienes permisos para acceder a esta página.');
+        return redirect()->route('dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 
     /**

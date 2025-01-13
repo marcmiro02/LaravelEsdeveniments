@@ -81,7 +81,7 @@
                             <select name="rol" id="rol" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->id_rol }}" {{ $user->rol == $role->id_rol ? 'selected' : '' }}>
-                                        {{ $role->rol }}
+                                        {{ $role->nom_rol }}
                                     </option>
                                 @endforeach
                             </select>
