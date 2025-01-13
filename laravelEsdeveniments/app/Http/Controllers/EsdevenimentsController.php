@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 
 class EsdevenimentsController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         $esdeveniments = Esdeveniments::all();
         return view('esdeveniments.index', compact('esdeveniments'));
     }
