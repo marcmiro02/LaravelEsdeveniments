@@ -15,7 +15,7 @@ class EmpresesController extends Controller
 
     public function show($nif)
     {
-        $empresa = Empreses::where('nif', $nif)->firstOrFail();
+        $empresa = Empreses::findOrFail($nif);
         return view('empreses.show', compact('empresa'));
     }
 

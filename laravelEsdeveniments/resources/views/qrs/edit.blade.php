@@ -12,29 +12,27 @@
                     <form action="{{ route('qrs.update', $qr->id_qr) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        
                         <div class="mb-4">
                             <label for="codi_qr" class="block text-sm font-medium text-gray-700">Codi QR</label>
-                            <input type="text" id="codi_qr" name="codi_qr" value="{{ $qr->codi_qr }}" class="mt-1 block w-full text-black" required>
+                            <input type="text" name="codi_qr" class="mt-1 block w-full text-black" value="{{ $qr->codi_qr }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="data_generacio" class="block text-sm font-medium text-gray-700">Data de Generació</label>
-                            <input type="date" id="data_generacio" name="data_generacio" value="{{ $qr->data_generacio }}" class="mt-1 block w-full text-black" required>
+                            <label for="data_generacio" class="block text-sm font-medium text-gray-700">Data Generació</label>
+                            <input type="date" name="data_generacio" class="mt-1 block w-full text-black" value="{{ $qr->data_generacio }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="data_expiracio" class="block text-sm font-medium text-gray-700">Data d'Expiració</label>
-                            <input type="date" id="data_expiracio" name="data_expiracio" value="{{ $qr->data_expiracio }}" class="mt-1 block w-full text-black" required>
+                            <label for="data_expiracio" class="block text-sm font-medium text-gray-700">Data Expiració</label>
+                            <input type="date" name="data_expiracio" class="mt-1 block w-full text-black" value="{{ $qr->data_expiracio }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700">ID Esdeveniment</label>
-                            <input type="number" id="id_esdeveniment" name="id_esdeveniment" value="{{ $qr->id_esdeveniment }}" class="mt-1 block w-full text-black" required>
+                            <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700">Esdeveniment</label>
+                            <input type="number" name="id_esdeveniment" class="mt-1 block w-full text-black" value="{{ $qr->id_esdeveniment }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="id_usuari" class="block text-sm font-medium text-gray-700">ID Usuari</label>
-                            <input type="number" id="id_usuari" name="id_usuari" value="{{ $qr->id_usuari }}" class="mt-1 block w-full text-black" required>
+                            <label for="id_usuari" class="block text-sm font-medium text-gray-700">Usuari</label>
+                            <input type="number" name="id_usuari" class="mt-1 block w-full text-black" value="{{ $qr->id_usuari }}" required>
                         </div>
-
-                        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">Actualitzar</button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Actualitzar</button>
                     </form>
                 </div>
             </div>
