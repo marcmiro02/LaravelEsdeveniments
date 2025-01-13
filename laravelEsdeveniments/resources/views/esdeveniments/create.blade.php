@@ -37,8 +37,8 @@
                             <textarea id="sinopsis" name="sinopsis" class="mt-1 block w-full text-black"></textarea>
                         </div>
                         <div class="mb-4">
-                            <label for="trailer" class="block text-sm font-medium text-gray-700">Trailer</label>
-                            <input type="file" id="trailer" name="trailer" class="mt-1 block w-full text-black">
+                            <label for="trailer" class="block text-sm font-medium text-gray-700">Tràiler (Enllaç de YouTube)</label>
+                            <input type="url" id="trailer" name="trailer" class="mt-1 block w-full text-black">
                         </div>
                         <div class="mb-4">
                             <label for="director" class="block text-sm font-medium text-gray-700">Director</label>
@@ -65,19 +65,31 @@
                         </div>
                         <div class="mb-4">
                             <label for="id_tipus" class="block text-sm font-medium text-gray-700">Tipus</label>
-                            <input type="number" id="id_tipus" name="id_tipus" class="mt-1 block w-full text-black">
+                            <select id="id_tipus" name="id_tipus" class="mt-1 block w-full text-black">
+                                @foreach($tipusEsdeveniments as $tipus)
+                                    <option value="{{ $tipus->id_tipus }}">{{ $tipus->nom_tipus }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label for="id_categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
-                            <input type="number" id="id_categoria" name="id_categoria" class="mt-1 block w-full text-black">
+                            <select id="id_categoria" name="id_categoria" class="mt-1 block w-full text-black">
+                                @foreach($categories as $categoria)
+                                    <option value="{{ $categoria->id_categoria }}">{{ $categoria->nom_categoria }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label for="id_sala" class="block text-sm font-medium text-gray-700">Sala</label>
-                            <input type="number" id="id_sala" name="id_sala" class="mt-1 block w-full text-black">
+                            <select id="id_sala" name="id_sala" class="mt-1 block w-full text-black">
+                                @foreach($sales as $sala)
+                                    <option value="{{ $sala->id_sala }}">{{ $sala->nom_sala }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label for="id_empresa" class="block text-sm font-medium text-gray-700">Empresa</label>
-                            <input type="number" id="id_empresa" name="id_empresa" class="mt-1 block w-full text-black">
+                            <input type="number" id="id_empresa" name="id_empresa" class="mt-1 block w-full text-black" value="{{ Auth::user()->id_empresa }}" readonly>
                         </div>
 
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Esdeveniment</button>

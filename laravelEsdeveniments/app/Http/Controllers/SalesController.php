@@ -29,6 +29,7 @@ class SalesController extends Controller
         $request->validate([
             'nom_sala' => 'required',
             'aforament' => 'required|integer',
+            'id_empresa' => 'required|exists:empreses,id_empresa',
         ]);
 
         Sales::create($request->all());
@@ -47,6 +48,7 @@ class SalesController extends Controller
         $request->validate([
             'nom_sala' => 'required',
             'aforament' => 'required|integer',
+            'id_empresa' => 'required|exists:empreses,id_empresa',
         ]);
 
         $sala = Sales::findOrFail($id_sala);

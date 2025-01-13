@@ -23,18 +23,15 @@
                     <p class="text-black"><strong>Empresa:</strong> {{ $esdeveniment->id_empresa }}</p>
                     @if($esdeveniment->foto_portada)
                         <p class="text-black"><strong>Foto Portada:</strong></p>
-                        <img src="data:image/jpeg;base64,{{ base64_encode($esdeveniment->foto_portada) }}" alt="{{ $esdeveniment->nom }}" style="max-width: 200px;">
+                        <img src="{{ asset($esdeveniment->foto_portada) }}" alt="{{ $esdeveniment->nom }}" style="max-width: 200px;">
                     @endif
                     @if($esdeveniment->foto_fons)
                         <p class="text-black"><strong>Foto Fons:</strong></p>
-                        <img src="data:image/jpeg;base64,{{ base64_encode($esdeveniment->foto_fons) }}" alt="{{ $esdeveniment->nom }}" style="max-width: 200px;">
+                        <img src="{{ asset($esdeveniment->foto_fons) }}" alt="{{ $esdeveniment->nom }}" style="max-width: 200px;">
                     @endif
                     @if($esdeveniment->trailer)
                         <p class="text-black"><strong>Trailer:</strong></p>
-                        <video controls style="max-width: 400px;">
-                            <source src="data:video/mp4;base64,{{ base64_encode($esdeveniment->trailer) }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                        <a href="{{ $esdeveniment->trailer }}" target="_blank" class="text-blue-500 hover:text-blue-700">{{ $esdeveniment->trailer }}</a>
                     @endif
                 </div>
             </div>
