@@ -11,29 +11,27 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('qrs.store') }}" method="POST">
                         @csrf
-
                         <div class="mb-4">
                             <label for="codi_qr" class="block text-sm font-medium text-gray-700">Codi QR</label>
-                            <input type="text" id="codi_qr" name="codi_qr" class="mt-1 block w-full text-black" required>
+                            <input type="text" name="codi_qr" class="mt-1 block w-full text-black" required>
                         </div>
                         <div class="mb-4">
-                            <label for="data_generacio" class="block text-sm font-medium text-gray-700">Data de Generació</label>
-                            <input type="date" id="data_generacio" name="data_generacio" class="mt-1 block w-full text-black" required>
+                            <label for="data_generacio" class="block text-sm font-medium text-gray-700">Data Generació</label>
+                            <input type="date" name="data_generacio" class="mt-1 block w-full text-black" required>
                         </div>
                         <div class="mb-4">
-                            <label for="data_expiracio" class="block text-sm font-medium text-gray-700">Data d'Expiració</label>
-                            <input type="date" id="data_expiracio" name="data_expiracio" class="mt-1 block w-full text-black" required>
+                            <label for="data_expiracio" class="block text-sm font-medium text-gray-700">Data Expiració</label>
+                            <input type="date" name="data_expiracio" class="mt-1 block w-full text-black" required>
                         </div>
                         <div class="mb-4">
-                            <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700">ID Esdeveniment</label>
-                            <input type="number" id="id_esdeveniment" name="id_esdeveniment" class="mt-1 block w-full text-black" required>
+                            <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700">Esdeveniment</label>
+                            <input type="number" name="id_esdeveniment" class="mt-1 block w-full text-black" required>
                         </div>
                         <div class="mb-4">
-                            <label for="id_usuari" class="block text-sm font-medium text-gray-700">ID Usuari</label>
-                            <input type="number" id="id_usuari" name="id_usuari" class="mt-1 block w-full text-black" required>
+                            <label for="id_usuari" class="block text-sm font-medium text-gray-700">Usuari</label>
+                            <input type="number" name="id_usuari" class="mt-1 block w-full text-black" required>
                         </div>
-
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear QR</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear</button>
                     </form>
                 </div>
             </div>
