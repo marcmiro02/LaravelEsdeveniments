@@ -61,4 +61,8 @@ class Sales extends Model
     {
         return $this->belongsTo(Empreses::class, 'id_empresa', 'id_empresa');
     }
+    public function seients()
+    {
+        return $this->hasMany(Seients::class, 'id_sala');
+    }
 }
