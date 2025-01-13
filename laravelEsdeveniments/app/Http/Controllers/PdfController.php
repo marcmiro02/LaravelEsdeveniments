@@ -4,84 +4,50 @@ namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Qr;
 
 class PdfController extends Controller
 {
-    public function index()
+    public function generarEntrada($id)
     {
-        // Aquí puedes listar los PDFs generados o cualquier otra lógica
-        return view('pdf.index');
+        // 1. Buscar el QR en la base de datos
+        $qr = Qr::find($id);
+
+        if (!$qr) {
+            return response()->json(['error' => 'QR no encontrado'], 404);
+        }
+
+        // 2. Generar el contenido del QR (contendrá los datos del evento y el QR)
+        $contenido = "Código: {$qr->codi}, Evento ID: {$qr->id_esdeveniment}, Usuario: {$qr->id_usuari}, Expiración: {$qr->data_expiracio}";
+
+        // 3. Generar el QR dinámicamente (como base64 para la vista)
+        $qrCode = QrCode::format('png')->size(200)->generate($contenido);
+        $qrCodeBase64 = base64_encode($qrCode); // Convertir a base64 para integrarlo en la vista
+
+        // 4. Preparar datos para el PDF
+        $data = [
+            'eventName' => 'Evento ID ' . $qr->id_esdeveniment, // Puedes personalizar el nombre del evento
+            'eventDate' => '12/12/2025', // O personalizar con datos reales
+            'eventTime' => '20:00', // Personaliza el horario
+            'eventLocation' => 'Lugar del Evento', // Personaliza la ubicación
+            'eventOrganizer' => 'Organizador del Evento', // Nombre del organizador
+            'ticketPrice' => 50, // Precio real del evento
+            'discount' => 10, // Descuento si es necesario
+            'totalPrice' => 40, // Precio total después del descuento
+            'row' => 'A', // Personaliza la fila
+            'seat' => 12, // Asiento asignado
+            'qrCode' => $qrCodeBase64, // El QR como base64
+            'qr' => $qr, // Información completa del QR
+        ];
+
+        // 5. Crear el PDF usando la vista
+        $pdf = PDF::loadView('pdf.pdf', $data);
+
+        // 6. Devolver el PDF generado
+        return $pdf->stream('entrada-' . $qr->codi . '.pdf');
     }
 
-    public function show($id)
-    {
-        // Aquí puedes mostrar un PDF específico
-        return view('pdf.show', compact('id'));
-    }
-
-    public function create()
-    {
-        // Aquí puedes mostrar un formulario para crear un nuevo PDF
-        return view('pdf.create');
-    }
-
-    public function store(Request $request)
-    {
-        // Aquí puedes manejar la lógica para almacenar un nuevo PDF
-        // Por ejemplo, puedes validar y guardar datos en la base de datos
-        $request->validate([
-            'data' => 'required',
-        ]);
-
-        // Lógica para almacenar el PDF
-
-        return redirect()->route('pdf.index')->with('success', 'PDF creat correctament');
-    }
-
-    public function edit($id)
-    {
-        // Aquí puedes mostrar un formulario para editar un PDF existente
-        return view('pdf.edit', compact('id'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        // Aquí puedes manejar la lógica para actualizar un PDF existente
-        $request->validate([
-            'data' => 'required',
-        ]);
-
-        // Lógica para actualizar el PDF
-
-        return redirect()->route('pdf.index')->with('success', 'PDF actualitzat correctament');
-    }
-
-    public function destroy($id)
-    {
-        // Aquí puedes manejar la lógica para eliminar un PDF existente
-        // Lógica para eliminar el PDF
-
-        return redirect()->route('pdf.index')->with('success', 'PDF eliminat correctament');
-    }
-
-    public function pdf()
-{
-    $data = [
-        'eventName' => 'Concert de Rock',
-        'eventDate' => '2023-12-31',
-        'eventTime' => '20:00',
-        'eventLocation' => 'Estadi Olímpic',
-        'eventOrganizer' => 'Rock Events',
-        'ticketPrice' => 50,
-        'discount' => 10,
-        'totalPrice' => 40,
-        'row' => 'A',
-        'seat' => 12,
-        //qr aqui tambe
-    ];
-
-    $pdf = PDF::loadView('pdf.pdf', $data);
-
-    return $pdf->stream('entrada.pdf');
-}
 }

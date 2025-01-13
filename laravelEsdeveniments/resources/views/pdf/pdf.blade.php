@@ -115,6 +115,7 @@
         </div>
         <div class="qr-code">
             <p>Escaneja el codi QR per accedir a l'esdeveniment:</p>
+            <img src="data:image/png;base64,{{ $qrCode }}" alt="Código QR">
         </div>
     </div>
 </body>

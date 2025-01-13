@@ -113,6 +113,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/pdf/pdf', [PdfController::class, 'pdf'])->name('pdf.pdf');
+
+Route::get('/qr/generar/{id}', [QrController::class, 'generarQr'])->name('qr.generar'); // Generar QR
+//Route::get('/entrada/{id}', [PdfController::class, 'generarEntrada'])->name('entrada.pdf'); // Generar PDF con QR
+Route::get('/verificar-qr', [PdfController::class, 'verificarQr'])->name('verificar.qr'); // Verificar QR
+Route::get('/pdf/pdf', [PdfController::class, 'pdf'])->name('pdf.pdf'); // Ruta que ya tienes
+Route::get('/test-qr-entrades', [PdfController::class, 'generarEntrada'])->name('test_qr_entrades.index');
 
 require __DIR__.'/auth.php';

@@ -25,6 +25,7 @@ class Qr extends Model
         'data_expiracio',
         'id_esdeveniment',
         'id_usuari',
+        'dibuix_qr',
     ];
 
     public function esdeveniment()

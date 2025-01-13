@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Qr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class QrController extends Controller
 {
@@ -67,5 +71,32 @@ class QrController extends Controller
         $qr->delete();
 
         return redirect()->route('qrs.index')->with('success', 'QR eliminat correctament');
+    }
+
+    public function generarQr($id)
+    {
+        $codigo = Str::random(12);
+        $id_esdeveniment = rand(2, 5);
+        $qrContent = "Código: $codigo, Evento: $id_esdeveniment";
+        $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
+        $qrImageBlob = base64_encode($qrImage);
+
+        $qr = new Qr();
+        $qr->codi_qr = $codigo;
+        $qr->data_generacio = Carbon::now();
+        $qr->data_expiracio = Carbon::now()->addDays(7);
+        $qr->id_esdeveniment = $id_esdeveniment;
+        $qr->id_usuari = 4;
+        $qr->dibuix_qr = $qrImageBlob;
+        $qr->save();
+
+        $contenidoQR = [
+            'codi' => $qr->codi,
+            'evento' => $qr->id_esdeveniment,
+            'usuario' => $qr->id_usuari,
+            'expiracion' => $qr->data_expiracio
+        ];
+    
+        return response()->json($contenidoQR);   
     }
 }
