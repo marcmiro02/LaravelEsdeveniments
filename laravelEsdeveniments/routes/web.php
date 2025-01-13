@@ -15,6 +15,7 @@ use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
 use App\Http\Controllers\TipusEsdevenimentController;
 use App\Http\Controllers\QrController;
+use App\Http\Controllers\PdfController;
 
 
 Route::get('/', function () {
@@ -111,5 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/pdf/pdf', [PdfController::class, 'pdf'])->name('pdf.pdf');
 
 require __DIR__.'/auth.php';
