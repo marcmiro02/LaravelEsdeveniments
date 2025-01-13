@@ -8,6 +8,7 @@ use App\Models\Categories;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class EsdevenimentsController extends Controller
 {
@@ -55,14 +56,14 @@ class EsdevenimentsController extends Controller
 
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaNom = $esdeveniment->nom . '_portada.' . $fotoPortada->getClientOriginalExtension();
+            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
             $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
             $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
         }
 
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsNom = $esdeveniment->nom . '_fons.' . $fotoFons->getClientOriginalExtension();
+            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
             $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
             $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
         }
@@ -77,7 +78,6 @@ class EsdevenimentsController extends Controller
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
         $tipusEsdeveniments = Tipus_esdeveniment::all();
         $categories = Categories::all();
-        
         $sales = Sales::where('id_empresa', Auth::user()->id_empresa)->get();
         return view('esdeveniments.edit', compact('esdeveniment', 'tipusEsdeveniments', 'categories', 'sales'));
     }
@@ -107,14 +107,14 @@ class EsdevenimentsController extends Controller
 
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaNom = $esdeveniment->nom . '_portada.' . $fotoPortada->getClientOriginalExtension();
+            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
             $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
             $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
         }
 
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsNom = $esdeveniment->nom . '_fons.' . $fotoFons->getClientOriginalExtension();
+            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
             $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
             $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
         }

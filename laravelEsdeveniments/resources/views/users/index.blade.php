@@ -57,6 +57,7 @@
                                 <th class="px-4 py-2 text-left">Nombre</th>
                                 <th class="px-4 py-2 text-left">Rol</th>
                                 <th class="px-4 py-2 text-left">Empresa</th>
+                                <th class="px-4 py-2 text-left">ID</th>
                                 <th class="px-4 py-2 text-left">Acciones</th>
                             </tr>
                         </thead>
@@ -78,30 +79,13 @@
                                         {{ $user->empresa->nom_empresa ?? 'N/A' }}
                                     </td>
                                     <td class="px-4 py-2">
+                                        {{ $user->id }}
+                                    <td class="px-4 py-2">
                                         <!-- Ver Usuario -->
                                         <a href="{{ route('users.show', $user->id) }}" 
                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                             Ver
                                         </a>
-
-                                        <!-- Editar Usuario -->
-                                        <a href="{{ route('users.edit', $user->id) }}" 
-                                           class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                            Editar
-                                        </a>
-
-                                        <!-- Eliminar Usuario -->
-                                        <form action="{{ route('users.destroy', $user->id) }}" 
-                                              method="POST" 
-                                              onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')" 
-                                              class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                                Eliminar
-                                            </button>
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
