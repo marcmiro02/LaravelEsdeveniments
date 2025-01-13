@@ -1,10 +1,6 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+<!-- filepath: /e:/DAM/DAM2/M9-Programaciodeserveisiprocessos/Laravel/LaravelEsdeveniments/laravelEsdeveniments/resources/views/dashboard.blade.php -->
 
+<x-app-layout>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Hero Section -->
@@ -48,7 +44,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-2xl font-bold mb-4">Pel·lícules en Cartellera</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Movie Card -->
                         @foreach($esdeveniments as $esdeveniment)
                             <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
@@ -68,7 +64,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-2xl font-bold mb-4">Esdeveniments Especials</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Event Card -->
                         <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
                             <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
@@ -113,7 +109,7 @@
                         spaceBetween: 30,
                     },
                     1024: {
-                        slidesPerView: 2,
+                        slidesPerView: 3,
                         spaceBetween: 40,
                     },
                 },

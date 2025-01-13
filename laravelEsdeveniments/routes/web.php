@@ -16,15 +16,16 @@ use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
 use App\Http\Controllers\TipusEsdevenimentController;
 use App\Http\Controllers\QrController;
+use App\Models\Esdeveniments;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', function () {
+    $esdeveniments = Esdeveniments::all();
+    return view('welcome', compact('esdeveniments'));
+})->name('welcome');
 
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
