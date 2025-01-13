@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seients;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 
 class SeientsController extends Controller
@@ -33,9 +34,7 @@ class SeientsController extends Controller
             'estat_seient' => 'required',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
-
         Seients::create($request->all());
-
         return redirect()->route('seients.index')->with('success', 'Seient creat correctament');
     }
 
@@ -54,10 +53,8 @@ class SeientsController extends Controller
             'estat_seient' => 'required',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
-
         $seient = Seients::findOrFail($id_seient);
         $seient->update($request->all());
-
         return redirect()->route('seients.index')->with('success', 'Seient actualitzat correctament');
     }
 
@@ -65,7 +62,13 @@ class SeientsController extends Controller
     {
         $seient = Seients::findOrFail($id_seient);
         $seient->delete();
-
         return redirect()->route('seients.index')->with('success', 'Seient eliminat correctament');
+    }
+
+    public function showSeients($id_sala)
+    {
+        $sala = Sales::findOrFail($id_sala);
+        $seients = Seients::where('id_sala', $id_sala)->orderBy('fila')->orderBy('columna')->get()->groupBy('fila');
+        return view('seients.showSeients', compact('sala', 'seients'));
     }
 }

@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Añadir estilos personalizados para los asientos */
+.seat {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.seat.available {
+    background-color: #4CAF50; /* Verde para asientos disponibles */
+}
+
+.seat.occupied {
+    background-color: #F44336; /* Rojo para asientos ocupados */
+}
+
+.seat.reserved {
+    background-color: #FFC107; /* Amarillo para asientos reservados */
+}
+
+.seat.selected {
+    background-color: #2196F3; /* Azul para asientos seleccionados */
+}
+
+.seat-label {
+    color: white;
+    font-size: 12px;
+}
