@@ -27,6 +27,9 @@ Route::get('/', function () {
     return view('welcome', compact('esdeveniments'));
 })->name('welcome');
 
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
+
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
 

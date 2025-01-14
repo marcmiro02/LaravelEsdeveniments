@@ -28,14 +28,26 @@ class SeientsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fila' => 'required',
-            'columna' => 'required',
-            'preu' => 'required',
-            'estat_seient' => 'required',
+            'seats.*.*.fila' => 'required|integer',
+            'seats.*.*.columna' => 'required|integer',
+            'seats.*.*.preu' => 'required|numeric',
+            'seats.*.*.estat_seient' => 'required|integer',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
-        Seients::create($request->all());
-        return redirect()->route('seients.index')->with('success', 'Seient creat correctament');
+
+        foreach ($request->seats as $fila => $columnes) {
+            foreach ($columnes as $columna => $seatData) {
+                Seients::create([
+                    'fila' => $seatData['fila'],
+                    'columna' => $seatData['columna'],
+                    'preu' => $seatData['preu'],
+                    'estat_seient' => $seatData['estat_seient'],
+                    'id_sala' => $request->id_sala,
+                ]);
+            }
+        }
+
+        return redirect()->route('seients.index')->with('success', 'Seients creats correctament');
     }
 
     public function edit($id_seient)
@@ -47,14 +59,16 @@ class SeientsController extends Controller
     public function update(Request $request, $id_seient)
     {
         $request->validate([
-            'fila' => 'required',
-            'columna' => 'required',
-            'preu' => 'required',
-            'estat_seient' => 'required',
+            'fila' => 'required|integer',
+            'columna' => 'required|integer',
+            'preu' => 'required|numeric',
+            'estat_seient' => 'required|integer',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
+
         $seient = Seients::findOrFail($id_seient);
         $seient->update($request->all());
+
         return redirect()->route('seients.index')->with('success', 'Seient actualitzat correctament');
     }
 
@@ -62,6 +76,7 @@ class SeientsController extends Controller
     {
         $seient = Seients::findOrFail($id_seient);
         $seient->delete();
+
         return redirect()->route('seients.index')->with('success', 'Seient eliminat correctament');
     }
 

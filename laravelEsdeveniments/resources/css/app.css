@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 /* Añadir estilos personalizados para los asientos */
+/* Añadir estilos personalizados para los asientos */
 .seat {
-    width: 40px;
-    height: 40px;
-    margin: 5px;
+    width: 25px;
+    height: 25px;
+    margin: 2px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -13,23 +14,35 @@
     cursor: pointer;
 }
 
-.seat.available {
-    background-color: #4CAF50; /* Verde para asientos disponibles */
+.seat img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.seat.occupied {
-    background-color: #F44336; /* Rojo para asientos ocupados */
+/* Añadir estilos personalizados para el desplegable */
+.seat-options {
+    z-index: 50; /* Asegurarse de que esté al frente */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añadir sombra */
+    border-radius: 8px; /* Bordes redondeados */
+    width: 200px; /* Aumentar el tamaño del desplegable */
 }
 
-.seat.reserved {
-    background-color: #FFC107; /* Amarillo para asientos reservados */
+.seat-options label {
+    margin-bottom: 0.5rem; /* Espacio entre el label y el input */
 }
 
-.seat.selected {
-    background-color: #2196F3; /* Azul para asientos seleccionados */
+.seat-options input,
+.seat-options select {
+    padding: 0.5rem; /* Añadir padding */
+    border: 1px solid #ccc; /* Borde */
+    border-radius: 4px; /* Bordes redondeados */
+    margin-bottom: 1rem; /* Espacio entre los inputs */
 }
 
-.seat-label {
-    color: white;
-    font-size: 12px;
+.seat-options input:focus,
+.seat-options select:focus {
+    outline: none; /* Quitar outline */
+    border-color: #3182ce; /* Cambiar color del borde al enfocar */
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Añadir sombra al enfocar */
 }
