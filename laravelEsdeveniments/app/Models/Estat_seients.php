@@ -51,4 +51,8 @@ class Estat_seients extends Model
      * @var bool
      */
     public $timestamps = false;
+    public function seients()
+    {
+        return $this->hasMany(Seients::class, 'estat_seient');
+    }
 }

@@ -38,8 +38,8 @@
                             <textarea id="sinopsis" name="sinopsis" class="mt-1 block w-full text-black">{{ $esdeveniment->sinopsis }}</textarea>
                         </div>
                         <div class="mb-4">
-                            <label for="trailer" class="block text-sm font-medium text-gray-700">Trailer</label>
-                            <input type="file" id="trailer" name="trailer" class="mt-1 block w-full text-black">
+                            <label for="trailer" class="block text-sm font-medium text-gray-700">Tràiler (Enllaç de YouTube)</label>
+                            <input type="url" id="trailer" name="trailer" class="mt-1 block w-full text-black" value="{{ $esdeveniment->trailer }}">
                         </div>
                         <div class="mb-4">
                             <label for="director" class="block text-sm font-medium text-gray-700">Director</label>

@@ -23,6 +23,7 @@ class Sales extends Model
     protected $fillable = [
         'nom_sala',
         'aforament',
+        'id_empresa',
     ];
 
     /**
@@ -52,4 +53,16 @@ class Sales extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * Get the empresa that owns the sala.
+     */
+    public function empresa()
+    {
+        return $this->belongsTo(Empreses::class, 'id_empresa', 'id_empresa');
+    }
+    public function seients()
+    {
+        return $this->hasMany(Seients::class, 'id_sala');
+    }
 }

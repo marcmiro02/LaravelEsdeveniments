@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Esdeveniments;
+use App\Models\Tipus_esdeveniment;
+use App\Models\Categories;
+use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class EsdevenimentsController extends Controller
 {
@@ -20,7 +25,10 @@ class EsdevenimentsController extends Controller
 
     public function create()
     {
-        return view('esdeveniments.create');
+        $tipusEsdeveniments = Tipus_esdeveniment::all();
+        $categories = Categories::all();
+        $sales = Sales::where('id_empresa', Auth::user()->id_empresa)->get();
+        return view('esdeveniments.create', compact('tipusEsdeveniments', 'categories', 'sales'));
     }
 
     public function store(Request $request)
@@ -43,23 +51,24 @@ class EsdevenimentsController extends Controller
             'id_empresa' => 'nullable|exists:empreses,id_empresa',
         ]);
 
+        $esdeveniment = new Esdeveniments($request->all());
 
-            // Procesar foto_portada en Base64
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
-            $request->merge(['foto_portada' => $fotoPortadaBase64]);
+            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
+            $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
+            $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
         }
 
-        // Procesar foto_fons en Base64
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
-            $request->merge(['foto_fons' => $fotoFonsBase64]);
+            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
+            $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
+            $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
         }
 
+        $esdeveniment->save();
 
-        Esdeveniments::create($request->all());
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
     }
@@ -67,7 +76,10 @@ class EsdevenimentsController extends Controller
     public function edit($id_esdeveniment)
     {
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
-        return view('esdeveniments.edit', compact('esdeveniment'));
+        $tipusEsdeveniments = Tipus_esdeveniment::all();
+        $categories = Categories::all();
+        $sales = Sales::where('id_empresa', Auth::user()->id_empresa)->get();
+        return view('esdeveniments.edit', compact('esdeveniment', 'tipusEsdeveniments', 'categories', 'sales'));
     }
 
     public function update(Request $request, $id_esdeveniment)
@@ -92,21 +104,23 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
 
-        // Procesar foto_portada en Base64
+        $esdeveniment->fill($request->all());
+
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
-            $request->merge(['foto_portada' => $fotoPortadaBase64]);
+            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
+            $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
+            $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
         }
 
-        // Procesar foto_fons en Base64
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
-            $request->merge(['foto_fons' => $fotoFonsBase64]);
+            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
+            $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
+            $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
         }
-        
-        $esdeveniment->update($request->all());
+
+        $esdeveniment->save();
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment actualitzat correctament');
     }

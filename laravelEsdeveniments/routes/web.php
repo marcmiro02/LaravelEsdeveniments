@@ -10,29 +10,27 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
 use App\Http\Controllers\TipusEsdevenimentController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\PdfController;
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Models\Esdeveniments;
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', function () {
+    $esdeveniments = Esdeveniments::all();
+    return view('welcome', compact('esdeveniments'));
+})->name('welcome');
 
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
 
 //--------------------------------------- USERS ---------------------------------------//
-Route::resource('users', UsersController::class)->parameters([
-   'users' => 'id_usuari'
-])->middleware(['auth', 'verified']);
+Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
 
 
 //-------------------------------------- EMPRESES --------------------------------------//
@@ -116,5 +114,5 @@ Route::middleware('auth')->group(function () {
 Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index');
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
 
-
-require __DIR__.'/auth.php';
+Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
+require __DIR__ . '/auth.php';

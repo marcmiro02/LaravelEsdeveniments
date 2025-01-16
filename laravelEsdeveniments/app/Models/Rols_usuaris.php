@@ -51,4 +51,12 @@ class Rols_usuaris extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * Get the users for the role.
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class, 'rol','rol_id');
+    }
 }
