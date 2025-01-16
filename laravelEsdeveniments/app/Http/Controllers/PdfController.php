@@ -18,7 +18,7 @@ class PdfController extends Controller
         $esdeveniment = Esdeveniments::find($esdeveniment);
 
         $qrController = new QrController();
-        $qr = $qrController->generarQr();
+        $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
 
         $data = [
             'eventName' => $esdeveniment->nom,

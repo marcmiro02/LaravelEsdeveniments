@@ -130,13 +130,20 @@ class UsersController extends Controller
             'id_empresa' => $validatedData['id_empresa'],
         ]);
 
-        // Si el usuario sube una imagen de perfil
         if ($request->hasFile('foto_perfil')) {
             $fotoPerfil = $request->file('foto_perfil');
-            $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
-            $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
-            $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
+            // Obtén el contenido del archivo y codifícalo en base64
+            $fotoPerfilBase64 = base64_encode(file_get_contents($fotoPerfil));
+            // Guarda la cadena Base64 en la base de datos
+            $user->update(['foto_perfil' => $fotoPerfilBase64]);
         }
+        // Si el usuario sube una imagen de perfil
+        // if ($request->hasFile('foto_perfil')) {
+        //     $fotoPerfil = $request->file('foto_perfil');
+        //     $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
+        //     $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
+        //     $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
+        // }
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -211,14 +218,20 @@ class UsersController extends Controller
             'id_empresa' => $request->id_empresa,
         ]);
     
-        // Actualización de foto de perfil
+        // // Actualización de foto de perfil
+        // if ($request->hasFile('foto_perfil')) {
+        //     $fotoPerfil = $request->file('foto_perfil');
+        //     $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
+        //     $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
+        //     $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
+        // }
         if ($request->hasFile('foto_perfil')) {
             $fotoPerfil = $request->file('foto_perfil');
-            $fotoPerfilNom = Str::slug($user->name . ' ' . $user->surname) . '_perfil.' . $fotoPerfil->getClientOriginalExtension();
-            $fotoPerfil->move(public_path('img/Avatars'), $fotoPerfilNom);
-            $user->update(['foto_perfil' => 'img/Avatars/' . $fotoPerfilNom]);
+            // Obtén el contenido del archivo y codifícalo en base64
+            $fotoPerfilBase64 = base64_encode(file_get_contents($fotoPerfil));
+            // Guarda la cadena Base64 en la base de datos
+            $user->update(['foto_perfil' => $fotoPerfilBase64]);
         }
-    
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 

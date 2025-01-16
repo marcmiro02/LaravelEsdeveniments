@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
+use App\Models\Esdeveniments;
 
 class QrController extends Controller
 {
@@ -73,28 +73,15 @@ class QrController extends Controller
         return redirect()->route('qrs.index')->with('success', 'QR eliminat correctament');
     }
 
-    public function generarQr()
+    public function generarQr($id_esdeveniment)
     {
         $codigo = Str::random(12);
-        $id_esdeveniment = rand(2, 5);
-        if($id_esdeveniment == 2) {
-            $nom_esdeveniment = 'Ive Got the Cimex';
-        }
-        if($id_esdeveniment == 3) {
-            $nom_esdeveniment = 'Manole del Flow';
-        }
-        if($id_esdeveniment == 4) {
-            $nom_esdeveniment = 'Tinc caca';
-        }
-        if($id_esdeveniment == 5) {
-            $nom_esdeveniment = 'Berlingo is not pipolian';
-        }
+        $nom_esdeveniment = Esdeveniments::find($id_esdeveniment)->nom;
 
         $qr = new Qr();
         $qr->codi_qr = $codigo;
         $qr->data_generacio = Carbon::now();
         $qr->data_expiracio = Carbon::now()->addDays(7);
-        $qr->id_esdeveniment = $id_esdeveniment;
         $qr->id_usuari = 4;
 
         $qrContent = "$codigo\n$nom_esdeveniment";

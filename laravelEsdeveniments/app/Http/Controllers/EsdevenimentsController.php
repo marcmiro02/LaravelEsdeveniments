@@ -53,22 +53,21 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment = new Esdeveniments($request->all());
 
+        // Procesar foto_portada en Base64
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
-            $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
-            $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
+            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
+            $esdeveniment->foto_portada = $fotoPortadaBase64;  // Asignar Base64 a foto_portada
         }
 
+        // Procesar foto_fons en Base64
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
-            $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
-            $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
+            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
+            $esdeveniment->foto_fons = $fotoFonsBase64;  // Asignar Base64 a foto_fons
         }
 
         $esdeveniment->save();
-
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
     }
@@ -108,16 +107,15 @@ class EsdevenimentsController extends Controller
 
         if ($request->hasFile('foto_portada')) {
             $fotoPortada = $request->file('foto_portada');
-            $fotoPortadaNom = Str::slug($esdeveniment->nom) . '_portada.' . $fotoPortada->getClientOriginalExtension();
-            $fotoPortada->move(public_path('img/Esdeveniment'), $fotoPortadaNom);
-            $esdeveniment->foto_portada = 'img/Esdeveniment/' . $fotoPortadaNom;
+            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
+            $esdeveniment->foto_portada = $fotoPortadaBase64;  // Asignar Base64 a foto_portada
         }
-
+    
+        // Procesar foto_fons en Base64
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
-            $fotoFonsNom = Str::slug($esdeveniment->nom) . '_fons.' . $fotoFons->getClientOriginalExtension();
-            $fotoFons->move(public_path('img/Esdeveniment'), $fotoFonsNom);
-            $esdeveniment->foto_fons = 'img/Esdeveniment/' . $fotoFonsNom;
+            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
+            $esdeveniment->foto_fons = $fotoFonsBase64;  // Asignar Base64 a foto_fons
         }
 
         $esdeveniment->save();
