@@ -29,10 +29,10 @@ class EsdevenimentsController extends Controller
             'nom' => 'required',
             'foto_portada' => 'nullable|image',
             'foto_fons' => 'nullable|image',
+            'trailer' => 'nullable|url',
             'duracio' => 'nullable|date_format:H:i:s',
             'dies_dates' => 'nullable|string',
             'sinopsis' => 'nullable|string',
-            'trailer' => 'nullable|file',
             'director' => 'nullable|string|max:100',
             'actors' => 'nullable|string',
             'data_estrena' => 'nullable|date',
@@ -42,6 +42,7 @@ class EsdevenimentsController extends Controller
             'id_sala' => 'nullable|exists:sales,id_sala',
             'id_empresa' => 'nullable|exists:empreses,id_empresa',
         ]);
+
 
             // Procesar foto_portada en Base64
         if ($request->hasFile('foto_portada')) {
@@ -75,10 +76,10 @@ class EsdevenimentsController extends Controller
             'nom' => 'required',
             'foto_portada' => 'nullable|image',
             'foto_fons' => 'nullable|image',
+            'trailer' => 'nullable|url',
             'duracio' => 'nullable|date_format:H:i:s',
             'dies_dates' => 'nullable|string',
             'sinopsis' => 'nullable|string',
-            'trailer' => 'nullable|file',
             'director' => 'nullable|string|max:100',
             'actors' => 'nullable|string',
             'data_estrena' => 'nullable|date',
