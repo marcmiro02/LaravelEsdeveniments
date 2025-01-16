@@ -95,7 +95,7 @@ class QrController extends Controller
         $qr->data_generacio = Carbon::now();
         $qr->data_expiracio = Carbon::now()->addDays(7);
         $qr->id_esdeveniment = $id_esdeveniment;
-        $qr->id_usuari = 4; // Ajusta según corresponda
+        $qr->id_usuari = 4;
 
         $qrContent = "$codigo\n$nom_esdeveniment";
         $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
@@ -104,7 +104,7 @@ class QrController extends Controller
         $qr->dibuix_qr = $qrImageBlob;
         $qr->save();
 
-        return $qr; // Devolver el modelo de QR
+        return $qr;
     }
 
 }

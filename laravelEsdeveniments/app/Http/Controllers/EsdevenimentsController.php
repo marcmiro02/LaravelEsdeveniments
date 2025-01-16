@@ -43,6 +43,21 @@ class EsdevenimentsController extends Controller
             'id_empresa' => 'nullable|exists:empreses,id_empresa',
         ]);
 
+            // Procesar foto_portada en Base64
+        if ($request->hasFile('foto_portada')) {
+            $fotoPortada = $request->file('foto_portada');
+            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
+            $request->merge(['foto_portada' => $fotoPortadaBase64]);
+        }
+
+        // Procesar foto_fons en Base64
+        if ($request->hasFile('foto_fons')) {
+            $fotoFons = $request->file('foto_fons');
+            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
+            $request->merge(['foto_fons' => $fotoFonsBase64]);
+        }
+
+
         Esdeveniments::create($request->all());
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
@@ -75,6 +90,21 @@ class EsdevenimentsController extends Controller
         ]);
 
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+
+        // Procesar foto_portada en Base64
+        if ($request->hasFile('foto_portada')) {
+            $fotoPortada = $request->file('foto_portada');
+            $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
+            $request->merge(['foto_portada' => $fotoPortadaBase64]);
+        }
+
+        // Procesar foto_fons en Base64
+        if ($request->hasFile('foto_fons')) {
+            $fotoFons = $request->file('foto_fons');
+            $fotoFonsBase64 = base64_encode(file_get_contents($fotoFons));
+            $request->merge(['foto_fons' => $fotoFonsBase64]);
+        }
+        
         $esdeveniment->update($request->all());
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment actualitzat correctament');

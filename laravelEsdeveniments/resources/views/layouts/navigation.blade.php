@@ -113,7 +113,7 @@
                 @endcan
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('test_qr_entrades.index')" :active="request()->routeIs('test_qr_entrades.index')">
+                    <x-nav-link :href="route('pdf.index')" :active="request()->routeIs('pdf.index')">
                         {{ __('TEST QR') }}
                     </x-nav-link>
                 </div>

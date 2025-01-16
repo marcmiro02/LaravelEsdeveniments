@@ -97,14 +97,12 @@
             <h1>Entrada d'Esdeveniment</h1>
         </div>
         <div class="event-logo">
-            <img src="{{ public_path('img/Logos/comic-book-cover-vertical-banner-design-vector.jpg') }}" alt="Event Logo">
+            <img src="data:image/jpeg;base64,{{ $esdeveniment->foto_portada }}" alt="Event Logo">
         </div>
         <div class="event-details">
             <h2>Nom de l'Esdeveniment: {{ $eventName }}</h2>
             <p>Data: {{ $eventDate }}</p>
             <p>Hora: {{ $eventTime }}</p>
-            <p>Lloc: {{ $eventLocation }}</p>
-            <p>Organitzat per: {{ $eventOrganizer }}</p>
         </div>
         <div class="ticket-details">
             <p>Preu de l'Entrada: {{ $ticketPrice }} €</p>
