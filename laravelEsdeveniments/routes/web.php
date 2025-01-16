@@ -16,9 +16,8 @@ use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
 use App\Http\Controllers\TipusEsdevenimentController;
 use App\Http\Controllers\QrController;
+use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
-
-
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
@@ -111,6 +110,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index');
+Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 require __DIR__ . '/auth.php';

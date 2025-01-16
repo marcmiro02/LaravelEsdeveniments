@@ -69,6 +69,7 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment->save();
 
+
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
     }
 
@@ -102,6 +103,7 @@ class EsdevenimentsController extends Controller
         ]);
 
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+
         $esdeveniment->fill($request->all());
 
         if ($request->hasFile('foto_portada')) {
