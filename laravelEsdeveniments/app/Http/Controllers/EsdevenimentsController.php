@@ -12,8 +12,7 @@ use Illuminate\Support\Str;
 
 class EsdevenimentsController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         $esdeveniments = Esdeveniments::all();
         return view('esdeveniments.index', compact('esdeveniments'));
     }
@@ -70,6 +69,7 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment->save();
 
+
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
     }
 
@@ -103,6 +103,7 @@ class EsdevenimentsController extends Controller
         ]);
 
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+
         $esdeveniment->fill($request->all());
 
         if ($request->hasFile('foto_portada')) {
