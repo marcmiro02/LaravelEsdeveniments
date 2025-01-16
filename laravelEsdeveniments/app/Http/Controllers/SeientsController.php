@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seients;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 
 class SeientsController extends Controller
@@ -27,16 +28,26 @@ class SeientsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fila' => 'required',
-            'columna' => 'required',
-            'preu' => 'required',
-            'estat_seient' => 'required',
+            'seats.*.*.fila' => 'required|integer',
+            'seats.*.*.columna' => 'required|integer',
+            'seats.*.*.preu' => 'required|numeric',
+            'seats.*.*.estat_seient' => 'required|integer',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
 
-        Seients::create($request->all());
+        foreach ($request->seats as $fila => $columnes) {
+            foreach ($columnes as $columna => $seatData) {
+                Seients::create([
+                    'fila' => $seatData['fila'],
+                    'columna' => $seatData['columna'],
+                    'preu' => $seatData['preu'],
+                    'estat_seient' => $seatData['estat_seient'],
+                    'id_sala' => $request->id_sala,
+                ]);
+            }
+        }
 
-        return redirect()->route('seients.index')->with('success', 'Seient creat correctament');
+        return redirect()->route('seients.index')->with('success', 'Seients creats correctament');
     }
 
     public function edit($id_seient)
@@ -48,10 +59,10 @@ class SeientsController extends Controller
     public function update(Request $request, $id_seient)
     {
         $request->validate([
-            'fila' => 'required',
-            'columna' => 'required',
-            'preu' => 'required',
-            'estat_seient' => 'required',
+            'fila' => 'required|integer',
+            'columna' => 'required|integer',
+            'preu' => 'required|numeric',
+            'estat_seient' => 'required|integer',
             'id_sala' => 'required|exists:sales,id_sala',
         ]);
 
@@ -67,5 +78,12 @@ class SeientsController extends Controller
         $seient->delete();
 
         return redirect()->route('seients.index')->with('success', 'Seient eliminat correctament');
+    }
+
+    public function showSeients($id_sala)
+    {
+        $sala = Sales::findOrFail($id_sala);
+        $seients = Seients::where('id_sala', $id_sala)->orderBy('fila')->orderBy('columna')->get()->groupBy('fila');
+        return view('seients.showSeients', compact('sala', 'seients'));
     }
 }
