@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Editar Seient') }}
+            {{ __('Editar Seients') }}
         </h2>
     </x-slot>
 
@@ -9,35 +9,182 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('seients.update', $seient->id_seient) }}" method="POST">
+                    <form id="seat-form" action="{{ route('seients.update', $sala->id_sala) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        
+
                         <div class="mb-4">
-                            <label for="fila" class="block text-sm font-medium text-gray-700">Fila</label>
-                            <input type="text" id="fila" name="fila" value="{{ $seient->fila }}" class="mt-1 block w-full text-black" required>
+                            <label for="nom_sala" class="block text-sm font-medium text-gray-700">Nom Sala</label>
+                            <input type="text" id="nom_sala" name="nom_sala" class="mt-1 block w-full text-black" value="{{ $sala->nom_sala }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="columna" class="block text-sm font-medium text-gray-700">Columna</label>
-                            <input type="text" id="columna" name="columna" value="{{ $seient->columna }}" class="mt-1 block w-full text-black" required>
+                            <label for="num_files" class="block text-sm font-medium text-gray-700">Número de Files</label>
+                            <input type="number" id="num_files" name="num_files" class="mt-1 block w-full text-black" value="{{ $num_files }}" required>
                         </div>
                         <div class="mb-4">
-                            <label for="preu" class="block text-sm font-medium text-gray-700">Preu</label>
-                            <input type="text" id="preu" name="preu" value="{{ $seient->preu }}" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="estat_seient" class="block text-sm font-medium text-gray-700">Estat del Seient</label>
-                            <input type="text" id="estat_seient" name="estat_seient" value="{{ $seient->estat_seient }}" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="id_sala" class="block text-sm font-medium text-gray-700">ID de la Sala</label>
-                            <input type="number" id="id_sala" name="id_sala" value="{{ $seient->id_sala }}" class="mt-1 block w-full text-black" required>
+                            <label for="num_columnes" class="block text-sm font-medium text-gray-700">Número de Columnes</label>
+                            <input type="number" id="num_columnes" name="num_columnes" class="mt-1 block w-full text-black" value="{{ $num_columnes }}" required>
                         </div>
 
-                        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">Actualitzar</button>
+                        <button type="button" id="generate-seats" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generar Seients</button>
+
+                        <div id="seats-container" class="mt-6 grid grid-cols-1 gap-4">
+                            @foreach ($seients as $seient)
+                                <div class="relative mx-1">
+                                    <button class="seat Seient_d" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}" data-estat-seient="{{ $seient->estat_seient }}" data-preu="{{ $seient->preu }}">
+                                        <img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">
+                                    </button>
+                                    <input type="hidden" class="preu-seient" value="{{ $seient->preu }}">
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="preu_seient" class="block text-sm font-medium text-gray-700">Preu Seient Seleccionat</label>
+                            <input type="number" id="preu_seient" class="mt-1 block w-full text-black">
+                        </div>
+
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4" id="submit-seats">Guardar Canvis</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('generate-seats').addEventListener('click', function() {
+            const numFiles = document.getElementById('num_files').value;
+            const numColumnes = document.getElementById('num_columnes').value;
+            const seatsContainer = document.getElementById('seats-container');
+            seatsContainer.innerHTML = '';
+
+            for (let fila = 1; fila <= numFiles; fila++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('flex', 'justify-center', 'mb-4');
+
+                for (let columna = 1; columna <= numColumnes; columna++) {
+                    const seatDiv = document.createElement('div');
+                    seatDiv.classList.add('relative', 'mx-1');
+
+                    const seatButton = document.createElement('button');
+                    seatButton.classList.add('seat', 'Seient_d');
+                    seatButton.dataset.fila = fila;
+                    seatButton.dataset.columna = columna;
+                    seatButton.dataset.estatSeient = 1; // Default estat_seient
+                    seatButton.dataset.preu = 0; // Default preu
+
+                    seatButton.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
+                    seatButton.title = `Fila: ${fila}, Columna: ${columna}, Preu: 0`;
+
+                    seatButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const currentState = parseInt(this.dataset.estatSeient);
+                        const nextState = (currentState % 5) + 1; // Cycle through states 1 to 6
+                        this.dataset.estatSeient = nextState;
+
+                        let nextImage = '';
+                        switch (nextState) {
+                            case 1:
+                                nextImage = 'Seient_d.png';
+                                break;
+                            case 2:
+                                nextImage = 'Cadira_rodes_d.png';
+                                break;
+                            case 3:
+                                nextImage = 'Acompanyant_d.png';
+                                break;
+                            case 4:
+                                nextImage = 'Seient_b.png';
+                                break;
+                            case 5:
+                                nextImage = 'invisible.png'; // Invisible state
+                                break;
+                            default:
+                                nextImage = 'Seient_d.png';
+                        }
+
+                        if (nextImage === '') {
+                            this.classList.add('invisible');
+                            this.innerHTML = '';
+                        } else {
+                            this.classList.remove('invisible');
+                            this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
+                        }
+                    });
+
+                    seatButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const preuSeientInput = document.getElementById('preu_seient');
+                        preuSeientInput.value = this.dataset.preu;
+                        preuSeientInput.dataset.fila = this.dataset.fila;
+                        preuSeientInput.dataset.columna = this.dataset.columna;
+                    });
+
+                    const preuInput = document.createElement('input');
+                    preuInput.type = 'hidden';
+                    preuInput.classList.add('preu-seient');
+                    preuInput.value = 0;
+
+                    seatDiv.appendChild(seatButton);
+                    seatDiv.appendChild(preuInput);
+                    rowDiv.appendChild(seatDiv);
+                }
+
+                seatsContainer.appendChild(rowDiv);
+            }
+        });
+
+        document.getElementById('preu_seient').addEventListener('change', function() {
+            const fila = this.dataset.fila;
+            const columna = this.dataset.columna;
+            const newPreu = this.value;
+
+            const seatButton = document.querySelector(`button[data-fila="${fila}"][data-columna="${columna}"]`);
+            if (seatButton) {
+                seatButton.dataset.preu = newPreu;
+                seatButton.title = `Fila: ${fila}, Columna: ${columna}, Preu: ${newPreu}`;
+                const preuInput = seatButton.nextElementSibling;
+                if (preuInput) {
+                    preuInput.value = newPreu;
+                }
+            }
+        });
+
+        document.getElementById('seat-form').addEventListener('submit', function(event) {
+            const seatsContainer = document.getElementById('seats-container');
+            const seatButtons = seatsContainer.querySelectorAll('button.seat');
+
+            seatButtons.forEach(button => {
+                const fila = button.dataset.fila;
+                const columna = button.dataset.columna;
+                const estatSeient = button.dataset.estatSeient;
+                const preu = button.dataset.preu;
+
+                const seatInputFila = document.createElement('input');
+                seatInputFila.type = 'hidden';
+                seatInputFila.name = `seats[${fila}][${columna}][fila]`;
+                seatInputFila.value = fila;
+
+                const seatInputColumna = document.createElement('input');
+                seatInputColumna.type = 'hidden';
+                seatInputColumna.name = `seats[${fila}][${columna}][columna]`;
+                seatInputColumna.value = columna;
+
+                const seatInputEstat = document.createElement('input');
+                seatInputEstat.type = 'hidden';
+                seatInputEstat.name = `seats[${fila}][${columna}][estat_seient]`;
+                seatInputEstat.value = estatSeient;
+
+                const seatInputPreu = document.createElement('input');
+                seatInputPreu.type = 'hidden';
+                seatInputPreu.name = `seats[${fila}][${columna}][preu]`;
+                seatInputPreu.value = preu;
+
+                button.appendChild(seatInputFila);
+                button.appendChild(seatInputColumna);
+                button.appendChild(seatInputEstat);
+                button.appendChild(seatInputPreu);
+            });
+        });
+    </script>
 </x-app-layout>
