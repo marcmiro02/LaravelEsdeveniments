@@ -135,4 +135,11 @@ class SeientsController extends Controller
 
         return redirect()->route('seients.index')->with('success', 'Sala i seients eliminats correctament.');
     }
+
+    public function showSeients($id_sala)
+    {
+        $sala = Sales::findOrFail($id_sala);
+        $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
+        return view('seients.showSeients', compact('sala', 'seients'));
+    }
 }
