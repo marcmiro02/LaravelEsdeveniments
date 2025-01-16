@@ -10,8 +10,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Qr;
 use App\Models\Esdeveniments;
 
-include 'SELECTSController.php';
-
 class PdfController extends Controller
 {
     public function generarEntrada(Request $request)
