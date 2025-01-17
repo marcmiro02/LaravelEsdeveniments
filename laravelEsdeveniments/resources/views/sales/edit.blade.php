@@ -15,33 +15,39 @@
 
                         <div class="mb-4">
                             <label for="nom_sala" class="block text-sm font-medium text-gray-700">Nom Sala</label>
-                            <input type="text" id="nom_sala" name="nom_sala" class="mt-1 block w-full text-black" value="{{ $sala->nom_sala }}" required>
+                            <input type="text" id="nom_sala" name="nom_sala" class="mt-1 block w-full text-black" value="{{ $sala->nom_sala }}" readonly>
                         </div>
-                        <div class="mb-4">
-                            <label for="num_files" class="block text-sm font-medium text-gray-700">Número de Files</label>
-                            <input type="number" id="num_files" name="num_files" class="mt-1 block w-full text-black" value="{{ $num_files }}" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="num_columnes" class="block text-sm font-medium text-gray-700">Número de Columnes</label>
-                            <input type="number" id="num_columnes" name="num_columnes" class="mt-1 block w-full text-black" value="{{ $num_columnes }}" required>
-                        </div>
-
-                        <button type="button" id="generate-seats" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generar Seients</button>
 
                         <div id="seats-container" class="mt-6 grid grid-cols-1 gap-4">
-                            @foreach ($seients as $seient)
+                            @foreach ($seients->groupBy('fila') as $fila => $columnes)
+                            <div class="flex justify-center">
+                                @foreach ($columnes as $seient)
                                 <div class="relative mx-1">
                                     <button class="seat Seient_d" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}" data-estat-seient="{{ $seient->estat_seient }}" data-preu="{{ $seient->preu }}">
+                                        @if ($seient->estat_seient == 1)
                                         <img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">
+                                        @elseif ($seient->estat_seient == 9)
+                                        <img src="{{ asset('img/seients/Cadira_rodes_d.png') }}" alt="Seient">
+                                        @elseif ($seient->estat_seient == 6)
+                                        <img src="{{ asset('img/seients/Acompanyant_d.png') }}" alt="Seient">
+                                        @elseif ($seient->estat_seient == 4)
+                                        <img src="{{ asset('img/seients/Seient_b.png') }}" alt="Seient">
+                                        @elseif ($seient->estat_seient == 5)
+                                        <img src="{{ asset('img/seients/invisible.png') }}" alt="Seient">
+                                        @else
+                                        <img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">
+                                        @endif
                                     </button>
                                     <input type="hidden" class="preu-seient" value="{{ $seient->preu }}">
                                 </div>
+                                @endforeach
+                            </div>
                             @endforeach
                         </div>
 
                         <div class="mt-4">
-                            <label for="preu_seient" class="block text-sm font-medium text-gray-700">Preu Seient Seleccionat</label>
-                            <input type="number" id="preu_seient" class="mt-1 block w-full text-black">
+                            <label for="preu" class="block text-sm font-medium text-gray-700">Preu Seient Seleccionat</label>
+                            <input type="number" id="preu" class="mt-1 block w-full text-black">
                         </div>
 
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4" id="submit-seats">Guardar Canvis</button>
@@ -52,89 +58,56 @@
     </div>
 
     <script>
-        document.getElementById('generate-seats').addEventListener('click', function() {
-            const numFiles = document.getElementById('num_files').value;
-            const numColumnes = document.getElementById('num_columnes').value;
-            const seatsContainer = document.getElementById('seats-container');
-            seatsContainer.innerHTML = '';
+        document.querySelectorAll('button.seat').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const currentState = parseInt(this.dataset.estatSeient);
+                const nextState = (currentState % 5) + 1; // Cycle through states 1 to 5
+                this.dataset.estatSeient = nextState;
 
-            for (let fila = 1; fila <= numFiles; fila++) {
-                const rowDiv = document.createElement('div');
-                rowDiv.classList.add('flex', 'justify-center', 'mb-4');
-
-                for (let columna = 1; columna <= numColumnes; columna++) {
-                    const seatDiv = document.createElement('div');
-                    seatDiv.classList.add('relative', 'mx-1');
-
-                    const seatButton = document.createElement('button');
-                    seatButton.classList.add('seat', 'Seient_d');
-                    seatButton.dataset.fila = fila;
-                    seatButton.dataset.columna = columna;
-                    seatButton.dataset.estatSeient = 1; // Default estat_seient
-                    seatButton.dataset.preu = 0; // Default preu
-
-                    seatButton.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
-                    seatButton.title = `Fila: ${fila}, Columna: ${columna}, Preu: 0`;
-
-                    seatButton.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        const currentState = parseInt(this.dataset.estatSeient);
-                        const nextState = (currentState % 5) + 1; // Cycle through states 1 to 6
-                        this.dataset.estatSeient = nextState;
-
-                        let nextImage = '';
-                        switch (nextState) {
-                            case 1:
-                                nextImage = 'Seient_d.png';
-                                break;
-                            case 2:
-                                nextImage = 'Cadira_rodes_d.png';
-                                break;
-                            case 3:
-                                nextImage = 'Acompanyant_d.png';
-                                break;
-                            case 4:
-                                nextImage = 'Seient_b.png';
-                                break;
-                            case 5:
-                                nextImage = 'invisible.png'; // Invisible state
-                                break;
-                            default:
-                                nextImage = 'Seient_d.png';
-                        }
-
-                        if (nextImage === '') {
-                            this.classList.add('invisible');
-                            this.innerHTML = '';
-                        } else {
-                            this.classList.remove('invisible');
-                            this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
-                        }
-                    });
-
-                    seatButton.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        const preuSeientInput = document.getElementById('preu_seient');
-                        preuSeientInput.value = this.dataset.preu;
-                        preuSeientInput.dataset.fila = this.dataset.fila;
-                        preuSeientInput.dataset.columna = this.dataset.columna;
-                    });
-
-                    const preuInput = document.createElement('input');
-                    preuInput.type = 'hidden';
-                    preuInput.classList.add('preu-seient');
-                    preuInput.value = 0;
-
-                    seatDiv.appendChild(seatButton);
-                    seatDiv.appendChild(preuInput);
-                    rowDiv.appendChild(seatDiv);
+                let nextImage = '';
+                switch (nextState) {
+                    case 1:
+                        nextImage = 'Seient_d.png';
+                        this.dataset.estatSeient = 1;
+                        break;
+                    case 2:
+                        nextImage = 'Cadira_rodes_d.png';
+                        this.dataset.estatSeient = 9;
+                        break;
+                    case 3:
+                        nextImage = 'Acompanyant_d.png';
+                        this.dataset.estatSeient = 6;
+                        break;
+                    case 4:
+                        nextImage = 'Seient_b.png';
+                        this.dataset.estatSeient = 4;
+                        break;
+                    case 5:
+                        nextImage = 'invisible.png';
+                        this.dataset.estatSeient = 5;
+                        break;
+                    default:
+                        nextImage = 'Seient_d.png';
+                        this.dataset.estatSeient = 1;
                 }
 
-                seatsContainer.appendChild(rowDiv);
-            }
+                if (nextImage === 'invisible.png') {
+                    this.classList.add('invisible');
+                    this.innerHTML = '';
+                } else {
+                    this.classList.remove('invisible');
+                    this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
+                }
+
+                const preuSeientInput = document.getElementById('preu');
+                preuSeientInput.value = this.dataset.preu;
+                preuSeientInput.dataset.fila = this.dataset.fila;
+                preuSeientInput.dataset.columna = this.dataset.columna;
+            });
         });
 
-        document.getElementById('preu_seient').addEventListener('change', function() {
+        document.getElementById('preu').addEventListener('change', function() {
             const fila = this.dataset.fila;
             const columna = this.dataset.columna;
             const newPreu = this.value;

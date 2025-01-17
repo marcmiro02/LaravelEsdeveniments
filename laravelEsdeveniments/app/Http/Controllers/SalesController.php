@@ -18,10 +18,9 @@ class SalesController extends Controller
     public function show($id_sala)
     {
         $sala = Sales::findOrFail($id_sala);
-        $seients = Seients::where('id_sala', $id_sala)->get();
+        $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
         return view('sales.show', compact('sala', 'seients'));
     }
-
     public function create()
     {
         return view('sales.create');
@@ -58,7 +57,7 @@ class SalesController extends Controller
                 ]);
 
                 // Contar los asientos disponibles para el aforo
-                if (in_array($seatData['estat_seient'], [1, 2, 3])) {
+                if (in_array($seatData['estat_seient'], [1, 9, 6])) {
                     $aforament++;
                 }
             }
@@ -113,7 +112,7 @@ class SalesController extends Controller
                 ]);
 
                 // Contar los asientos disponibles para el aforo
-                if (in_array($seatData['estat_seient'], [1, 2, 3])) {
+                if (in_array($seatData['estat_seient'], [1, 9, 6])) {
                     $aforament++;
                 }
             }
@@ -137,10 +136,5 @@ class SalesController extends Controller
         return redirect()->route('sales.index')->with('success', 'Sala i seients eliminats correctament.');
     }
 
-    public function showSeients($id_sala)
-    {
-        $sala = Sales::findOrFail($id_sala);
-        $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
-        return view('seients.showSeients', compact('sala', 'seients'));
-    }
+   
 }
