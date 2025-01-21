@@ -25,6 +25,7 @@ class PdfController extends Controller
             'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
             'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
             'eventPhoto' => $esdeveniment->foto_portada,
+            'eventPhotoBackground' => $esdeveniment->foto_fons,  
             'ticketPrice' => 50,
             'discount' => 10,
             'totalPrice' => 40,
@@ -33,10 +34,10 @@ class PdfController extends Controller
             'qrCode' => $qr->dibuix_qr,
         ];
         
-        $pdf = PDF::loadView('pdf.pdf', $data);
+       //$pdf = PDF::loadView('pdf.pdf', $data);
+        $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 226.77, 560], 'portrait'); // 80 mm x altura ajustable
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
-
 
     public function showEventSelection()
     {

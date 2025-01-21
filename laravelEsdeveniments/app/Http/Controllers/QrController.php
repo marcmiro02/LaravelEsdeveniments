@@ -80,11 +80,12 @@ class QrController extends Controller
 
         $qr = new Qr();
         $qr->codi_qr = $codigo;
+        $qr->id_esdeveniment = $id_esdeveniment;
         $qr->data_generacio = Carbon::now();
         $qr->data_expiracio = Carbon::now()->addDays(7);
         $qr->id_usuari = 4;
 
-        $qrContent = "$codigo\n$nom_esdeveniment";
+        $qrContent = "$codigo\n$nom_esdeveniment\n";
         $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
         $qrImageBlob = base64_encode($qrImage);
 
@@ -92,6 +93,21 @@ class QrController extends Controller
         $qr->save();
 
         return $qr;
+    }
+
+    public function validarQr(Request $request)
+    {
+        $qrCode = $request->input('qr_code');
+        $qr = Qr::where('codi_qr', $qrCode)->first();
+
+        if ($qr) {
+            $qr->validat = true;
+            $qr->save();
+
+            return response()->json(['success' => 'QR validado correctamente']);
+        } else {
+            return response()->json(['error' => 'QR no encontrado'], 404);
+        }
     }
 
 }

@@ -112,7 +112,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index');
+
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
+
+Route::get('/comprarEntrada', [EntradesController::class, 'dadesEntrada'])->name('entrades.dadesEntrada');
+
+Route::post('/validar-qr', [QrController::class, 'validarQr'])->name('qr.validar');
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);

@@ -4,7 +4,7 @@
     <title>Entrada d'Esdeveniment</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -15,15 +15,17 @@
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border: 2px dashed #333;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
         }
         .title-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
         }
         .title-bar img {
             width: 80px;
@@ -42,8 +44,10 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 20px;
+            font-size: 28px;
             color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .event-logo {
             text-align: center;
@@ -52,7 +56,8 @@
         .event-logo img {
             width: 100%;
             height: auto;
-            max-width: 200px;
+            max-width: 250px;
+            border-radius: 10px;
         }
         .event-details {
             text-align: center;
@@ -60,21 +65,23 @@
         }
         .event-details h2 {
             margin: 0;
-            font-size: 18px;
+            font-size: 22px;
             color: #555;
         }
         .event-details p {
             margin: 5px 0;
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
         }
         .ticket-details {
             text-align: center;
             margin-bottom: 20px;
+            border-top: 2px solid #333;
+            padding-top: 10px;
         }
         .ticket-details p {
             margin: 5px 0;
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
         }
         .qr-code {
@@ -82,8 +89,11 @@
             margin-top: 20px;
         }
         .qr-code img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -100,7 +110,7 @@
             <img src="data:image/jpeg;base64,{{ $eventPhoto }}" alt="Event Logo">
         </div>
         <div class="event-details">
-            <h2>Nom de l'Esdeveniment: {{ $eventName }}</h2>
+            <h2>{{ $eventName }}</h2>
             <p>Data: {{ $eventDate }}</p>
             <p>Hora: {{ $eventTime }}</p>
         </div>
