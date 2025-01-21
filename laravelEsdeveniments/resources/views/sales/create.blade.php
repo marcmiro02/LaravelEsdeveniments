@@ -74,42 +74,23 @@
                     seatButton.addEventListener('click', function(event) {
                         event.preventDefault();
                         const currentState = parseInt(this.dataset.estatSeient);
-                        const nextState = (currentState % 5) + 1; // Cycle through states 1 to 6
+                        let nextState = (currentState % 5) + 1; // Cycle through states 1 to 5
 
                         let nextImage = '';
-                        switch (nextState) {
-                            case 1:
-                                nextImage = 'Seient_d.png';
-                                this.dataset.estatSeient = 1;
-                                break;
-                            case 2:
-                                nextImage = 'Cadira_rodes_d.png';
-                                this.dataset.estatSeient = 9;
-                                break;
-                            case 3:
-                                nextImage = 'Acompanyant_d.png';
-                                this.dataset.estatSeient = 6;
-                                break;
-                            case 4:
-                                nextImage = 'Seient_b.png';
-                                this.dataset.estatSeient = 4;
-                                break;
-                            case 5:
-                                nextImage = 'invisible.png';
-                                this.dataset.estatSeient = 5;
-                                break;
-                            default:
-                                nextImage = 'Seient_d.png';
-                                this.dataset.estatSeient = 1;
+                        if (nextState === 1) {
+                            nextImage = 'Seient_d.png';
+                        } else if (nextState === 2) {
+                            nextImage = 'Cadira_rodes_d.png';
+                        } else if (nextState === 3) {
+                            nextImage = 'Acompanyant_d.png';
+                        } else if (nextState === 4) {
+                            nextImage = 'Seient_b.png';
+                        } else if (nextState === 5) {
+                            nextImage = 'invisible.png';
                         }
 
-                        if (nextImage === '') {
-                            this.classList.add('invisible');
-                            this.innerHTML = '';
-                        } else {
-                            this.classList.remove('invisible');
-                            this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
-                        }
+                        this.dataset.estatSeient = nextState;
+                        this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
                     });
 
                     seatButton.addEventListener('click', function(event) {
