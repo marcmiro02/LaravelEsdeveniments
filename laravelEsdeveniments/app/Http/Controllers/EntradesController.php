@@ -62,4 +62,18 @@ class EntradesController extends Controller
 
         return redirect()->route('entrades.index')->with('success', 'Entrada eliminada correctament');
     }
+
+    public function dadesEntrada(Request $request)
+    {
+        $id_entrada = $request->input('id_entrada');
+        
+        $entrada = Entrades::findOrFail($id_entrada);
+
+        return view('entrades.dadesEntrada', compact('entrada'));
+    }
+
+    public function validacioEntrada()
+    {
+        return view('entrades.validarEntrada', compact('entrada'));
+    }
 }

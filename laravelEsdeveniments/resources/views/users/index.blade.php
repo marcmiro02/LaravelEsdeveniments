@@ -64,11 +64,9 @@
                         <tbody>
                             @foreach ($users as $user)
                                 <tr class="border-b dark:border-gray-700">
-                                    <td class="px-4 py-2">
-                                        <img src="{{ $user->foto_perfil ? $user->foto_perfil : asset('img/Avatars/default-avatar.png') }}" 
-                                             alt="Foto de perfil" 
-                                             class="w-12 h-12 rounded-full">
-                                    </td>
+                                <td class="px-4 py-2">
+                                    <img src="data:image/png;base64,{{ $user->foto_perfil ?? '' }}" alt="Foto de perfil" class="w-12 h-12 rounded-full">
+                                </td>
                                     <td class="px-4 py-2">
                                         {{ $user->name }} {{ $user->surname }}
                                     </td>
