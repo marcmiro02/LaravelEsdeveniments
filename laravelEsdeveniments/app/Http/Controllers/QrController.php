@@ -97,17 +97,41 @@ class QrController extends Controller
 
     public function validarQr(Request $request)
     {
-        $qrCode = $request->input('qr_code');
-        $qr = Qr::where('codi_qr', $qrCode)->first();
+        $codigoQr = $request->input('codigo_qr');
 
-        if ($qr) {
-            $qr->validat = true;
-            $qr->save();
+        $qr = Qr::where('codi_qr', $codigoQr)->first();
 
-            return response()->json(['success' => 'QR validado correctamente']);
-        } else {
-            return response()->json(['error' => 'QR no encontrado'], 404);
+        if (!$qr) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El código QR no existe.'
+            ], 404);
         }
-    }
 
+        if ($qr->validat) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El código QR ya ha sido validado.'
+            ], 400);
+        }
+
+        if (Carbon::now()->greaterThan($qr->data_expiracio)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El código QR ha expirado.'
+            ], 400);
+        }
+
+        $qr->validat = 1;
+
+        $qr->data_expiracio = Carbon::now();
+
+        $qr->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'El código QR ha sido validado correctamente.',
+            'qr' => $qr
+        ]);
+    }
 }

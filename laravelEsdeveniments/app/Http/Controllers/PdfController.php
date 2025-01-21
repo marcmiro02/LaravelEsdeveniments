@@ -45,4 +45,17 @@ class PdfController extends Controller
         return view('pdf.index', compact('esdeveniments'));
     }
 
+    public function indexValidar()
+    {
+        // Obtener los eventos disponibles
+        $esdeveniments = Esdeveniments::all();
+
+        // Pasar los eventos a la vista
+        return view('pdf.indexValidar', compact('esdeveniments'));
+    }
+
+    public function pestanyaValidar()
+    {
+        return view('pdf.validacio');
+    }
 }
