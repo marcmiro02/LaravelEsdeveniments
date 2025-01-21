@@ -75,27 +75,32 @@
                         event.preventDefault();
                         const currentState = parseInt(this.dataset.estatSeient);
                         const nextState = (currentState % 5) + 1; // Cycle through states 1 to 6
-                        this.dataset.estatSeient = nextState;
 
                         let nextImage = '';
                         switch (nextState) {
                             case 1:
                                 nextImage = 'Seient_d.png';
+                                this.dataset.estatSeient = 1;
                                 break;
                             case 2:
                                 nextImage = 'Cadira_rodes_d.png';
+                                this.dataset.estatSeient = 9;
                                 break;
                             case 3:
                                 nextImage = 'Acompanyant_d.png';
+                                this.dataset.estatSeient = 6;
                                 break;
                             case 4:
                                 nextImage = 'Seient_b.png';
+                                this.dataset.estatSeient = 4;
                                 break;
                             case 5:
-                                nextImage = 'invisible.png'; // Invisible state
+                                nextImage = 'invisible.png';
+                                this.dataset.estatSeient = 5;
                                 break;
                             default:
                                 nextImage = 'Seient_d.png';
+                                this.dataset.estatSeient = 1;
                         }
 
                         if (nextImage === '') {

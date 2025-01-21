@@ -120,4 +120,5 @@ Route::get('/comprarEntrada', [EntradesController::class, 'dadesEntrada'])->name
 Route::post('/validar-qr', [QrController::class, 'validarQr'])->name('qr.validar');
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
+Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 require __DIR__ . '/auth.php';
