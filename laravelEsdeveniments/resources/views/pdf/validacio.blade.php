@@ -14,9 +14,11 @@
                         Passa el QR de les entrades per aquí:
                     </h3>
 
-                    <!-- Zona para la cámara -->
-                    <div id="qr-scanner-container" class="mt-6">
+                    <!-- Zona de la cámara y filtro de escaneo -->
+                    <div id="qr-scanner-container" class="relative mt-6">
                         <video id="video" width="100%" height="auto" style="border: 1px solid #ccc;"></video>
+                        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
+                        <div id="scannerArea" class="absolute top-1/4 left-1/4 w-1/2 h-1/2 border-4 border-dashed border-white"></div>
                     </div>
 
                     <!-- Botón para iniciar el escaneo -->
@@ -39,6 +41,7 @@
         let videoElement = document.getElementById('video');
         let startScanButton = document.getElementById('startScan');
         let scanResult = document.getElementById('scanResult');
+        let scannerArea = document.getElementById('scannerArea');
         let scanStarted = false;
 
         // Accede a la cámara
