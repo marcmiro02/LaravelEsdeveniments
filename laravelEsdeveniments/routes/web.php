@@ -18,6 +18,8 @@ use App\Http\Controllers\TipusEsdevenimentController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
+use App\Http\Controllers\TicketController;
+
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
@@ -121,4 +123,10 @@ Route::post('/validar-qr', [QrController::class, 'validarQr'])->name('qr.validar
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
+
+Route::get('/tickets/payment', [TicketController::class, 'showPaymentForm'])->name('tickets.payment');
+Route::post('/tickets/payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
+Route::get('/tickets/success', [TicketController::class, 'success'])->name('tickets.success');
+Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
+
 require __DIR__ . '/auth.php';

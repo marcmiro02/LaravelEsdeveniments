@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Cashier\Billable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use Billable;
 
     protected $fillable = [
         'name',
@@ -47,5 +49,9 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Rols_usuaris::class, 'rol', 'id_rol');
+    }
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }

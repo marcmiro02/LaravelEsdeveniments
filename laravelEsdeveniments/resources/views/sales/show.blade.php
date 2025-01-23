@@ -59,6 +59,7 @@
                         <h4 class="text-lg font-medium text-black dark:text-white">Asientos Seleccionados</h4>
                         <div id="seats-info" class="text-black dark:text-white"></div>
                         <p id="total-price" class="text-black dark:text-white mt-2"></p>
+                        <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pagar</button>
                     </div>
                 </div>
             </div>
@@ -71,6 +72,7 @@
             const selectedSeatsInfo = document.getElementById('selected-seats-info');
             const seatsInfo = document.getElementById('seats-info');
             const totalPrice = document.getElementById('total-price');
+            const payButton = document.getElementById('pay-button');
             let selectedSeats = [];
 
             seients.forEach(seient => {
@@ -138,10 +140,19 @@
                         seatsInfo.innerHTML = seatsInfoHtml;
                         totalPrice.textContent = `Total: ${total.toFixed(2)}€`;
                         selectedSeatsInfo.classList.remove('hidden');
+                        payButton.classList.remove('hidden');
+
+                        // Guardar los asientos seleccionados en localStorage
+                        localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
                     } else {
                         selectedSeatsInfo.classList.add('hidden');
+                        payButton.classList.add('hidden');
                     }
                 });
+            });
+
+            payButton.addEventListener('click', function() {
+                window.location.href = "{{ route('tickets.payment') }}";
             });
         });
     </script>
