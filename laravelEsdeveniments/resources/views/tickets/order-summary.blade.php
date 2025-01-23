@@ -1,4 +1,4 @@
-<!-- resources/views/tickets/payment.blade.php -->
+<!-- resources/views/tickets/order-summary.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -21,14 +21,15 @@
                     </div>
                     <br>
                     <h4 class="text-md font-medium text-black">Tipus d'Entrada:</h4>
-                    <ul>
+                    <select id="ticket-type" class="form-control mb-4">
                         @foreach($entrades as $entrada)
-                            <li>{{ $entrada->tipus_entrada }} - Descompte: {{ $entrada->descompte }}%</li>
+                            <option value="{{ $entrada->descompte }}">{{ $entrada->tipus_entrada }} - Descompte: {{ $entrada->descompte }}%</option>
                         @endforeach
-                    </ul>
+                    </select>
                     <form action="{{ route('tickets.processPayment') }}" method="POST" id="payment-form">
                         @csrf
                         <input type="hidden" name="seats" id="selected-seats">
+                        <input type="hidden" name="discount" id="discount">
                         <button type="submit" id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pagar</button>
                     </form>
                 </div>
@@ -39,6 +40,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const selectedSeatsInput = document.getElementById('selected-seats');
+            const discountInput = document.getElementById('discount');
             const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
             selectedSeatsInput.value = JSON.stringify(selectedSeats);
 
@@ -57,7 +59,22 @@
                 total += seat.preu;
             });
 
-            document.getElementById('total-price').textContent = total.toFixed(2);
+            const totalPriceElement = document.getElementById('total-price');
+            totalPriceElement.textContent = total.toFixed(2);
+
+            const ticketTypeSelect = document.getElementById('ticket-type');
+            ticketTypeSelect.addEventListener('change', function() {
+                const discount = parseFloat(this.value);
+                const discountedTotal = total - (total * (discount / 100));
+                totalPriceElement.textContent = discountedTotal.toFixed(2);
+                discountInput.value = discount;
+            });
+
+            // Inicialitzar el descompte
+            const initialDiscount = parseFloat(ticketTypeSelect.value);
+            const initialDiscountedTotal = total - (total * (initialDiscount / 100));
+            totalPriceElement.textContent = initialDiscountedTotal.toFixed(2);
+            discountInput.value = initialDiscount;
         });
     </script>
 </x-app-layout>

@@ -152,7 +152,7 @@
             });
 
             payButton.addEventListener('click', function() {
-                window.location.href = "{{ route('tickets.payment') }}";
+                window.location.href = "{{ route('tickets.orderSummary') }}";
             });
         });
     </script>
