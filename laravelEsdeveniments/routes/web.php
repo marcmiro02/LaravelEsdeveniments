@@ -28,6 +28,10 @@ Route::get('/', function () {
 })->name('inici');
 
 
+//------------------------------ MOSTRAR PEL·LICULES ------------------------------//
+
+
+
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
 
