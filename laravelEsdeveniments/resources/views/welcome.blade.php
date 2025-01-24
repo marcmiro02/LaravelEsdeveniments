@@ -26,7 +26,7 @@
                                 <div class="swiper-slide">
                                     <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
                                         <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
-                                            <img src="{{ asset($esdeveniment->foto_fons) }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
+                                        <img src="data:image/png;base64,{{$esdeveniment->foto_fons ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
                                         </div>
                                         <h3 class="text-2xl font-bold mb-2">{{ $esdeveniment->nom }}</h3>
                                         <p class="mb-4">{{ $esdeveniment->sinopsis }}</p>
@@ -53,7 +53,7 @@
                         @foreach($esdeveniments as $esdeveniment)
                             <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg">
                                 <div class="w-full h-64 overflow-hidden rounded-lg mb-4">
-                                    <img src="{{ asset($esdeveniment->foto_portada) }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
+                                <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-full object-cover">
                                 </div>
                                 <h3 class="text-2xl font-bold mb-2">{{ $esdeveniment->nom }}</h3>
                                 <p class="mb-4">{{ $esdeveniment->sinopsis }}</p>

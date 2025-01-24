@@ -14,108 +14,110 @@
                         Passa el QR de les entrades per aquí:
                     </h3>
 
-                    <!-- Zona de la cámara y filtro de escaneo -->
-                    <div id="qr-scanner-container" class="relative mt-6">
-                        <video id="video" width="100%" height="auto" style="border: 1px solid #ccc;"></video>
-                        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
-                        <div id="scannerArea" class="absolute top-1/4 left-1/4 w-1/2 h-1/2 border-4 border-dashed border-white"></div>
-                    </div>
+                    <!-- Contenedor del lector QR -->
+                    <div id="qr-reader" style="width: 100%; max-width: 500px; margin: 20px auto;"></div>
 
-                    <!-- Botón para iniciar el escaneo -->
-                    <div id="startScanBtn" class="text-center mt-4">
-                        <button id="startScan" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Iniciar Escaneo
-                        </button>
-                    </div>
-
-                    <!-- Mostrar mensaje de resultado -->
+                    <!-- Contenedor para mostrar el resultado -->
                     <div id="scanResult" class="text-center mt-4 text-xl"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Incluye la librería para leer el QR -->
-    <script src="https://unpkg.com/jsQR/dist/jsQR.js"></script>
+    <!-- Librería HTML5-QRCode -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        let videoElement = document.getElementById('video');
-        let startScanButton = document.getElementById('startScan');
-        let scanResult = document.getElementById('scanResult');
-        let scannerArea = document.getElementById('scannerArea');
-        let scanStarted = false;
+        // Elementos de la página
+        const qrReaderContainer = document.getElementById("qr-reader");
+        const scanResult = document.getElementById("scanResult");
 
-        // Accede a la cámara
-        async function startCamera() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' } // Usa la cámara trasera en dispositivos móviles
-                });
-                videoElement.srcObject = stream;
-                videoElement.setAttribute("playsinline", true); // Hace que funcione en iOS
-                videoElement.play();
-                scanStarted = true;
-                startScanButton.style.display = 'none'; // Oculta el botón después de iniciar
-                requestAnimationFrame(scanQRCode); // Llama a la función para escanear el QR
-            } catch (err) {
-                console.error("Error al acceder a la cámara: ", err);
-                scanResult.textContent = "No se puede acceder a la cámara. Asegúrate de tener permisos.";
-            }
-        }
+        // Configuración para el lector QR
+        const config = {
+            fps: 10, // Frames por segundo
+            qrbox: 250 // Tamaño del cuadro para detectar QR
+        };
 
-        // Escanea el QR de la cámara
-        function scanQRCode() {
-            if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-                const canvasElement = document.createElement("canvas");
-                const canvas = canvasElement.getContext("2d");
-                canvasElement.height = videoElement.videoHeight;
-                canvasElement.width = videoElement.videoWidth;
-                canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+        // Función para manejar el escaneo exitoso
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log("QR Detectado:", decodedText); // Muestra el QR en la consola
+            scanResult.textContent = `QR Detectado: ${decodedText}`;
+            scanResult.style.color = "green";
 
-                const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                const code = jsQR(imageData.data, canvasElement.width, canvasElement.height, {
-                    inversionAttempts: "dontInvert"
-                });
+            // Limpiar el valor del código QR (eliminar saltos de línea y espacios extra)
+            const codigoQrLimpio = decodedText.replace(/[\r\n]+/g, "").trim();
 
-                if (code) {
-                    // Si se detecta el código QR, envía la solicitud al servidor
-                    handleScanResult(code.data);
-                } else {
-                    if (scanStarted) {
-                        requestAnimationFrame(scanQRCode); // Vuelve a intentar si no detecta un QR
+            // Aquí se asegura que solo la primera parte del QR (antes de un espacio o salto de línea) sea enviada
+            const codigoQrFinal = codigoQrLimpio.split(' ')[0];  // Si el QR tiene un espacio, esto toma solo la primera parte
+
+            console.log("Código QR final:", codigoQrFinal); // Verifica si el valor está correcto
+
+            // Obtener el id del evento seleccionado directamente
+            //const selectedEventId = document.getElementById('id_esdeveniment').value;
+            //console.log("ID del evento seleccionado:", selectedEventId); // Verifica que el ID se obtiene correctamente
+
+            // if (!selectedEventId) {
+            //     scanResult.textContent = "❌ No se ha seleccionado un evento.";
+            //     scanResult.style.color = "red";
+            //     // Detenemos el escáner si no hay evento seleccionado
+            //     html5QrCode.stop().catch(err => {
+            //         console.error("Error al detener el lector QR:", err);
+            //     });
+            //     return; // Si no hay evento seleccionado, aborta el proceso
+            // }
+
+            // Detener el escáner antes de validar el QR
+            html5QrCode.stop().then(() => {
+                console.log("Enviando código QR al servidor:", codigoQrFinal);
+
+                // Llama al servidor para validar el QR
+                fetch("{{ route('pdf.validarQr') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ codigo_qr: codigoQrFinal }) // Envía el QR limpio y correcto al servidor
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error del servidor: ${response.status}`);
                     }
-                }
-            }
-        }
-
-        // Envia el código QR al servidor para validarlo
-        function handleScanResult(codigoQr) {
-            scanResult.textContent = `QR Detectado: ${codigoQr}`;
-            fetch("{{ route('pdf.validarQr') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({ codigo_qr: codigoQr })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    scanResult.textContent = data.message;
-                    scanResult.style.color = "green";
-                } else {
-                    scanResult.textContent = data.message;
+                    return response.json(); // Asegúrate de que el servidor devuelve JSON
+                })
+                .then(data => {
+                    console.log("Respuesta del servidor:", data);
+                    if (data.success) {
+                        scanResult.textContent = `✅ ${data.message}`;
+                        scanResult.style.color = "green";
+                    } else {
+                        scanResult.textContent = `❌ ${data.message}`;
+                        scanResult.style.color = "red";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al validar el QR:", error);
+                    scanResult.textContent = "Hubo un error al validar el QR.";
                     scanResult.style.color = "red";
-                }
-            })
-            .catch(error => {
-                console.error('Error al validar el QR:', error);
-                scanResult.textContent = "Hubo un error al validar el QR.";
+                });
+            }).catch(err => {
+                console.error("Error al detener el lector QR:", err);
+                scanResult.textContent = "Hubo un error al detener el lector QR.";
                 scanResult.style.color = "red";
             });
         }
 
-        // Iniciar el escaneo cuando el usuario presione el botón
-        startScanButton.addEventListener('click', startCamera);
+
+        // Inicializa el lector QR con la cámara trasera
+        const html5QrCode = new Html5Qrcode("qr-reader");
+
+        html5QrCode.start(
+            { facingMode: "environment" }, // Usa la cámara trasera
+            config,
+            onScanSuccess
+        ).catch(err => {
+            console.error("Error al iniciar el lector QR:", err);
+            scanResult.textContent = "No se puede acceder a la cámara. Asegúrate de otorgar permisos.";
+            scanResult.style.color = "red";
+        });
     </script>
 </x-app-layout>

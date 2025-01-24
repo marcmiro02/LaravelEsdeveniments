@@ -117,7 +117,7 @@ Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->na
 
 Route::get('/pdf/validarEntrada', [PdfController::class, 'indexValidar'])->name('pdf.indexValidar');
 Route::post('/pdf/validarEntrada', [PdfController::class, 'pestanyaValidar'])->name('pdf.validarEntrada');
-Route::post('/pdf/validarQr', [PdfController::class, 'validarQr'])->name('pdf.validarQr');
+Route::post('/pdf/validarQr', [QrController::class, 'validarQr'])->name('pdf.validarQr');
 
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);

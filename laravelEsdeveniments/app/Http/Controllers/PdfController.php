@@ -54,8 +54,19 @@ class PdfController extends Controller
         return view('pdf.indexValidar', compact('esdeveniments'));
     }
 
-    public function pestanyaValidar()
+    public function pestanyaValidar(Request $request)
     {
+        // Validar que se envía un evento
+        $idEsdeveniment = $request->input('id_esdeveniment');
+        if (!$idEsdeveniment) {
+            return redirect()->back()->with('error', 'Por favor selecciona un evento.');
+        }
+        echo"<script>console.log('ID esdeveniment: ".$idEsdeveniment."')</script>";
+        // Guardar el evento seleccionado en la sesión
+        session(['id_del_esdeveniment' => $idEsdeveniment]);
+        $idEsdeveniment = session('id_del_esdeveniment');
+        echo"<script>console.log('ID esdeveniment llegit del session: ".$idEsdeveniment."')</script>";
+
         return view('pdf.validacio');
     }
 }
