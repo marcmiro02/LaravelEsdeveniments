@@ -23,11 +23,6 @@ use App\Http\Controllers\TicketController;
 
 
 //------------------------------------- DASHBOARD -------------------------------------//
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('welcome', compact('esdeveniments'));
-})->name('welcome');
-
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -130,5 +125,12 @@ Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
 Route::get('/tickets/success', [TicketController::class, 'success'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
+
+
+Route::get('/', function () {
+    $esdeveniments = Esdeveniments::all();
+    return view('inici', compact('esdeveniments'));
+})->name('inici');
+
 
 require __DIR__ . '/auth.php';
