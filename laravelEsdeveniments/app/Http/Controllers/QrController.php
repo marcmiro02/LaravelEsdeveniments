@@ -85,7 +85,7 @@ class QrController extends Controller
         $qr->data_expiracio = Carbon::now()->addDays(7);
         $qr->id_usuari = 4;
 
-        $qrContent = "$codigo\n$nom_esdeveniment\n";
+        $qrContent = $codigo;
         $qrImage = QrCode::format('png')->size(200)->generate($qrContent);
         $qrImageBlob = base64_encode($qrImage);
 
@@ -96,18 +96,49 @@ class QrController extends Controller
     }
 
     public function validarQr(Request $request)
-    {
-        $qrCode = $request->input('qr_code');
-        $qr = Qr::where('codi_qr', $qrCode)->first();
+    {      
+        $codigoQr = $request->input('codigo_qr');
+        $idEsdeveniment = session('id_del_esdeveniment');
+        
+        // Buscar el QR en la base de datos
+        $qr = Qr::where('codi_qr', $codigoQr)->first();
 
-        if ($qr) {
-            $qr->validat = true;
-            $qr->save();
-
-            return response()->json(['success' => 'QR validado correctamente']);
-        } else {
-            return response()->json(['error' => 'QR no encontrado'], 404);
+        // Validar existencia del QR
+        if (!$qr) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El código QR no existe.',
+                'codigo_qr' => $codigoQr
+            ], 404);
         }
+
+        // Validar si el QR pertenece al evento correcto
+        if ((int)$qr->id_esdeveniment !== (int)$idEsdeveniment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Este código QR no pertenece al evento seleccionado.'
+            ], 400);
+        }
+
+        // Validar si ya ha sido usado
+        if ($qr->validat) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El código QR ya ha sido validado.'
+            ], 400);
+        }
+
+        // Marcar como validado
+        $qr->validat = 1;
+        $qr->data_expiracio = Carbon::now();
+        $qr->save();
+
+        // Responder con éxito
+        return response()->json([
+            'success' => true,
+            'message' => 'El código QR ha sido validado correctamente.',
+            'qr' => $qr
+        ]);
     }
 
 }

@@ -24,6 +24,7 @@ class Qr extends Model
         'data_generacio',
         'data_expiracio',
         'dibuix_qr',
+        'validat',
         'id_esdeveniment',
         'id_usuari',
     ];
