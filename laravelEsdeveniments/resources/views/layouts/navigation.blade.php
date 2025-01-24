@@ -118,6 +118,12 @@
                         {{ __('TEST QR') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('pdf.indexValidar')" :active="request()->routeIs('pdf.indexValidar')">
+                        {{ __('VALIDAR QR') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
