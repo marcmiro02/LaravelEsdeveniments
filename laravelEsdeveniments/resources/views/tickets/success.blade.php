@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Payment Successful') }}
+            {{ __('Pagament Realitzat') }}
         </h2>
     </x-slot>
 
@@ -10,9 +10,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">Thank you for your purchase!</h3>
+                    <h3 class="text-lg font-medium text-black">El teu pagament s'ha realitzat correctament.</h3>
+                    <br>
+                    <button id="generate-qr-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generar QR</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('generate-qr-button').addEventListener('click', function() {
+            window.location.href = "{{ route('pdf.generarEntrada') }}";
+        });
+    </script>
 </x-app-layout>

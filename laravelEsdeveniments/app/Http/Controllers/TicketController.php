@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Ticket;
 use App\Models\Entrades;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
+use App\Models\Esdeveniments;
+
 
 class TicketController extends Controller
 {
@@ -19,10 +20,23 @@ class TicketController extends Controller
 
     public function showOrderSummary(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         $entrades = Entrades::all();
         return view('tickets.order-summary', compact('entrades'));
     }
 
+    public function showSelectEntrades(Request $request)
+    {
+        $entrades = Entrades::all();
+        $esdeveniment = Esdeveniments::find($request->query('id_esdeveniment')); // Rebre l'ID de l'esdeveniment des de la URL
+        if (!$esdeveniment) {
+            return redirect()->route('esdeveniments.index')->with('error', 'Esdeveniment no trobat');
+        }
+        return view('tickets.select-entrades', compact('entrades', 'esdeveniment'));
+    }
     public function processPayment(Request $request)
     {
         $request->validate([

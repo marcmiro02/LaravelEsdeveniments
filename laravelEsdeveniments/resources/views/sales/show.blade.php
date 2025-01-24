@@ -40,18 +40,18 @@
                     </div>
 
                     @foreach($seients as $fila => $seientsFila)
-                        <div class="flex justify-center mb-4">
-                            <div class="text-center mr-2">{{ $fila }}</div>
-                            @foreach($seientsFila as $seient)
-                                <div class="relative mx-1">
-                                    <button class="seat @if($seient->estat_seient == 1) Seient_d @elseif($seient->estat_seient == 2) Cadira_rodes_d @elseif($seient->estat_seient == 3) Acompanyant_d @elseif($seient->estat_seient == 4) Seient_b @elseif($seient->estat_seient == 5) invisible @elseif($seient->estat_seient == 6) Seient_s @elseif($seient->estat_seient == 7) Seient_nd @elseif($seient->estat_seient == 8) Cadira_rodes_s @elseif($seient->estat_seient == 9) Cadira_rodes_nd @elseif($seient->estat_seient == 10) Acompanyant_s @elseif($seient->estat_seient == 11) Acompanyant_nd @else Seient_s @endif" data-seient-id="{{ $seient->id_seient }}" data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}">
-                                        @if($seient->estat_seient != 5)
-                                            <img src="@if($seient->estat_seient == 1) {{ asset('img/seients/Seient_d.png') }} @elseif($seient->estat_seient == 2) {{ asset('img/seients/Cadira_rodes_d.png') }} @elseif($seient->estat_seient == 3) {{ asset('img/seients/Acompanyant_d.png') }} @elseif($seient->estat_seient == 4) {{ asset('img/seients/Seient_b.png') }} @elseif($seient->estat_seient == 6) {{ asset('img/seients/Seient_s.png') }} @elseif($seient->estat_seient == 7) {{ asset('img/seients/Seient_nd.png') }} @elseif($seient->estat_seient == 8) {{ asset('img/seients/Cadira_rodes_s.png') }} @elseif($seient->estat_seient == 9) {{ asset('img/seients/Cadira_rodes_nd.png') }} @elseif($seient->estat_seient == 10) {{ asset('img/seients/Acompanyant_s.png') }} @elseif($seient->estat_seient == 11) {{ asset('img/seients/Acompanyant_nd.png') }} @else {{ asset('img/seients/Seient_s.png') }} @endif" alt="Seient">
-                                        @endif
-                                    </button>
-                                </div>
-                            @endforeach
+                    <div class="flex justify-center mb-4">
+                        <div class="text-center mr-2">{{ $fila }}</div>
+                        @foreach($seientsFila as $seient)
+                        <div class="relative mx-1">
+                            <button class="seat @if($seient->estat_seient == 1) Seient_d @elseif($seient->estat_seient == 2) Cadira_rodes_d @elseif($seient->estat_seient == 3) Acompanyant_d @elseif($seient->estat_seient == 4) Seient_b @elseif($seient->estat_seient == 5) invisible @elseif($seient->estat_seient == 6) Seient_s @elseif($seient->estat_seient == 7) Seient_nd @elseif($seient->estat_seient == 8) Cadira_rodes_s @elseif($seient->estat_seient == 9) Cadira_rodes_nd @elseif($seient->estat_seient == 10) Acompanyant_s @elseif($seient->estat_seient == 11) Acompanyant_nd @else Seient_s @endif" data-seient-id="{{ $seient->id_seient }}" data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}">
+                                @if($seient->estat_seient != 5)
+                                <img src="@if($seient->estat_seient == 1) {{ asset('img/seients/Seient_d.png') }} @elseif($seient->estat_seient == 2) {{ asset('img/seients/Cadira_rodes_d.png') }} @elseif($seient->estat_seient == 3) {{ asset('img/seients/Acompanyant_d.png') }} @elseif($seient->estat_seient == 4) {{ asset('img/seients/Seient_b.png') }} @elseif($seient->estat_seient == 6) {{ asset('img/seients/Seient_s.png') }} @elseif($seient->estat_seient == 7) {{ asset('img/seients/Seient_nd.png') }} @elseif($seient->estat_seient == 8) {{ asset('img/seients/Cadira_rodes_s.png') }} @elseif($seient->estat_seient == 9) {{ asset('img/seients/Cadira_rodes_nd.png') }} @elseif($seient->estat_seient == 10) {{ asset('img/seients/Acompanyant_s.png') }} @elseif($seient->estat_seient == 11) {{ asset('img/seients/Acompanyant_nd.png') }} @else {{ asset('img/seients/Seient_s.png') }} @endif" alt="Seient">
+                                @endif
+                            </button>
                         </div>
+                        @endforeach
+                    </div>
                     @endforeach
 
                     <!-- Contenedor para mostrar la información de los asientos seleccionados -->
@@ -93,7 +93,12 @@
 
                     // Actualizar la lista de asientos seleccionados
                     if (this.classList.contains('selected')) {
-                        selectedSeats.push({ seientId, preu, fila, columna });
+                        selectedSeats.push({
+                            seientId,
+                            preu,
+                            fila,
+                            columna
+                        });
                     } else {
                         selectedSeats = selectedSeats.filter(seat => seat.seientId !== seientId);
                     }
@@ -152,7 +157,8 @@
             });
 
             payButton.addEventListener('click', function() {
-                window.location.href = "{{ route('tickets.orderSummary') }}";
+                 const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}"; // Assegura't que tens l'ID de l'esdeveniment disponible
+                 window.location.href = "{{ route('tickets.selectEntrades') }}?id_esdeveniment=" + esdevenimentId;
             });
         });
     </script>

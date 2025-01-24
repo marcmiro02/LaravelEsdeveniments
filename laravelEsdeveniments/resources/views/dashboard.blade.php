@@ -26,8 +26,8 @@
                                         </div>
                                         <h3 class="text-2xl font-bold mb-2">{{ $esdeveniment->nom }}</h3>
                                         <p class="mb-4">{{ $esdeveniment->sinopsis }}</p>
-                                        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
-                                    </div>
+                                        <a href="{{ route('sales.show', $esdeveniment->id_sala) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Compra Entrades</a>
+                                        </div>
                                 </div>
                             @endforeach
                         </div>

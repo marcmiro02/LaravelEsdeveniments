@@ -13,25 +13,17 @@
                     <h3 class="text-lg font-medium text-black">Resum de la Comanda</h3>
                     <br>
                     <div id="order-summary">
-                        <h4 class="text-md font-medium text-black">Pel·lícula: <span id="movie-title"></span></h4>
-                        <p id="movie-info"></p>
-                        <h4 class="text-md font-medium text-black">Seients Seleccionats:</h4>
-                        <ul id="selected-seats-list" class="list-disc pl-5"></ul>
+                        <h4 class="text-md font-medium text-black">Nom: {{ Auth::user()->name }} {{ Auth::user()->surname }}</h4>
+                        <p class="text-md font-medium text-black">Correu: {{ Auth::user()->email }}</p>
+                        <h4 class="text-md font-medium text-black">Entrades Seleccionades:</h4>
+                        <ul id="selected-entrades-list" class="list-disc pl-5"></ul>
+                        <p class="text-md font-medium text-black">Gastos de Gestió: <span id="gestio-cost">2.00</span>€</p>
+                        <p class="text-md font-medium text-black">IVA: <span id="iva-cost">1.50</span>€</p>
+                        <p class="text-md font-medium text-black">Recàrrecs: <span id="recarrec-cost">1.00</span>€</p>
                         <p class="text-md font-medium text-black">Preu Total: <span id="total-price"></span>€</p>
                     </div>
                     <br>
-                    <h4 class="text-md font-medium text-black">Tipus d'Entrada:</h4>
-                    <select id="ticket-type" class="form-control mb-4">
-                        @foreach($entrades as $entrada)
-                            <option value="{{ $entrada->descompte }}">{{ $entrada->tipus_entrada }} - Descompte: {{ $entrada->descompte }}%</option>
-                        @endforeach
-                    </select>
-                    <form action="{{ route('tickets.processPayment') }}" method="POST" id="payment-form">
-                        @csrf
-                        <input type="hidden" name="seats" id="selected-seats">
-                        <input type="hidden" name="discount" id="discount">
-                        <button type="submit" id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pagar</button>
-                    </form>
+                    <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pagar</button>
                 </div>
             </div>
         </div>
@@ -39,42 +31,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const selectedSeatsInput = document.getElementById('selected-seats');
-            const discountInput = document.getElementById('discount');
-            const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
-            selectedSeatsInput.value = JSON.stringify(selectedSeats);
-
-            const movieTitle = "Nom de la Pel·lícula"; // Canvia això segons el teu cas
-            const movieInfo = "Informació de la pel·lícula"; // Canvia això segons el teu cas
-
-            document.getElementById('movie-title').textContent = movieTitle;
-            document.getElementById('movie-info').textContent = movieInfo;
-
-            const selectedSeatsList = document.getElementById('selected-seats-list');
-            let total = 0;
-            selectedSeats.forEach(seat => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€`;
-                selectedSeatsList.appendChild(listItem);
-                total += seat.preu;
-            });
-
+            const selectedEntrades = JSON.parse(localStorage.getItem('selectedEntrades')) || [];
+            const selectedEntradesList = document.getElementById('selected-entrades-list');
             const totalPriceElement = document.getElementById('total-price');
-            totalPriceElement.textContent = total.toFixed(2);
+            let total = 0;
 
-            const ticketTypeSelect = document.getElementById('ticket-type');
-            ticketTypeSelect.addEventListener('change', function() {
-                const discount = parseFloat(this.value);
-                const discountedTotal = total - (total * (discount / 100));
-                totalPriceElement.textContent = discountedTotal.toFixed(2);
-                discountInput.value = discount;
+            selectedEntrades.forEach(entrada => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${entrada.tipus_entrada} - Quantitat: ${entrada.quantitat} - Subtotal: ${entrada.subtotal}€`;
+                selectedEntradesList.appendChild(listItem);
+                total += entrada.subtotal;
             });
 
-            // Inicialitzar el descompte
-            const initialDiscount = parseFloat(ticketTypeSelect.value);
-            const initialDiscountedTotal = total - (total * (initialDiscount / 100));
-            totalPriceElement.textContent = initialDiscountedTotal.toFixed(2);
-            discountInput.value = initialDiscount;
+            const gestioCost = parseFloat(document.getElementById('gestio-cost').textContent);
+            const ivaCost = parseFloat(document.getElementById('iva-cost').textContent);
+            const recarrecCost = parseFloat(document.getElementById('recarrec-cost').textContent);
+            total += gestioCost + ivaCost + recarrecCost;
+
+            totalPriceElement.textContent = total.toFixed(2);
         });
     </script>
 </x-app-layout>

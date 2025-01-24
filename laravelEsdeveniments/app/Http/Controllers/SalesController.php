@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Seients;
 use App\Models\Sales;
+use App\Models\Esdeveniments;
 use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
@@ -15,11 +16,13 @@ class SalesController extends Controller
         return view('sales.index', compact('sales'));
     }
 
+    
     public function show($id_sala)
     {
         $sala = Sales::findOrFail($id_sala);
         $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
-        return view('sales.show', compact('sala', 'seients'));
+        $esdeveniment = Esdeveniments::where('id_sala', $id_sala)->firstOrFail();
+        return view('sales.show', compact('sala', 'seients', 'esdeveniment'));
     }
 
     public function create()

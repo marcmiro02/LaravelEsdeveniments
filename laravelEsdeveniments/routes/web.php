@@ -29,7 +29,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
@@ -124,9 +124,9 @@ Route::post('/validar-qr', [QrController::class, 'validarQr'])->name('qr.validar
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 
-Route::get('/tickets/payment', [TicketController::class, 'showPaymentForm'])->name('tickets.payment');
-Route::post('/tickets/payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
+Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
+Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
 Route::get('/tickets/success', [TicketController::class, 'success'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
 
