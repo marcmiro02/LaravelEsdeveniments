@@ -10,7 +10,6 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RolsUsuarisController;
 use App\Http\Controllers\EstatSeientsController;
 use App\Http\Controllers\CodisPromocionalsController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TipusSeientController;
 use App\Http\Controllers\EsdevenimentsController;
 use App\Http\Controllers\EntradesController;
@@ -22,9 +21,12 @@ use App\Http\Controllers\TicketController;
 
 
 
-//------------------------------------- DASHBOARD -------------------------------------//
+//------------------------------------- INICI -------------------------------------//
+Route::get('/', function () {
+    $esdeveniments = Esdeveniments::all();
+    return view('inici', compact('esdeveniments'));
+})->name('inici');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 //--------------------------------------- USERS ---------------------------------------//
 Route::resource('users', UsersController::class)->middleware(['auth', 'verified']);
@@ -127,10 +129,6 @@ Route::get('/tickets/success', [TicketController::class, 'success'])->name('tick
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
 
 
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('inici', compact('esdeveniments'));
-})->name('inici');
 
 
 require __DIR__ . '/auth.php';

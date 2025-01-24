@@ -1,4 +1,4 @@
-<!-- filepath: /e:/DAM/DAM2/M9-Programaciodeserveisiprocessos/Laravel/LaravelEsdeveniments/laravelEsdeveniments/resources/views/dashboard.blade.php -->
+<!-- filepath: /e:/DAM/DAM2/M9-Programaciodeserveisiprocessos/Laravel/LaravelEsdeveniments/laravelEsdeveniments/resources/views/inici.blade.php -->
 
 <x-app-layout>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">

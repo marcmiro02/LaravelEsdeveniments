@@ -65,7 +65,7 @@ class RegisteredUserController extends Controller
         
             Auth::login($user);
         
-            return redirect(route('dashboard'));
+            return redirect(route('inici'));
         } catch (\Exception $e) {
             Log::error('Error during registration: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'An error occurred during registration. Please try again.']);
