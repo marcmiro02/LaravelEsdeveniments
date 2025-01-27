@@ -1,3 +1,4 @@
+<!-- resources/views/sales/show.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -54,12 +55,12 @@
                     </div>
                     @endforeach
 
-                    <!-- Contenedor para mostrar la información de los asientos seleccionados -->
-                    <div id="selected-seats-info" class="mt-6 p-4 bg-gray-200 dark:bg-gray-700 rounded-lg hidden">
-                        <h4 class="text-lg font-medium text-black dark:text-white">Asientos Seleccionados</h4>
-                        <div id="seats-info" class="text-black dark:text-white"></div>
-                        <p id="total-price" class="text-black dark:text-white mt-2"></p>
-                        <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pagar</button>
+                    <!-- Contenedor per mostrar la informació dels seients seleccionats -->
+                    <div id="selected-seats-info" class="hidden">
+                        <h4 class="text-md font-medium text-black">Seients Seleccionats:</h4>
+                        <div id="seats-info"></div>
+                        <p id="total-price"></p>
+                        <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Continuar</button>
                     </div>
                 </div>
             </div>
@@ -77,7 +78,7 @@
 
             seients.forEach(seient => {
                 seient.addEventListener('click', function(event) {
-                    // Evitar clic en asientos invisibles, bloqueados o no disponibles
+                    // Evitar clic en seients invisibles, bloquejats o no disponibles
                     if (this.classList.contains('invisible') || this.classList.contains('Seient_b') || this.classList.contains('Seient_nd')) {
                         event.preventDefault();
                         return;
@@ -88,10 +89,10 @@
                     const fila = this.getAttribute('data-fila');
                     const columna = this.getAttribute('data-columna');
 
-                    // Cambiar el estado del asiento a seleccionado
+                    // Canviar l'estat del seient a seleccionat
                     this.classList.toggle('selected');
 
-                    // Actualizar la lista de asientos seleccionados
+                    // Actualitzar la llista de seients seleccionats
                     if (this.classList.contains('selected')) {
                         selectedSeats.push({
                             seientId,
@@ -102,7 +103,6 @@
                     } else {
                         selectedSeats = selectedSeats.filter(seat => seat.seientId !== seientId);
                     }
-
                     // Actualizar la imagen del botón
                     if (this.classList.contains('selected')) {
                         let selectedImage = '';
@@ -133,13 +133,12 @@
                         }
                         this.innerHTML = estatSeient !== 'invisible' ? `<img src="{{ asset('img/seients/') }}/${estatSeient}.png" alt="Seient">` : '';
                     }
-
-                    // Mostrar la información de los asientos seleccionados
+                    // Mostrar la informació dels seients seleccionats
                     if (selectedSeats.length > 0) {
                         let seatsInfoHtml = '';
                         let total = 0;
                         selectedSeats.forEach(seat => {
-                            seatsInfoHtml += `<p>Ubicación: Fila ${seat.fila}, Columna ${seat.columna} - Precio: ${seat.preu}€</p>`;
+                            seatsInfoHtml += `<p>Ubicació: Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€</p>`;
                             total += seat.preu;
                         });
                         seatsInfo.innerHTML = seatsInfoHtml;
@@ -147,7 +146,7 @@
                         selectedSeatsInfo.classList.remove('hidden');
                         payButton.classList.remove('hidden');
 
-                        // Guardar los asientos seleccionados en localStorage
+                        // Guardar els seients seleccionats en localStorage
                         localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
                     } else {
                         selectedSeatsInfo.classList.add('hidden');
@@ -157,8 +156,8 @@
             });
 
             payButton.addEventListener('click', function() {
-                 const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}"; // Assegura't que tens l'ID de l'esdeveniment disponible
-                 window.location.href = "{{ route('tickets.selectEntrades') }}?id_esdeveniment=" + esdevenimentId;
+                const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}"; // Assegura't que tens l'ID de l'esdeveniment disponible
+                window.location.href = "{{ route('tickets.selectEntrades') }}?id_esdeveniment=" + esdevenimentId;
             });
         });
     </script>

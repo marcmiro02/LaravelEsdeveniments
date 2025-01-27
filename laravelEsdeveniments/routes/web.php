@@ -38,6 +38,10 @@ Route::get('/', function () {
 
 // MOSTRAR ESDEVENIMENTS
 
+Route::get('/', function () {
+    $esdeveniments = Esdeveniments::all();
+    return view('inici', compact('esdeveniments'));
+})->name('inici');
 
 // ------------------------------
 // -          ENTRADES          -
@@ -101,6 +105,8 @@ Route::get('/', function () {
 // -------------------------------
 
 // MOSTRAR ESDEVENIMENTS
+
+Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('esdeveniments.index');
 
 // MOSTRAR ESDEVENIMENT
 
@@ -234,6 +240,8 @@ Route::get('/', function () {
 // -------------------------------
 
 // MOSTRAR ESDEVENIMENTS
+
+Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('esdeveniments.index');
 
 // MOSTRAR ESDEVENIMENT
 
