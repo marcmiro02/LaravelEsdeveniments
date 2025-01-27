@@ -51,7 +51,7 @@ class UsersController extends Controller
             return view('users.index', compact('users', 'empresaId'));
         }
     
-        return redirect()->route('dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        return redirect()->route('inici')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 
     /**
@@ -71,7 +71,7 @@ class UsersController extends Controller
             $roles = Rols_usuaris::whereIn('id_rol', [4])->get(); // Subadmin solo puede crear Trabajadores
             return view('users.create', compact('roles'));
         } else {
-            return redirect()->route('dashboard')->with('error', 'No tienes permisos para crear usuarios.');
+            return redirect()->route('inici')->with('error', 'No tienes permisos para crear usuarios.');
         }
     }
 
@@ -176,7 +176,7 @@ class UsersController extends Controller
         }
     
         // Otros roles no deben poder acceder a la edición de usuarios
-        return redirect()->route('dashboard')->with('error', 'No tienes permisos para acceder a esta página.');
+        return redirect()->route('inici')->with('error', 'No tienes permisos para acceder a esta página.');
     }
 
     /**

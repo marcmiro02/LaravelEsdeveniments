@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Entrades;
+use App\Models\Seients;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\Esdeveniments;
-
 
 class TicketController extends Controller
 {
@@ -24,8 +24,8 @@ class TicketController extends Controller
             return redirect()->route('login');
         }
 
-        $entrades = Entrades::all();
-        return view('tickets.order-summary', compact('entrades'));
+        $selectedEntrades = json_decode($request->input('selectedEntrades', '[]'), true);
+        return view('tickets.order-summary', compact('selectedEntrades'));
     }
 
     public function showSelectEntrades(Request $request)
@@ -35,25 +35,30 @@ class TicketController extends Controller
         if (!$esdeveniment) {
             return redirect()->route('esdeveniments.index')->with('error', 'Esdeveniment no trobat');
         }
-        return view('tickets.select-entrades', compact('entrades', 'esdeveniment'));
+        $seients = Seients::where('id_esdeveniment', $esdeveniment->id_esdeveniment)->get();
+        return view('tickets.select-entrades', compact('entrades', 'esdeveniment', 'seients'));
     }
+
     public function processPayment(Request $request)
     {
         $request->validate([
-            'seats' => 'required|string',
-            'discount' => 'required|numeric',
+            'selectedEntrades' => 'required|string',
         ]);
 
-        $user = Auth::user();
-        $seats = json_decode($request->seats, true);
-        $discount = $request->discount;
+        $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
 
-        $totalAmount = array_reduce($seats, function ($carry, $seat) {
-            return $carry + $seat['preu'];
+        $totalAmount = array_reduce($selectedEntrades, function ($carry, $entrada) {
+            return $carry + $entrada['subtotal'];
         }, 0);
 
-        // Aplicar el descompte
-        $discountedTotal = $totalAmount - ($totalAmount * ($discount / 100));
+        // Calcular els costos addicionals
+        $gestioCost = $totalAmount * 0.05; // Gastos de gestió (5% del total)
+        $ivaCost = $totalAmount * 0.21; // IVA (21% del total)
+        $recarrecCost = $totalAmount * 0.02; // Recàrrecs (2% del total)
+        $totalAmount += $gestioCost + $ivaCost + $recarrecCost;
+
+        // Convertir l'import total a cèntims
+        $totalAmountCents = intval(round($totalAmount * 100));
 
         // Aquí pots continuar amb el procés de pagament amb Stripe o qualsevol altre servei de pagament
         Stripe::setApiKey('sk_test_51QWan1DQSLCEGDSPs45f4Du1dS6HkKWNg5zqSTMgCe9KF8iz6M7tlXBdPMRVubJmwtpA9IiC6AWzyLO2Tj8faYOV00oKWs84ML');
@@ -66,7 +71,7 @@ class TicketController extends Controller
                     'product_data' => [
                         'name' => 'Entrades de cinema',
                     ],
-                    'unit_amount' => $discountedTotal * 100, // Stripe espera l'import en cèntims
+                    'unit_amount' => $totalAmountCents, // Stripe espera l'import en cèntims
                 ],
                 'quantity' => 1,
             ]],
@@ -76,5 +81,15 @@ class TicketController extends Controller
         ]);
 
         return redirect($session->url);
+    }
+
+    public function success()
+    {
+        return view('tickets.success');
+    }
+
+    public function cancel()
+    {
+        return view('tickets.cancel');
     }
 }
