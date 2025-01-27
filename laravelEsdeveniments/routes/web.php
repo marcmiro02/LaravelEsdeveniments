@@ -18,6 +18,7 @@ use App\Http\Controllers\QrController;
 use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\HorariController;
 
 
 
@@ -116,6 +117,8 @@ Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('e
 
 // ELIMINAR ESDEVENIMENT
 
+Route::get('/esdeveniments/{id_esdeveniment}/horaris/create', [HorariController::class, 'create'])->name('horaris.create');
+Route::post('/esdeveniments/{id_esdeveniment}/horaris', [HorariController::class, 'store'])->name('horaris.store');
 
 // --------------------------------
 // -      CODIS PROMOCIONALS      -

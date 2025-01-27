@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 
 class EsdevenimentsController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $esdeveniments = Esdeveniments::all();
         return view('esdeveniments.index', compact('esdeveniments'));
     }
@@ -68,7 +69,7 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment->save();
 
-        return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment creat correctament');
+        return redirect()->route('horaris.create', $esdeveniment->id_esdeveniment)->with('success', 'Esdeveniment creat correctament. Ara pots crear els horaris.');
     }
 
     public function edit($id_esdeveniment)
@@ -108,7 +109,7 @@ class EsdevenimentsController extends Controller
             $fotoPortadaBase64 = base64_encode(file_get_contents($fotoPortada));
             $esdeveniment->foto_portada = $fotoPortadaBase64;  // Asignar Base64 a foto_portada
         }
-    
+
         // Procesar foto_fons en Base64
         if ($request->hasFile('foto_fons')) {
             $fotoFons = $request->file('foto_fons');
