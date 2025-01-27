@@ -30,10 +30,6 @@
                             <input type="text" id="duracio" name="duracio" value="{{ $esdeveniment->duracio }}" class="mt-1 block w-full text-black">
                         </div>
                         <div class="mb-4">
-                            <label for="dies_dates" class="block text-sm font-medium text-gray-700">Dies/Dates</label>
-                            <input type="text" id="dies_dates" name="dies_dates" value="{{ $esdeveniment->dies_dates }}" class="mt-1 block w-full text-black">
-                        </div>
-                        <div class="mb-4">
                             <label for="sinopsis" class="block text-sm font-medium text-gray-700">Sinopsis</label>
                             <textarea id="sinopsis" name="sinopsis" class="mt-1 block w-full text-black">{{ $esdeveniment->sinopsis }}</textarea>
                         </div>

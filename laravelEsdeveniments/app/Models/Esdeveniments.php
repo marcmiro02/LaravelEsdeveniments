@@ -26,7 +26,6 @@ class Esdeveniments extends Model
         'foto_portada',
         'foto_fons',
         'duracio',
-        'dies_dates',
         'sinopsis',
         'trailer',
         'director',

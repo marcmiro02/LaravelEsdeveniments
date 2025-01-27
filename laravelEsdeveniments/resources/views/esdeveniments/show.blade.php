@@ -12,7 +12,6 @@
                     <h3 class="text-lg font-medium text-black">Nom: {{ $esdeveniment->nom }}</h3>
                     <p class="text-black"><strong>Data Estrena:</strong> {{ $esdeveniment->data_estrena }}</p>
                     <p class="text-black"><strong>Duració:</strong> {{ $esdeveniment->duracio }}</p>
-                    <p class="text-black"><strong>Dies/Dates:</strong> {{ $esdeveniment->dies_dates }}</p>
                     <p class="text-black"><strong>Sinopsis:</strong> {{ $esdeveniment->sinopsis }}</p>
                     <p class="text-black"><strong>Director:</strong> {{ $esdeveniment->director }}</p>
                     <p class="text-black"><strong>Actors:</strong> {{ $esdeveniment->actors }}</p>
