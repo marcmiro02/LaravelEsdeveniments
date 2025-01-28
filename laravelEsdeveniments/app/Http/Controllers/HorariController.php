@@ -80,8 +80,8 @@ class HorariController extends Controller
     {
         echo "Eliminant horari...\n";
         try {
-            $horari = Horari::findOrFail($id_horari);
-            echo "Horari a eliminar: " . $horari->id . "\n";
+            $horari = Horari::where('id_horari', $id_horari)->firstOrFail();
+            echo "Horari a eliminar: " . $horari->id_horari . "\n";
             $horari->delete();
             echo "Horari eliminat correctament.\n";
             return response()->json(['success' => true, 'message' => 'Horari eliminat correctament']);
