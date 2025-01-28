@@ -120,6 +120,13 @@ Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('e
 Route::get('/esdeveniments/{id_esdeveniment}/horaris/create', [HorariController::class, 'create'])->name('horaris.create');
 Route::post('/esdeveniments/{id_esdeveniment}/horaris', [HorariController::class, 'store'])->name('horaris.store');
 
+Route::get('/horaris', [HorariController::class, 'index'])->name('horaris.index');
+Route::get('/horaris/empresa', [HorariController::class, 'indexEmpresa'])->name('horaris.indexEmpresa');
+Route::get('/horaris/{id_esdeveniment}', [HorariController::class, 'show'])->name('horaris.show');
+Route::post('/horaris/{id_esdeveniment}', [HorariController::class, 'store'])->name('horaris.store');
+Route::put('/horaris/{id_horari}', [HorariController::class, 'update'])->name('horaris.update');
+Route::delete('/horaris/{id_horari}', [HorariController::class, 'destroy'])->name('horaris.destroy');
+
 // --------------------------------
 // -      CODIS PROMOCIONALS      -
 // --------------------------------
