@@ -32,6 +32,7 @@
             const calendarEl = document.getElementById('calendar');
             const dataHoraInput = document.getElementById('data_hora');
             const form = document.getElementById('horaris-form');
+            const duracio = "{{ $esdeveniment->duracio }}"; // Duració de l'esdeveniment en format HH:mm:ss
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -47,9 +48,17 @@
                     const dateStr = prompt('Introdueix l\'hora (HH:mm):', '12:00');
                     if (dateStr) {
                         const dateTimeStr = info.dateStr + 'T' + dateStr + ':00';
+                        const startDateTime = new Date(dateTimeStr);
+                        const [hours, minutes, seconds] = duracio.split(':').map(Number);
+                        const endDateTime = new Date(startDateTime);
+                        endDateTime.setHours(startDateTime.getHours() + hours);
+                        endDateTime.setMinutes(startDateTime.getMinutes() + minutes);
+                        endDateTime.setSeconds(startDateTime.getSeconds() + seconds);
+
                         calendar.addEvent({
                             title: 'Horari',
-                            start: dateTimeStr,
+                            start: startDateTime,
+                            end: endDateTime,
                             allDay: false
                         });
                     }
@@ -65,12 +74,10 @@
 
             form.addEventListener('submit', function() {
                 const events = calendar.getEvents();
-                const dataHoraArray = events.map(event => {
-                    const localDate = new Date(event.start);
-                    const offset = localDate.getTimezoneOffset();
-                    localDate.setMinutes(localDate.getMinutes() - offset);
-                    return localDate.toISOString().slice(0, 19).replace('T', ' ');
-                });
+                const dataHoraArray = events.map(event => ({
+                    start: event.start.toISOString(),
+                    end: event.end ? event.end.toISOString() : null
+                }));
                 dataHoraInput.value = JSON.stringify(dataHoraArray);
             });
         });
