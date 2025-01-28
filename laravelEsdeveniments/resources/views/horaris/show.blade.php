@@ -1,0 +1,134 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Horaris de l\'Esdeveniment: ') . $esdeveniment->nom }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div id="calendar" style="max-width: 900px; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+
+            const events = {!! json_encode($horaris->map(function($horari) {
+                return [
+                    'title' => $horari->esdeveniment->nom,
+                    'start' => $horari->data_hora,
+                    'url' => route('horaris.show', $horari->id_horari),
+                    'id' => $horari->id_horari,
+                    'description' => $horari->esdeveniment->sinopsis,
+                    'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',
+                    'director' => $horari->esdeveniment->director,
+                    'actors' => $horari->esdeveniment->actors
+                ];
+            })->toArray()) !!};
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ca',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: events,
+                editable: true,
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+
+                    Swal.fire({
+                        title: info.event.title,
+                        html: `
+                            <p><strong>Data i Hora:</strong> ${info.event.start.toLocaleString()}</p>
+                            <p><strong>Sinopsis:</strong> ${info.event.extendedProps.description}</p>
+                            <p><strong>Sala:</strong> ${info.event.extendedProps.sala}</p>
+                            <p><strong>Director:</strong> ${info.event.extendedProps.director}</p>
+                            <p><strong>Actors:</strong> ${info.event.extendedProps.actors}</p>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Eliminar',
+                        cancelButtonText: 'Tancar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                fetch(`/horaris/${info.event.id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Content-Type': 'application/json'
+                                    }
+                                }).then(response => {
+                                    if (response.ok) {
+                                        info.event.remove();
+                                        Swal.fire('Eliminat!', 'L\'horari ha estat eliminat.', 'success');
+                                    } else {
+                                        response.text().then(text => {
+                                            try {
+                                                const data = JSON.parse(text);
+                                                console.error('Error response:', data);
+                                                Swal.fire('Error!', 'Error eliminant l\'horari.', 'error');
+                                            } catch (error) {
+                                                console.error('Error parsing response:', text);
+                                                Swal.fire('Error!', 'Error processant la resposta.', 'error');
+                                            }
+                                        }).catch(() => {
+                                            Swal.fire('Error!', 'Error processant la resposta.', 'error');
+                                        });
+                                    }
+                                }).catch(error => {
+                                    console.error('Fetch error:', error);
+                                    Swal.fire('Error!', 'Error eliminant l\'horari.', 'error');
+                                });
+                            } catch (error) {
+                                console.error('Try-catch error:', error);
+                                Swal.fire('Error!', 'Error enviant la sol·licitud.', 'error');
+                            }
+                        }
+                    });
+                },
+                eventDrop: function(info) {
+                    const start = info.event.start.toISOString();
+                    const end = info.event.end ? info.event.end.toISOString() : null;
+                    fetch(`/horaris/${info.event.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            start,
+                            end
+                        })
+                    }).then(response => {
+                        if (!response.ok) {
+                            Swal.fire('Error!', 'Error actualitzant l\'horari.', 'error');
+                        }
+                    }).catch(error => {
+                        Swal.fire('Error!', 'Error actualitzant l\'horari.', 'error');
+                    });
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+</x-app-layout>
