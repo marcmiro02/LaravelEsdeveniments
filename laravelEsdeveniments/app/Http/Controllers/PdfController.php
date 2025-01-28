@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Qr;
 use App\Models\Esdeveniments;
+use App\Models\PdfModel;
 
 class PdfController extends Controller
 {
@@ -33,9 +34,27 @@ class PdfController extends Controller
             'seat' => 12,
             'qrCode' => $qr->dibuix_qr,
         ];
-        
-       //$pdf = PDF::loadView('pdf.pdf', $data);
-        $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 226.77, 560], 'portrait'); // 80 mm x altura ajustable
+
+        // Generar el PDF
+        $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 226.77, 560], 'portrait');
+
+        // Convertir el PDF a base64
+        $pdfContent = $pdf->output();
+        $pdfBase64 = base64_encode($pdfContent);
+
+        // Crear una nueva instancia del modelo Pdf
+        $pdfModel = new PdfModel();
+        $pdfModel->doc_pdf = $pdfBase64;
+        $pdfModel->id_usuari = auth()->id(); // Asumiendo que el usuario está autenticado
+
+        // Guardar el PDF en la base de datos
+        $pdfModel->save();
+
+        // Actualizar el campo id_pdf en la tabla qr
+        $qr->id_pdf = $pdfModel->id_pdf; // Asegúrate de usar el nombre correcto del campo
+        $qr->save();
+
+        // Enviar el PDF al navegador
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
 
@@ -68,5 +87,24 @@ class PdfController extends Controller
         echo"<script>console.log('ID esdeveniment llegit del session: ".$idEsdeveniment."')</script>";
 
         return view('pdf.validacio');
+    }
+
+    public function show($id)
+    {
+        $pdf = PdfModel::findOrFail($id);
+        $pdfContent = base64_decode($pdf->doc_pdf);
+
+        return response($pdfContent)->header('Content-Type', 'application/pdf');
+    }
+
+    public function download($id)
+    {
+        $pdf = PdfModel::findOrFail($id);
+        $pdfContent = base64_decode($pdf->doc_pdf);
+        $filename = 'entrada-' . $id . '.pdf';
+
+        return response($pdfContent)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }
