@@ -462,8 +462,6 @@ Route::middleware('auth')->group(function () {
 Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index');
 
 
-
-
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
 
 

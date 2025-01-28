@@ -10,6 +10,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Qr;
 use App\Models\Esdeveniments;
 use App\Models\PdfModel;
+use Illuminate\Support\Facades\Auth;
 
 class PdfController extends Controller
 {
@@ -36,7 +37,11 @@ class PdfController extends Controller
         ];
 
         // Generar el PDF
-        $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 226.77, 560], 'portrait');
+        if ($request->has('imprimir_ticket')) {
+            $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 218, 541], 'portrait'); // Ticket
+        } else {
+            $pdf = PDF::loadView('pdf.pdf', $data); // PDF normal
+        }
 
         // Convertir el PDF a base64
         $pdfContent = $pdf->output();
@@ -60,7 +65,8 @@ class PdfController extends Controller
 
     public function showEventSelection()
     {
-        $esdeveniments = Esdeveniments::all();
+        $empresaId = Auth::user()->id_empresa;
+        $esdeveniments = Esdeveniments::where('id_empresa', $empresaId)->get();
         return view('pdf.index', compact('esdeveniments'));
     }
 
