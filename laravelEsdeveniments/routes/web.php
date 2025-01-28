@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HistorialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmpresesController;
@@ -334,6 +335,12 @@ Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('e
 // =            ALTRES            =
 // ================================
 
+// MOSTRAR HISTORIAL EVENTS USUARI
+
+Route::resource('historial', HistorialController::class)->middleware(['auth', 'verified']);
+Route::get('/historial', [HistorialController::class, 'index'])->name('historial.index');
+Route::get('/pdf/{id}/show', [PdfController::class, 'show'])->name('pdf.show');
+Route::get('/pdf/{id}/download', [PdfController::class, 'download'])->name('pdf.download');
 
 // ------------------------------
 // -           ALTRES           -
