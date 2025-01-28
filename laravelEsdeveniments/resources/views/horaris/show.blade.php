@@ -40,7 +40,7 @@
                     'director' => $horari->esdeveniment->director,
                     'actors' => $horari->esdeveniment->actors
                 ];
-            })->toArray()) !!};
+            })->toArray(), JSON_HEX_TAG) !!};
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
