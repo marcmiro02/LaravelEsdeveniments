@@ -71,7 +71,6 @@ class Esdeveniments extends Model
         return $this->hasMany(Horari::class, 'id_esdeveniment');
     }
 
-    
     public function tipus()
     {
         return $this->belongsTo(Tipus_esdeveniment::class, 'id_tipus');
