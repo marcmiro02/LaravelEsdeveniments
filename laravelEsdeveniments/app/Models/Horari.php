@@ -17,10 +17,10 @@ class Horari extends Model
         'id_esdeveniment',
     ];
 
+    public $timestamps = false;
+
     public function esdeveniment()
     {
         return $this->belongsTo(Esdeveniments::class, 'id_esdeveniment');
     }
-    public $timestamps = false;
-
 }

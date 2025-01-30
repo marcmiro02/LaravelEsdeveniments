@@ -70,4 +70,26 @@ class Esdeveniments extends Model
     {
         return $this->hasMany(Horari::class, 'id_esdeveniment');
     }
+
+    public function tipus()
+    {
+        return $this->belongsTo(Tipus_esdeveniment::class, 'id_tipus');
+    }
+    
+    public function categoria()
+    {
+        return $this->belongsTo(Categories::class, 'id_categoria');
+    }
+
+    public function sala()
+    {
+        return $this->belongsTo(Sales::class, 'id_sala');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empreses::class, 'id_empresa');
+    }
+
+    
 }
