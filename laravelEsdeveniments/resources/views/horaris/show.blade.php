@@ -40,7 +40,7 @@
                     'director' => $horari->esdeveniment->director,
                     'actors' => $horari->esdeveniment->actors
                 ];
-            })->toArray(), JSON_HEX_TAG) !!};
+            })->toArray()) !!};
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -54,39 +54,87 @@
                 editable: true,
                 selectable: true,
                 dateClick: function(info) {
-                    const dateStr = prompt('Introdueix l\'hora (HH:mm):', '12:00');
-                    if (dateStr) {
-                        const dateTimeStr = info.dateStr + 'T' + dateStr + ':00';
-                        const startDateTime = new Date(dateTimeStr);
-                        const endDateTime = new Date(startDateTime);
-                        endDateTime.setHours(startDateTime.getHours() + 1); // Assuming 1 hour duration for new events
-
-                        calendar.addEvent({
-                            title: 'Nou Horari',
-                            start: startDateTime,
-                            end: endDateTime,
-                            allDay: false
-                        });
-
-                        // Save the new event to the server
-                        fetch("{{ route('horaris.store', $esdeveniment->id_esdeveniment) }}", {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                data_hora: dateTimeStr,
-                                id_esdeveniment: '{{ $esdeveniment->id_esdeveniment }}'
-                            })
-                        }).then(response => {
-                            if (!response.ok) {
-                                Swal.fire('Error!', 'Error creant l\'horari.', 'error');
+                    Swal.fire({
+                        title: 'Afegir Horari',
+                        html: `
+                            <input type="time" id="hora" class="swal2-input" value="12:00">
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Afegir',
+                        cancelButtonText: 'Cancel·lar',
+                        preConfirm: () => {
+                            const hora = document.getElementById('hora').value;
+                            if (!hora) {
+                                Swal.showValidationMessage('L\'hora és requerida');
+                                return false;
                             }
-                        }).catch(error => {
-                            Swal.fire('Error!', 'Error creant l\'horari.', 'error');
-                        });
-                    }
+                            return hora;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const dateTimeStr = info.dateStr + 'T' + result.value + ':00';
+                            const startDateTime = new Date(dateTimeStr);
+                            const endDateTime = new Date(startDateTime);
+                            endDateTime.setHours(startDateTime.getHours() + 1); // Assuming 1 hour duration for new events
+
+                            calendar.addEvent({
+                                title: 'Nou Horari',
+                                start: startDateTime,
+                                end: endDateTime,
+                                allDay: false
+                            });
+
+                            // Save the new event to the server
+                            try {
+                                fetch("{{ route('horaris.store', $esdeveniment->id_esdeveniment) }}", {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        data_hora: JSON.stringify({ start: dateTimeStr }),
+                                        id_esdeveniment: '{{ $esdeveniment->id_esdeveniment }}'
+                                    })
+                                }).then(response => {
+                                    try {
+                                        if (response.ok) {
+                                            response.json().then(data => {
+                                                try {
+                                                    Swal.fire('Afegit!', 'L\'horari ha estat afegit.', 'success').then(() => {
+                                                    });
+                                                } catch (error) {
+                                                    console.error('Error processing JSON:', error);
+                                                    Swal.fire('Error!', 'Error processant la resposta JSON.', 'error');
+                                                }
+                                            }).catch(error => {
+                                                console.error('Error parsing JSON:', error);
+                                                Swal.fire('Error!', 'Error analitzant la resposta JSON.', 'error');
+                                            });
+                                        } else {
+                                            console.error('Response not OK:', response);
+                                            response.text().then(text => {
+                                                console.error('Error response text:', text);
+                                                Swal.fire('Error!', 'Error creant l\'horari.', 'error');
+                                            }).catch(error => {
+                                                console.error('Error reading response text:', error);
+                                                Swal.fire('Error!', 'Error llegint la resposta.', 'error');
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error('Error handling response:', error);
+                                        Swal.fire('Error!', 'Error gestionant la resposta.', 'error');
+                                    }
+                                }).catch(error => {
+                                    console.error('Fetch error:', error);
+                                    Swal.fire('Error!', 'Error creant l\'horari.', 'error');
+                                });
+                            } catch (error) {
+                                console.error('Try-catch error:', error);
+                                Swal.fire('Error!', 'Error enviant la sol·licitud.', 'error');
+                            }
+                        }
+                    });
                 },
                 eventClick: function(info) {
                     info.jsEvent.preventDefault(); // don't let the browser navigate
@@ -124,7 +172,7 @@
                                                 Swal.fire('Error!', 'Error eliminant l\'horari.', 'error');
                                             } catch (error) {
                                                 console.error('Error parsing response:', text);
-                                                Swal.fire('Error!', 'Error processant la resposta11.', 'error');
+                                                Swal.fire('Error!', 'Error processant la resposta.', 'error');
                                             }
                                         }).catch(() => {
                                             Swal.fire('Error!', 'Error processant la resposta.', 'error');
@@ -144,6 +192,10 @@
                 eventDrop: function(info) {
                     const start = info.event.start.toISOString();
                     const end = info.event.end ? info.event.end.toISOString() : null;
+
+                    // Log the date being sent to the server
+                    console.log("Updating event with start date:", start);
+
                     fetch(`/horaris/${info.event.id}`, {
                         method: 'PUT',
                         headers: {

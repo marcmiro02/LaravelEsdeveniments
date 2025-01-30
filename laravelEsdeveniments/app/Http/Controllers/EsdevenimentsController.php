@@ -69,7 +69,7 @@ class EsdevenimentsController extends Controller
 
         $esdeveniment->save();
 
-        return redirect()->route('horaris.create', $esdeveniment->id_esdeveniment)->with('success', 'Esdeveniment creat correctament. Ara pots crear els horaris.');
+        return redirect()->route('horaris.show', $esdeveniment->id_esdeveniment)->with('success', 'Esdeveniment creat correctament. Ara pots crear els horaris.');
     }
 
     public function edit($id_esdeveniment)
