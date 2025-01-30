@@ -28,6 +28,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const calendarEl = document.getElementById('calendar');
+            const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}";
+            const esdevenimentNom = "{{ $esdeveniment->nom }}";
+            const esdevenimentDuracio = "{{ $esdeveniment->duracio }}"; // Duració de l'esdeveniment en format HH:mm:ss
 
             const events = {!! json_encode($horaris->map(function($horari) {
                 return [
@@ -74,11 +77,14 @@
                         if (result.isConfirmed) {
                             const dateTimeStr = info.dateStr + 'T' + result.value + ':00';
                             const startDateTime = new Date(dateTimeStr);
+                            const [hours, minutes, seconds] = esdevenimentDuracio.split(':').map(Number);
                             const endDateTime = new Date(startDateTime);
-                            endDateTime.setHours(startDateTime.getHours() + 1); // Assuming 1 hour duration for new events
+                            endDateTime.setHours(startDateTime.getHours() + hours);
+                            endDateTime.setMinutes(startDateTime.getMinutes() + minutes);
+                            endDateTime.setSeconds(startDateTime.getSeconds() + seconds);
 
                             calendar.addEvent({
-                                title: 'Nou Horari',
+                                title: esdevenimentNom,
                                 start: startDateTime,
                                 end: endDateTime,
                                 allDay: false
@@ -86,7 +92,7 @@
 
                             // Save the new event to the server
                             try {
-                                fetch("{{ route('horaris.store', $esdeveniment->id_esdeveniment) }}", {
+                                fetch(`/horaris/${esdevenimentId}`, {
                                     method: 'POST',
                                     headers: {
                                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -94,15 +100,14 @@
                                     },
                                     body: JSON.stringify({
                                         data_hora: JSON.stringify({ start: dateTimeStr }),
-                                        id_esdeveniment: '{{ $esdeveniment->id_esdeveniment }}'
+                                        id_esdeveniment: esdevenimentId
                                     })
                                 }).then(response => {
                                     try {
                                         if (response.ok) {
                                             response.json().then(data => {
                                                 try {
-                                                    Swal.fire('Afegit!', 'L\'horari ha estat afegit.', 'success').then(() => {
-                                                    });
+                                                    Swal.fire('Afegit!', 'L\'horari ha estat afegit.', 'success');
                                                 } catch (error) {
                                                     console.error('Error processing JSON:', error);
                                                     Swal.fire('Error!', 'Error processant la resposta JSON.', 'error');
