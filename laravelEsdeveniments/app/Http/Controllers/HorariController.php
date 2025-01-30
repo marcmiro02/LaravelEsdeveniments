@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Horari;
 use App\Models\Esdeveniments;
+use App\Models\Sales;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -70,7 +71,8 @@ class HorariController extends Controller
     {
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
         $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
-        return view('horaris.show', compact('esdeveniment', 'horaris'));
+        $sala = Sales::where('id_sala', $esdeveniment->id_sala)->get();
+        return view('horaris.show', compact('esdeveniment', 'horaris', 'sala'));
     }
 
     public function edit($id_horari)

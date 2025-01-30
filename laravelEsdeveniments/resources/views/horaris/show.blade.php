@@ -17,9 +17,9 @@
 
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
-
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- SweetAlert2 JS -->
@@ -33,15 +33,21 @@
             const esdevenimentDuracio = "{{ $esdeveniment->duracio }}"; // Duració de l'esdeveniment en format HH:mm:ss
 
             const events = {!! json_encode($horaris->map(function($horari) {
+                $start = new DateTime($horari->data_hora);
+                $duracio = explode(':', $horari->esdeveniment->duracio);
+                $end = (clone $start)->add(new DateInterval("PT{$duracio[0]}H{$duracio[1]}M{$duracio[2]}S"));
+
                 return [
                     'title' => $horari->esdeveniment->nom,
-                    'start' => $horari->data_hora,
+                    'start' => $start->format('Y-m-d\TH:i:s'),
+                    'end' => $end->format('Y-m-d\TH:i:s'),
                     'url' => route('horaris.show', $horari->id_horari),
                     'id' => $horari->id_horari,
                     'description' => $horari->esdeveniment->sinopsis,
                     'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',
                     'director' => $horari->esdeveniment->director,
-                    'actors' => $horari->esdeveniment->actors
+                    'actors' => $horari->esdeveniment->actors,
+                    'durada' => $horari->esdeveniment->duracio
                 ];
             })->toArray()) !!};
 
@@ -99,7 +105,9 @@
                                         'Content-Type': 'application/json'
                                     },
                                     body: JSON.stringify({
-                                        data_hora: JSON.stringify({ start: dateTimeStr }),
+                                        data_hora: JSON.stringify({
+                                            start: dateTimeStr
+                                        }),
                                         id_esdeveniment: esdevenimentId
                                     })
                                 }).then(response => {
@@ -148,6 +156,7 @@
                         title: info.event.title,
                         html: `
                             <p><strong>Data i Hora:</strong> ${info.event.start.toLocaleString()}</p>
+                            <p><strong>Durada:</strong> ${info.event.extendedProps.durada}</p>
                             <p><strong>Sinopsis:</strong> ${info.event.extendedProps.description}</p>
                             <p><strong>Sala:</strong> ${info.event.extendedProps.sala}</p>
                             <p><strong>Director:</strong> ${info.event.extendedProps.director}</p>
