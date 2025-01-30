@@ -23,11 +23,20 @@ class HorariController extends Controller
 
         $dataHoraArray = json_decode($request->data_hora, true);
 
-        foreach ($dataHoraArray as $dataHora) {
+        if (isset($dataHoraArray['start'])) {
+            // Single event creation
             Horari::create([
-                'data_hora' => date('Y-m-d H:i:s', strtotime($dataHora['start'])),
+                'data_hora' => date('Y-m-d H:i:s', strtotime($dataHoraArray['start'])),
                 'id_esdeveniment' => $id_esdeveniment,
             ]);
+        } else {
+            // Multiple events creation
+            foreach ($dataHoraArray as $dataHora) {
+                Horari::create([
+                    'data_hora' => date('Y-m-d H:i:s', strtotime($dataHora['start'])),
+                    'id_esdeveniment' => $id_esdeveniment,
+                ]);
+            }
         }
 
         return redirect()->route('esdeveniments.show', $id_esdeveniment)->with('success', 'Horaris creats correctament');
