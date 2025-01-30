@@ -52,4 +52,9 @@ class Tipus_esdeveniment extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function esdeveniments()
+    {
+        return $this->hasMany(Esdeveniments::class, 'id_tipus');
+    }
 }

@@ -44,7 +44,7 @@
                     'url' => route('horaris.show', $horari->id_horari),
                     'id' => $horari->id_horari,
                     'description' => $horari->esdeveniment->sinopsis,
-                    'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',
+                    'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',  
                     'director' => $horari->esdeveniment->director,
                     'actors' => $horari->esdeveniment->actors,
                     'durada' => $horari->esdeveniment->duracio

@@ -65,4 +65,9 @@ class Sales extends Model
     {
         return $this->hasMany(Seients::class, 'id_sala');
     }
+
+    public function sales()
+    {
+        return $this->hasMany(Horari::class, 'id_sala');
+    }
 }

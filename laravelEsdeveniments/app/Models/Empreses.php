@@ -62,4 +62,9 @@ class Empreses extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function sales()
+    {
+        return $this->hasMany(Sales::class, 'id_empresa');
+    }
 }
