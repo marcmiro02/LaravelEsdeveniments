@@ -24,10 +24,11 @@ use App\Http\Controllers\HorariController;
 
 
 //------------------------------------- INICI -------------------------------------//
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('inici', compact('esdeveniments'));
-})->name('inici');
+Route::get('/', [EmpresesController::class, 'welcome'])->name('welcome');
+// Route::get('/', function () {
+//     $esdeveniments = Esdeveniments::all();
+//     return view('inici', compact('esdeveniments'));
+// })->name('inici');
 
 
 // ================================
@@ -40,10 +41,10 @@ Route::get('/', function () {
 
 // MOSTRAR ESDEVENIMENTS
 
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('inici', compact('esdeveniments'));
-})->name('inici');
+// Route::get('/', function () {
+//     $esdeveniments = Esdeveniments::all();
+//     return view('inici', compact('esdeveniments'));
+// })->name('inici');
 
 // ------------------------------
 // -          ENTRADES          -
@@ -71,6 +72,9 @@ Route::get('/', function () {
 // ================================
 // =           EMPRESES           =
 // ================================
+
+// REDIRECCIO PAGINA WELCOME A PAGINA ESDEVENIMENTS DE CADA EMPRESA
+Route::get('/inici', [EsdevenimentsController::class, 'index'])->name('inici');
 
 // ------------------------------
 // -          USUARIS           -

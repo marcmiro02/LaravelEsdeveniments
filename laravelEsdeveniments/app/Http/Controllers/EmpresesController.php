@@ -80,6 +80,7 @@ class EmpresesController extends Controller
         // Buscar la empresa por su ID
         $empresa = Empreses::findOrFail($id_empresa);
 
+        // Procesar la imagen del logo si está presente en la solicitud
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $logoBase64 = base64_encode(file_get_contents($logo));
@@ -87,7 +88,10 @@ class EmpresesController extends Controller
         }
 
         // Actualizar los datos de la empresa
-        $empresa->update($request->all());
+        $empresa->fill($request->except('logo'));
+
+        // Guardar los cambios en la base de datos
+        $empresa->save();
 
         // Redirigir con un mensaje de éxito
         return redirect()->route('empreses.index')->with('success', 'Empresa actualizada correctamente');
@@ -99,5 +103,11 @@ class EmpresesController extends Controller
         $empresa->delete();
 
         return redirect()->route('empreses.index')->with('success', 'Empresa eliminada correctamente');
+    }
+
+    public function welcome()
+    {
+        $empreses = Empreses::all();
+        return view('welcome', compact('empreses'));
     }
 }
