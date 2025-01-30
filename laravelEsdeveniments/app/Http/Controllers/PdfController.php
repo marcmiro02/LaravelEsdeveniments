@@ -11,6 +11,7 @@ use App\Models\Qr;
 use App\Models\Esdeveniments;
 use App\Models\PdfModel;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Empreses;
 
 class PdfController extends Controller
 {
@@ -21,6 +22,8 @@ class PdfController extends Controller
 
         $qrController = new QrController();
         $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
+
+        $empresa = Empreses::findOrFail(Auth::user()->id_empresa);
 
         $data = [
             'eventName' => $esdeveniment->nom,
@@ -34,6 +37,7 @@ class PdfController extends Controller
             'row' => 'A',
             'seat' => 12,
             'qrCode' => $qr->dibuix_qr,
+            'empresaLogo' => $empresa->logo,
         ];
 
         // Generar el PDF

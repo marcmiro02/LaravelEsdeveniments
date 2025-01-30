@@ -1,3 +1,4 @@
+// filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/pdf/ticket.blade.php
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,8 +93,7 @@
 <body>
     <div class="container">
         <div class="title-bar">
-            <img src="{{ public_path('img/Logos/Clar.png') }}" alt="Logo">
-            <h2>DAM EVENT PRODUCTION</h2>
+            <img src="data:image/jpeg;base64,{{ $empresaLogo }}" alt="Logo Empresa">
         </div>
         <div class="header">
             <h1>Entrada d'Esdeveniment</h1>

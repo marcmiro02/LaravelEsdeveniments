@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('empreses.store') }}" method="POST">
+                    <form action="{{ route('empreses.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-4">
@@ -35,6 +35,10 @@
                         <div class="mb-4">
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                             <input type="email" id="email" name="email" class="mt-1 block w-full text-black" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
+                            <input type="file" id="logo" name="logo" class="mt-1 block w-full text-black">
                         </div>
 
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Empresa</button>

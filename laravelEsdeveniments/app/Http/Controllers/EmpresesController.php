@@ -33,9 +33,18 @@ class EmpresesController extends Controller
             'ciutat' => 'required',
             'telefon' => 'required',
             'email' => 'required|email',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Empreses::create($request->all());
+        $empresa = new Empreses($request->all());
+
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoBase64 = base64_encode(file_get_contents($logo));
+            $empresa->logo = $logoBase64;
+        }
+
+        $empresa->save();
 
         return redirect()->route('empreses.index')->with('success', 'Empresa creada correctamente');
     }
@@ -45,6 +54,7 @@ class EmpresesController extends Controller
         $empresa = Empreses::findOrFail($id_empresa);
         return view('empreses.edit', compact('empresa'));
     }
+
     public function update(Request $request, $id_empresa)
     {
         // Validar los campos, incluyendo la validación de unicidad del NIF
@@ -55,6 +65,7 @@ class EmpresesController extends Controller
             'ciutat' => 'required',
             'telefon' => 'required',
             'email' => 'required|email',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ], [
             'nif.unique' => 'El NIF ya está registrado en otra empresa.',
             'nif.required' => 'El campo NIF es obligatorio.',
@@ -65,17 +76,22 @@ class EmpresesController extends Controller
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico debe tener un formato válido.',
         ]);
-    
+
         // Buscar la empresa por su ID
         $empresa = Empreses::findOrFail($id_empresa);
-    
+
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoBase64 = base64_encode(file_get_contents($logo));
+            $empresa->logo = $logoBase64;
+        }
+
         // Actualizar los datos de la empresa
         $empresa->update($request->all());
-    
+
         // Redirigir con un mensaje de éxito
         return redirect()->route('empreses.index')->with('success', 'Empresa actualizada correctamente');
     }
-    
 
     public function destroy($id_empresa)
     {
