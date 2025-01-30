@@ -9,6 +9,7 @@ use App\Models\Seients;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\Esdeveniments;
+use App\Models\Ticket;
 
 class TicketController extends Controller
 {
@@ -60,8 +61,8 @@ class TicketController extends Controller
         // Convertir l'import total a cèntims
         $totalAmountCents = intval(round($totalAmount * 100));
 
-        // Aquí pots continuar amb el procés de pagament amb Stripe o qualsevol altre servei de pagament
-        Stripe::setApiKey('sk_test_51QWan1DQSLCEGDSPs45f4Du1dS6HkKWNg5zqSTMgCe9KF8iz6M7tlXBdPMRVubJmwtpA9IiC6AWzyLO2Tj8faYOV00oKWs84ML');
+        // Configurar la clau API de Stripe
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
@@ -76,14 +77,14 @@ class TicketController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('tickets.success'),
+            'success_url' => route('tickets.success', ['session_id' => '{CHECKOUT_SESSION_ID}']),
             'cancel_url' => route('tickets.cancel'),
         ]);
 
         return redirect($session->url);
     }
 
-    public function success()
+    public function success(Request $request)
     {
         return view('tickets.success');
     }
