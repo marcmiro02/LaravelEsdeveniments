@@ -9,6 +9,7 @@ use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\Horari;
 
 class EsdevenimentsController extends Controller
 {
@@ -21,7 +22,8 @@ class EsdevenimentsController extends Controller
     public function show($id_esdeveniment)
     {
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
-        return view('esdeveniments.show', compact('esdeveniment'));
+        $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
+        return view('esdeveniments.show', compact('esdeveniment','horaris'));
     }
 
     public function create()

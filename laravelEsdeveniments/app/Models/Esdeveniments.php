@@ -65,4 +65,9 @@ class Esdeveniments extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function horaris()
+    {
+        return $this->hasMany(Horari::class, 'id_esdeveniment');
+    }
 }

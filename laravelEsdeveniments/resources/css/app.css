@@ -46,3 +46,23 @@
     border-color: #3182ce; /* Cambiar color del borde al enfocar */
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Añadir sombra al enfocar */
 }
+
+[x-cloak] { display: none !important; }
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
