@@ -19,6 +19,13 @@
 
                     <!-- Contenedor para mostrar el resultado -->
                     <div id="scanResult" class="text-center mt-4 text-xl"></div>
+
+                    <!-- Botón para volver a escanear -->
+                    <div id="retryButtonContainer" class="text-center mt-4" style="display: none;">
+                        <button id="retryButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Volver a Escanear
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,6 +37,8 @@
         // Elementos de la página
         const qrReaderContainer = document.getElementById("qr-reader");
         const scanResult = document.getElementById("scanResult");
+        const retryButtonContainer = document.getElementById("retryButtonContainer");
+        const retryButton = document.getElementById("retryButton");
 
         // Configuración para el lector QR
         const config = {
@@ -93,19 +102,24 @@
                         scanResult.textContent = `❌ ${data.message}`;
                         scanResult.style.color = "red";
                     }
+                    // Mostrar el botón para volver a escanear
+                    retryButtonContainer.style.display = "block";
                 })
                 .catch(error => {
                     console.error("Error al validar el QR:", error);
                     scanResult.textContent = "Hubo un error al validar el QR.";
                     scanResult.style.color = "red";
+                    // Mostrar el botón para volver a escanear
+                    retryButtonContainer.style.display = "block";
                 });
             }).catch(err => {
                 console.error("Error al detener el lector QR:", err);
                 scanResult.textContent = "Hubo un error al detener el lector QR.";
                 scanResult.style.color = "red";
+                // Mostrar el botón para volver a escanear
+                retryButtonContainer.style.display = "block";
             });
         }
-
 
         // Inicializa el lector QR con la cámara trasera
         const html5QrCode = new Html5Qrcode("qr-reader");
@@ -118,6 +132,21 @@
             console.error("Error al iniciar el lector QR:", err);
             scanResult.textContent = "No se puede acceder a la cámara. Asegúrate de otorgar permisos.";
             scanResult.style.color = "red";
+        });
+
+        // Función para volver a escanear
+        retryButton.addEventListener("click", () => {
+            scanResult.textContent = "";
+            retryButtonContainer.style.display = "none";
+            html5QrCode.start(
+                { facingMode: "environment" }, // Usa la cámara trasera
+                config,
+                onScanSuccess
+            ).catch(err => {
+                console.error("Error al iniciar el lector QR:", err);
+                scanResult.textContent = "No se puede acceder a la cámara. Asegúrate de otorgar permisos.";
+                scanResult.style.color = "red";
+            });
         });
     </script>
 </x-app-layout>
