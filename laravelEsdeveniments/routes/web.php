@@ -340,15 +340,19 @@ Route::get('/esdeveniments', [EsdevenimentsController::class, 'index'])->name('e
 // ================================
 
 // MOSTRAR HISTORIAL EVENTS USUARI
-
 Route::resource('historial', HistorialController::class)->middleware(['auth', 'verified']);
 Route::get('/historial', [HistorialController::class, 'index'])->name('historial.index');
 Route::get('/pdf/{id}/show', [PdfController::class, 'show'])->name('pdf.show');
 Route::get('/pdf/{id}/download', [PdfController::class, 'download'])->name('pdf.download');
 
+// BARRA DE BUSQUEDA
+//Route::get('/esdeveniments/search-live', [EsdevenimentsController::class, 'liveSearch'])->name('esdeveniments.live-search');
+
 // ------------------------------
 // -           ALTRES           -
 // ------------------------------
+Route::get('/esdeveniments/{id_esdeveniment}/horaris/mostracio', [HorariController::class, 'mostracio'])->name('horaris.mostracio');
+
 
 
 // 
@@ -490,8 +494,6 @@ Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
 Route::get('/tickets/success', [TicketController::class, 'success'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
-
-
 
 
 require __DIR__ . '/auth.php';
