@@ -19,20 +19,20 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-    
+
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sFweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}";
             const esdevenimentNom = "{{ $esdeveniment->nom }}";
             const esdevenimentDuracio = "{{ $esdeveniment->duracio }}"; // Duració de l'esdeveniment en format HH:mm:ss
 
-            const events = {!! json_encode($horaris->map(function($horari) {
+            const events = {!! json_encode($horaris->map(function ($horari) {
                 $start = new DateTime($horari->data_hora);
                 $duracio = explode(':', $horari->esdeveniment->duracio);
                 $end = (clone $start)->add(new DateInterval("PT{$duracio[0]}H{$duracio[1]}M{$duracio[2]}S"));
@@ -44,7 +44,7 @@
                     'url' => route('horaris.show', $horari->id_horari),
                     'id' => $horari->id_horari,
                     'description' => $horari->esdeveniment->sinopsis,
-                    'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',  
+                    'sala' => $horari->esdeveniment->sala ? $horari->esdeveniment->sala->nom_sala : 'No assignada',
                     'director' => $horari->esdeveniment->director,
                     'actors' => $horari->esdeveniment->actors,
                     'durada' => $horari->esdeveniment->duracio
@@ -62,7 +62,7 @@
                 events: events,
                 editable: true,
                 selectable: true,
-                dateClick: function(info) {
+                dateClick: function (info) {
                     Swal.fire({
                         title: 'Afegir Horari',
                         html: `
@@ -149,7 +149,7 @@
                         }
                     });
                 },
-                eventClick: function(info) {
+                eventClick: function (info) {
                     info.jsEvent.preventDefault(); // don't let the browser navigate
 
                     Swal.fire({
@@ -203,7 +203,7 @@
                         }
                     });
                 },
-                eventDrop: function(info) {
+                eventDrop: function (info) {
                     const start = info.event.start.toISOString();
                     const end = info.event.end ? info.event.end.toISOString() : null;
 
