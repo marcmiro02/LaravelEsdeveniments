@@ -21,7 +21,7 @@ use App\Models\Esdeveniments;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\HorariController;
 use App\Http\Controllers\WebhookController;
-
+use App\Http\Controllers\SearchController;
 
 
 //------------------------------------- INICI -------------------------------------//
@@ -358,6 +358,9 @@ Route::get('/pdf/{id}/download', [PdfController::class, 'download'])->name('pdf.
 // -           ALTRES           -
 // ------------------------------
 Route::get('/esdeveniments/{id_esdeveniment}/horaris/mostracio', [HorariController::class, 'mostracio'])->name('horaris.mostracio');
+
+// BARRA DE BUSQUEDA
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 
 

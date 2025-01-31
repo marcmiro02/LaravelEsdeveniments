@@ -113,6 +113,91 @@
                 </div>
                 @endcan
 
+                <!-- Barra de Búsqueda -->
+                <div class="flex-grow flex items-center justify-center relative">
+                    <div class="relative w-full max-w-2xl">
+                        <input type="text" id="search-input" placeholder="Buscar..." class="w-full px-6 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <svg class="absolute right-4 top-2.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1111.196 3.47l4.717 4.717a1 1 0 01-1.414 1.414l-4.717-4.717A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div id="search-results" class="absolute top-full mt-2 w-full max-w-2xl bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 hidden">
+                        <ul id="results-list" class="divide-y divide-gray-200 dark:divide-gray-700"></ul>
+                    </div>
+                </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const searchInput = document.getElementById('search-input');
+                        const searchResults = document.getElementById('search-results');
+                        const resultsList = document.getElementById('results-list');
+                
+                        searchInput.addEventListener('input', function () {
+                            const query = searchInput.value;
+                
+                            if (query.length > 2) {
+                                fetch(`/search?query=${query}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        resultsList.innerHTML = '';
+                
+                                        if (data.esdeveniments.length > 0 || data.empreses.length > 0) {
+                                            data.esdeveniments.forEach(esdeveniment => {
+                                                const li = document.createElement('li');
+                                                li.classList.add('p-2', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'flex', 'items-center');
+                                                li.innerHTML = `
+                                                    <img src="data:image/png;base64,${esdeveniment.foto_portada}" alt="${esdeveniment.nom}" class="h-10 w-10 rounded-full mr-3">
+                                                    <div>
+                                                        <a href="/esdeveniments/${esdeveniment.id}" class="block text-gray-900 dark:text-gray-300">
+                                                            ${esdeveniment.nom}
+                                                            <span class="flex items-center text-sm text-green-600 dark:text-green-400">
+                                                                <svg class="h-2 w-2 mr-1" fill="currentColor" viewBox="0 0 8 8">
+                                                                    <circle cx="4" cy="4" r="3" />
+                                                                </svg>
+                                                                Esdeveniment
+                                                            </span>
+                                                        </a>
+                                                    </div>`;
+                                                resultsList.appendChild(li);
+                                            });
+                
+                                            data.empreses.forEach(empresa => {
+                                                const li = document.createElement('li');
+                                                li.classList.add('p-2', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'flex', 'items-center');
+                                                li.innerHTML = `
+                                                    <img src="data:image/png;base64,${empresa.logo}" alt="${empresa.nom_empresa}" class="h-10 w-10 rounded-full mr-3">
+                                                    <div>
+                                                        <a href="/empreses/${empresa.id}" class="block text-gray-900 dark:text-gray-300">
+                                                            ${empresa.nom_empresa}
+                                                            <span class="flex items-center text-sm text-red-600 dark:text-red-400">
+                                                                <svg class="h-2 w-2 mr-1" fill="currentColor" viewBox="0 0 8 8">
+                                                                    <circle cx="4" cy="4" r="3" />
+                                                                </svg>
+                                                                Empresa
+                                                            </span>
+                                                        </a>
+                                                    </div>`;
+                                                resultsList.appendChild(li);
+                                            });
+                
+                                            searchResults.classList.remove('hidden');
+                                        } else {
+                                            searchResults.classList.add('hidden');
+                                        }
+                                    });
+                            } else {
+                                searchResults.classList.add('hidden');
+                            }
+                        });
+                
+                        document.addEventListener('click', function (event) {
+                            if (!searchResults.contains(event.target) && event.target !== searchInput) {
+                                searchResults.classList.add('hidden');
+                            }
+                        });
+                    });
+                </script>
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('pdf.index')" :active="request()->routeIs('pdf.index')">
                         {{ __('TEST QR') }}

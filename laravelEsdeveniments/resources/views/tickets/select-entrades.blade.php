@@ -1,60 +1,81 @@
-<!-- resources/views/tickets/select-entrades.blade.php -->
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Selecciona les Entrades') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
+    <div class="py-12 bg-black dark:bg-black">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">{{ $esdeveniment->nom }}</h3>
-                    <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-auto">
-                    <br>
-                    <div class="steps">
-                        <ul class="list-disc pl-5">
-                            <li>Triar Seient</li>
-                            <li>Iniciar Sessió</li>
-                            <li>Seleccionar Entrades</li>
-                            <li>Resum de la Compra</li>
-                            <li>Pagament</li>
-                        </ul>
+            <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
+                <div class="p-8 text-gray-100 dark:text-gray-100">
+                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">{{ strtoupper($esdeveniment->nom) }}</h1>
+                    <div class="flex justify-center">
+                        <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-96 object-cover mb-4">
                     </div>
-                    <br>
-                    <div id="seats-summary">
-                        <h4 class="text-md font-medium text-black">Seients Seleccionats:</h4>
+                    
+                    <!-- Línea de Progreso -->
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex-1">
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                                <div class="bg-rose-600 h-3 rounded-full" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between w-full mt-2">
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Triar Seient</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-rose-600 text-white rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-rose-600">Triar Entrada</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Resum de la compra</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Pagament</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="seats-summary" class="mb-4">
+                        <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
                         <ul id="selected-seats-list" class="list-disc pl-5"></ul>
                     </div>
                     <br>
-                    <div id="entrades-summary">
-                        <h4 class="text-md font-medium text-black">Entrades Seleccionades: <span id="selected-entrades-count">0/0</span></h4>
+                    <div id="entrades-summary" class="mb-4">
                         <table class="table-auto w-full">
                             <thead>
                                 <tr>
-                                    <th>Tipus d'Entrada</th>
-                                    <th>Descompte</th>
-                                    <th>Quantitat</th>
-                                    <th>Subtotal</th>
+                                    <th class="px-4 py-2">Tipus d'Entrada</th>
+                                    <th class="px-4 py-2">Descompte</th>
+                                    <th class="px-4 py-2">Quantitat</th>
+                                    <th class="px-4 py-2">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($entrades as $entrada)
                                     <tr>
-                                        <td>{{ $entrada->tipus_entrada }}</td>
-                                        <td>{{ $entrada->descompte }}%</td>
-                                        <td>
-                                            <input type="number" min="0" value="0" class="entrada-quantitat" data-descompte="{{ $entrada->descompte }}">
+                                        <td class="border px-4 py-2">{{ $entrada->tipus_entrada }}</td>
+                                        <td class="border px-4 py-2">{{ $entrada->descompte }}%</td>
+                                        <td class="border px-4 py-2">
+                                            <input type="number" min="0" value="0" class="entrada-quantitat w-full bg-gray-800 text-white border border-gray-600 rounded-lg px-2 py-1" data-descompte="{{ $entrada->descompte }}">
                                         </td>
-                                        <td class="entrada-subtotal">0€</td>
+                                        <td class="border px-4 py-2 entrada-subtotal">0€</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="flex justify-between mt-4">
+                            <h4 class="text-md font-medium text-rose-600">Entrades Seleccionades: <span id="selected-entrades-count">0/0</span></h4>
+                            <button id="pay-button" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-2" disabled>Pagar</button>
+                        </div>
                     </div>
-                    <br>
-                    <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>Pagar</button>
                 </div>
             </div>
         </div>
