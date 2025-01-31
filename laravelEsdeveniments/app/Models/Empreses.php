@@ -33,6 +33,7 @@ class Empreses extends Model
         'web',
         'horari',
         'logo',
+        'logo_capsalera',
     ];
 
     /**
@@ -66,5 +67,10 @@ class Empreses extends Model
     public function sales()
     {
         return $this->hasMany(Sales::class, 'id_empresa');
+    }
+
+    public function esdeveniments()
+    {
+        return $this->hasMany(Esdeveniments::class, 'id_empresa');
     }
 }

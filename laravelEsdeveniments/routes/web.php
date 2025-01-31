@@ -76,7 +76,8 @@ Route::get('/', [EmpresesController::class, 'welcome'])->name('welcome');
 
 // REDIRECCIO PAGINA WELCOME A PAGINA ESDEVENIMENTS DE CADA EMPRESA
 Route::get('/inici', [EsdevenimentsController::class, 'index'])->name('inici');
-
+// PODER UTILITZAR LES DADES DE LEMPRESA QUAN L'HAS SELECCIONAT AL WELCOME.BLADE
+Route::get('/inici/{id_empresa}', [EmpresesController::class, 'inici'])->name('inici');
 // ------------------------------
 // -          USUARIS           -
 // ------------------------------
