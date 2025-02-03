@@ -10,9 +10,16 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\Esdeveniments;
 use App\Models\Ticket;
+use App\Notifications\PaymentReceived;
 
 class TicketController extends Controller
 {
+    public function __construct()
+    {
+        // Configurar la clau API de Stripe directament
+        Stripe::setApiKey('sk_test_51QWan1DQSLCEGDSPs45f4Du1dS6HkKWNg5zqSTMgCe9KF8iz6M7tlXBdPMRVubJmwtpA9IiC6AWzyLO2Tj8faYOV00oKWs84ML');
+    }
+
     public function showPaymentForm(Request $request)
     {
         $entrades = Entrades::all();
@@ -25,7 +32,7 @@ class TicketController extends Controller
             return redirect()->route('login');
         }
 
-        $selectedEntrades = json_decode($request->input('selectedEntrades', '[]'), true);
+        $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
         return view('tickets.order-summary', compact('selectedEntrades'));
     }
 
@@ -61,9 +68,7 @@ class TicketController extends Controller
         // Convertir l'import total a cèntims
         $totalAmountCents = intval(round($totalAmount * 100));
 
-        // Configurar la clau API de Stripe
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
+        // Crear la sessió de Stripe
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -72,12 +77,12 @@ class TicketController extends Controller
                     'product_data' => [
                         'name' => 'Entrades de cinema',
                     ],
-                    'unit_amount' => $totalAmountCents, // Stripe espera l'import en cèntims
+                    'unit_amount' => $totalAmountCents,
                 ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('tickets.success', ['session_id' => '{CHECKOUT_SESSION_ID}']),
+            'success_url' => route('tickets.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('tickets.cancel'),
         ]);
 
@@ -86,7 +91,30 @@ class TicketController extends Controller
 
     public function success(Request $request)
     {
-        return view('tickets.success');
+        // Obtenir l'usuari autenticat
+        $user = Auth::user();
+
+        try {
+            // Obtenir la sessió de Stripe
+            $session = StripeSession::retrieve($request->query('session_id'));
+
+            // Crear un nou registre de ticket
+            $ticket = new Ticket();
+            $ticket->user_id = $user->id;
+            $ticket->event_name = 'Entrades de cinema';
+            $ticket->quantity = 1; // Pots ajustar això segons les teves necessitats
+            $ticket->price = $session->amount_total / 100; // Convertir de cèntims a euros
+            $ticket->stripe_payment_id = $session->payment_intent;
+            $ticket->save();
+
+            // Enviar la notificació de correu electrònic
+            $user->notify(new PaymentReceived($ticket->price));
+
+            return view('tickets.success');
+        } catch (\Exception $e) {
+            // Capturar qualsevol error i mostrar un missatge d'error
+            return redirect()->route('tickets.cancel')->with('error', 'Error retrieving Stripe session: ' . $e->getMessage());
+        }
     }
 
     public function cancel()

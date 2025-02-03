@@ -44,8 +44,7 @@ class PaymentReceived extends Notification
         return (new MailMessage)
             ->subject('Payment Received')
             ->greeting('Hello!')
-            ->line('We have received your payment of €' . number_format($this->amount, 2) . '.')
-            ->line('Thank you for your purchase!');
+            ->line('We have received your payment of €' . number_format($this->amount, 2) . '.');
     }
 
     /**
@@ -57,7 +56,7 @@ class PaymentReceived extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }
