@@ -20,7 +20,6 @@ use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\HorariController;
-use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\SearchController;
 
 
