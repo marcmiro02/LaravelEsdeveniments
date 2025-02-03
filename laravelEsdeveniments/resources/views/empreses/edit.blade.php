@@ -68,6 +68,11 @@
                             <input type="file" id="logo" name="logo" class="mt-1 block w-full text-black">
                         </div>
 
+                        <div class="mb-4">
+                            <label for="logo_capsalera" class="block text-sm font-medium text-gray-700">Logo Capsalera</label>
+                            <input type="file" id="logo_capsalera" name="logo_capsalera" class="mt-1 block w-full text-black">
+                        </div>
+
                         <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">Actualitzar</button>
                     </form>
                 </div>

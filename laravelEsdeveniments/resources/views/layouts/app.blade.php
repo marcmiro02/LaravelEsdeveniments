@@ -13,6 +13,10 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
+        
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

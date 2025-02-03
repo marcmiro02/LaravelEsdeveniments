@@ -1,17 +1,9 @@
-<!-- resources/views/sales/show.blade.php -->
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Selecciona els Seients') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
+    <div class="py-12 bg-black dark:bg-black">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">Sala: {{ $sala->nom_sala }}</h3>
-                    <br>
+            <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
+                <div class="p-8 text-gray-100 dark:text-gray-100">
+                    <h3 class="text-lg font-medium text-rose-600">Sala: {{ strtoupper($sala->nom_sala) }}</h3><br>
                     <!-- Leyenda de los estados de los asientos -->
                     <div class="mb-6 flex justify-between">
                         <div class="flex items-center mb-2">
@@ -42,7 +34,7 @@
 
                     @foreach($seients as $fila => $seientsFila)
                     <div class="flex justify-center mb-4">
-                        <div class="text-center mr-2">{{ $fila }}</div>
+                        <div class="text-center mr-2 text-rose-600">{{ $fila }}</div>
                         @foreach($seientsFila as $seient)
                         <div class="relative mx-1">
                             <button class="seat @if($seient->estat_seient == 1) Seient_d @elseif($seient->estat_seient == 2) Cadira_rodes_d @elseif($seient->estat_seient == 3) Acompanyant_d @elseif($seient->estat_seient == 4) Seient_b @elseif($seient->estat_seient == 5) invisible @elseif($seient->estat_seient == 6) Seient_s @elseif($seient->estat_seient == 7) Seient_nd @elseif($seient->estat_seient == 8) Cadira_rodes_s @elseif($seient->estat_seient == 9) Cadira_rodes_nd @elseif($seient->estat_seient == 10) Acompanyant_s @elseif($seient->estat_seient == 11) Acompanyant_nd @else Seient_s @endif" data-seient-id="{{ $seient->id_seient }}" data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}">
@@ -57,10 +49,10 @@
 
                     <!-- Contenedor per mostrar la informació dels seients seleccionats -->
                     <div id="selected-seats-info" class="hidden">
-                        <h4 class="text-md font-medium text-black">Seients Seleccionats:</h4>
+                        <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
                         <div id="seats-info"></div>
                         <p id="total-price"></p>
-                        <button id="pay-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Continuar</button>
+                        <button id="pay-button" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded">Continuar</button>
                     </div>
                 </div>
             </div>

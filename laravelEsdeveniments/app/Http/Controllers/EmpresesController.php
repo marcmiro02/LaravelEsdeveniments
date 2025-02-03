@@ -34,6 +34,7 @@ class EmpresesController extends Controller
             'telefon' => 'required',
             'email' => 'required|email',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'logo_capsalera' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $empresa = new Empreses($request->all());
@@ -42,6 +43,12 @@ class EmpresesController extends Controller
             $logo = $request->file('logo');
             $logoBase64 = base64_encode(file_get_contents($logo));
             $empresa->logo = $logoBase64;
+        }
+
+        if ($request->hasFile('logo_capsalera')) {
+            $logo_capsalera = $request->file('logo_capsalera');
+            $logocapsaleraBase64 = base64_encode(file_get_contents($logo_capsalera));
+            $empresa->logo_capsalera = $logocapsaleraBase64;
         }
 
         $empresa->save();
@@ -66,6 +73,7 @@ class EmpresesController extends Controller
             'telefon' => 'required',
             'email' => 'required|email',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'logo_capsalera' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ], [
             'nif.unique' => 'El NIF ya está registrado en otra empresa.',
             'nif.required' => 'El campo NIF es obligatorio.',
@@ -80,14 +88,24 @@ class EmpresesController extends Controller
         // Buscar la empresa por su ID
         $empresa = Empreses::findOrFail($id_empresa);
 
+        // Procesar la imagen del logo si está presente en la solicitud
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $logoBase64 = base64_encode(file_get_contents($logo));
             $empresa->logo = $logoBase64;
         }
 
+        if ($request->hasFile('logo_capsalera')) {
+            $logo_capsalera = $request->file('logo_capsalera');
+            $logocapsaleraBase64 = base64_encode(file_get_contents($logo_capsalera));
+            $empresa->logo_capsalera = $logocapsaleraBase64;
+        }
+
         // Actualizar los datos de la empresa
-        $empresa->update($request->all());
+        $empresa->fill($request->except(['logo', 'logo_capsalera']));
+
+        // Guardar los cambios en la base de datos
+        $empresa->save();
 
         // Redirigir con un mensaje de éxito
         return redirect()->route('empreses.index')->with('success', 'Empresa actualizada correctamente');
@@ -99,5 +117,18 @@ class EmpresesController extends Controller
         $empresa->delete();
 
         return redirect()->route('empreses.index')->with('success', 'Empresa eliminada correctamente');
+    }
+
+    public function welcome()
+    {
+        $empreses = Empreses::all();
+        return view('welcome', compact('empreses'));
+    }
+
+    public function inici($id_empresa)
+    {
+        $empresa = Empreses::findOrFail($id_empresa);
+        $esdeveniments = $empresa->esdeveniments; // Asumiendo que hay una relación definida en el modelo
+        return view('inici', compact('empresa', 'esdeveniments'));
     }
 }

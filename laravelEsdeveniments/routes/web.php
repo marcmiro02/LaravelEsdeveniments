@@ -20,13 +20,16 @@ use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\HorariController;
+use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\SearchController;
 
 
 //------------------------------------- INICI -------------------------------------//
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('inici', compact('esdeveniments'));
-})->name('inici');
+Route::get('/', [EmpresesController::class, 'welcome'])->name('welcome');
+// Route::get('/', function () {
+//     $esdeveniments = Esdeveniments::all();
+//     return view('inici', compact('esdeveniments'));
+// })->name('inici');
 
 
 // ================================
@@ -39,10 +42,10 @@ Route::get('/', function () {
 
 // MOSTRAR ESDEVENIMENTS
 
-Route::get('/', function () {
-    $esdeveniments = Esdeveniments::all();
-    return view('inici', compact('esdeveniments'));
-})->name('inici');
+// Route::get('/', function () {
+//     $esdeveniments = Esdeveniments::all();
+//     return view('inici', compact('esdeveniments'));
+// })->name('inici');
 
 // ------------------------------
 // -          ENTRADES          -
@@ -71,6 +74,10 @@ Route::get('/', function () {
 // =           EMPRESES           =
 // ================================
 
+// REDIRECCIO PAGINA WELCOME A PAGINA ESDEVENIMENTS DE CADA EMPRESA
+Route::get('/inici', [EsdevenimentsController::class, 'index'])->name('inici');
+// PODER UTILITZAR LES DADES DE LEMPRESA QUAN L'HAS SELECCIONAT AL WELCOME.BLADE
+Route::get('/inici/{id_empresa}', [EmpresesController::class, 'inici'])->name('inici');
 // ------------------------------
 // -          USUARIS           -
 // ------------------------------
@@ -351,6 +358,9 @@ Route::get('/pdf/{id}/download', [PdfController::class, 'download'])->name('pdf.
 // -           ALTRES           -
 // ------------------------------
 Route::get('/esdeveniments/{id_esdeveniment}/horaris/mostracio', [HorariController::class, 'mostracio'])->name('horaris.mostracio');
+
+// BARRA DE BUSQUEDA
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 
 
