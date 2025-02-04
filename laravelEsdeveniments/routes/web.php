@@ -482,8 +482,6 @@ Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
 
 
-
-
 Route::get('/pdf/validarEntrada', [PdfController::class, 'indexValidar'])->name('pdf.indexValidar');
 Route::post('/pdf/validarEntrada', [PdfController::class, 'pestanyaValidar'])->name('pdf.validarEntrada');
 Route::post('/pdf/validarQr', [QrController::class, 'validarQr'])->name('pdf.validarQr');
@@ -501,8 +499,9 @@ Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients']
 Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
-Route::get('/tickets/success', [TicketController::class, 'success'])->name('tickets.success');
-Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
+Route::get('/tickets/success/{session_id}', [TicketController::class, 'handleSuccess'])->name('tickets.success');
+Route::get('/tickets/cancel', [TicketController::class, 'handleCancel'])->name('tickets.cancel');
+
 
 Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
 require __DIR__ . '/auth.php';

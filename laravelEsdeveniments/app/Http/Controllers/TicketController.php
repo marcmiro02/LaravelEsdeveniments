@@ -10,6 +10,7 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\Esdeveniments;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Session;
 
 class TicketController extends Controller
 {
@@ -77,11 +78,46 @@ class TicketController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => route('tickets.success', ['session_id' => '{CHECKOUT_SESSION_ID}']),
+            'success_url' => url('/tickets/success/{CHECKOUT_SESSION_ID}'),
             'cancel_url' => route('tickets.cancel'),
         ]);
-
         return redirect($session->url);
+    }
+
+    public function handleSuccess(Request $request, $session_id)
+    {
+        try {
+            // Verificar que la sesión de pago existe y ha sido completada
+            $session = StripeSession::retrieve($session_id);
+
+            if ($session->payment_status !== 'paid') {
+                return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
+            }
+
+            // Obtener las entradas seleccionadas desde la sesión
+            $selectedEntrades = Session::get('selectedEntrades');
+
+            if (empty($selectedEntrades)) {
+                return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
+            }
+
+            // Llamar a generarEntrada() para crear el PDF
+            $pdfController = app(PdfController::class);
+            $pdfUrl = $pdfController->generarEntrada(new Request(['selectedSeats' => $selectedEntrades]));
+
+            if ($pdfUrl) {
+                // Limpiar las entradas seleccionadas de la sesión
+                Session::forget('selectedEntrades');
+
+                // Redirigir al usuario al PDF generado
+                return redirect($pdfUrl)->with('success', 'Entrada(s) generada(s) correctamente.');
+            }
+
+        } catch (\Exception $e) {
+            // En caso de error, redirigir al usuario con un mensaje de error
+            return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
+        }
+        return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
     }
 
     public function success(Request $request)

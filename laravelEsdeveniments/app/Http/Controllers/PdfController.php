@@ -17,54 +17,67 @@ class PdfController extends Controller
 {
     public function generarEntrada(Request $request)
     {
-        $esdeveniment = $request->input('id_esdeveniment');
-        $esdeveniment = Esdeveniments::find($esdeveniment);
+        // Obtener los datos enviados desde el formulario
+        $selectedSeats = $request->input('selectedSeats');
 
-        $qrController = new QrController();
-        $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
-
-        $empresa = Empreses::findOrFail(Auth::user()->id_empresa);
-
-        $data = [
-            'eventName' => $esdeveniment->nom,
-            'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
-            'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
-            'eventPhoto' => $esdeveniment->foto_portada,
-            'eventPhotoBackground' => $esdeveniment->foto_fons,  
-            'ticketPrice' => 50,
-            'discount' => 10,
-            'totalPrice' => 40,
-            'row' => 'A',
-            'seat' => 12,
-            'qrCode' => $qr->dibuix_qr,
-            'empresaLogo' => $empresa->logo,
-        ];
-
-        // Generar el PDF
-        if ($request->has('imprimir_ticket')) {
-            $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 218, 541], 'portrait'); // Ticket
-        } else {
-            $pdf = PDF::loadView('pdf.pdf', $data); // PDF normal
+        if (empty($selectedSeats)) {
+            throw new \Exception('No se han seleccionado asientos.');
         }
+
+        // Recuperar el evento correspondiente
+        $esdevenimentId = $selectedSeats[0]['fila']; // Suponemos que todos los asientos pertenecen al mismo evento
+        $esdeveniment = Esdeveniments::find($esdevenimentId);
+
+        if (!$esdeveniment) {
+            throw new \Exception('El evento no existe.');
+        }
+
+        // Array para almacenar los datos de todas las entradas
+        $ticketData = [];
+
+        foreach ($selectedSeats as $seat) {
+            // Crear un QR único para cada entrada
+            $qrController = new QrController();
+            $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
+
+            // Datos dinámicos del asiento seleccionado
+            $data = [
+                'eventName' => $esdeveniment->nom,
+                'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
+                'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
+                'eventPhoto' => $esdeveniment->foto_portada,
+                'eventPhotoBackground' => $esdeveniment->foto_fons,
+                'ticketPrice' => $seat['price'], // Precio dinámico del asiento
+                'discount' => 0, // Descuento (puedes ajustarlo según tu lógica)
+                'totalPrice' => $seat['price'], // Precio total (sin descuento en este caso)
+                'row' => $seat['fila'], // Fila dinámica del asiento
+                'seat' => $seat['columna'], // Columna dinámica del asiento
+                'qrCode' => $qr->dibuix_qr,
+                'empresaLogo' => Auth::user()->empresa->logo, // Logo de la empresa del usuario autenticado
+            ];
+
+            // Agregar los datos de la entrada al array
+            $ticketData[] = $data;
+
+            // Guardar el QR generado
+            $qr->save();
+        }
+
+        // Generar un único PDF con todas las entradas
+        $pdf = PDF::loadView('pdf.multiple_tickets', ['tickets' => $ticketData])->setPaper([0, 0, 218, 541], 'portrait');
 
         // Convertir el PDF a base64
         $pdfContent = $pdf->output();
         $pdfBase64 = base64_encode($pdfContent);
 
-        // Crear una nueva instancia del modelo Pdf
+        // Guardar el PDF en la base de datos
         $pdfModel = new PdfModel();
         $pdfModel->doc_pdf = $pdfBase64;
         $pdfModel->id_usuari = auth()->id(); // Asumiendo que el usuario está autenticado
-
-        // Guardar el PDF en la base de datos
         $pdfModel->save();
 
-        // Actualizar el campo id_pdf en la tabla qr
-        $qr->id_pdf = $pdfModel->id_pdf; // Asegúrate de usar el nombre correcto del campo
-        $qr->save();
-
-        // Enviar el PDF al navegador
-        return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
+        // Devolver la URL del PDF generado
+        return route('pdf.show', $pdfModel->id);
     }
 
     public function showEventSelection()
