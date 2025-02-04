@@ -20,7 +20,6 @@ use App\Http\Controllers\PdfController;
 use App\Models\Esdeveniments;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\HorariController;
-use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\SearchController;
 
 
@@ -502,8 +501,5 @@ Route::post('/tickets/process-payment', [TicketController::class, 'processPaymen
 Route::get('/tickets/success/{session_id}', [TicketController::class, 'handleSuccess'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'handleCancel'])->name('tickets.cancel');
 
-
-Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook']);
-require __DIR__ . '/auth.php';
 
 require __DIR__ . '/auth.php';
