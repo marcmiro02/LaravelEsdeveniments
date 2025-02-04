@@ -10,11 +10,8 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use App\Models\Esdeveniments;
 use App\Models\Ticket;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Session;
-=======
 use App\Notifications\PaymentReceived;
->>>>>>> 57244b6a0ce45144988d1b3c1b010230fbf53c97
 
 class TicketController extends Controller
 {
@@ -86,11 +83,7 @@ class TicketController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-<<<<<<< HEAD
-            'success_url' => url('/tickets/success/{CHECKOUT_SESSION_ID}'),
-=======
-            'success_url' => route('tickets.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
->>>>>>> 57244b6a0ce45144988d1b3c1b010230fbf53c97
+            'success_url' => url('tickets/success/{CHECKOUT_SESSION_ID}'),
             'cancel_url' => route('tickets.cancel'),
         ]);
         return redirect($session->url);

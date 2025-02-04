@@ -498,8 +498,8 @@ Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients']
 Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
-Route::get('/tickets/success/{session_id}', [TicketController::class, 'handleSuccess'])->name('tickets.success');
-Route::get('/tickets/cancel', [TicketController::class, 'handleCancel'])->name('tickets.cancel');
+Route::get('/tickets/success/{session_id}', [TicketController::class, 'success'])->name('tickets.success');
+Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
 
 
 require __DIR__ . '/auth.php';
