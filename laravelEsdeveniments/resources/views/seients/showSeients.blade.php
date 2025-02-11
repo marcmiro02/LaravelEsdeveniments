@@ -1,64 +1,81 @@
+<!-- filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/seients/showSeients.blade.php -->
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Selecciona els Seients') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
+    <div class="py-12 bg-black dark:bg-black">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">Sala: {{ $sala->nom_sala }}</h3>
-                    <br>
-                    <!-- Leyenda de los estados de los asientos -->
-                    <div class="mb-6 flex justify-between">
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Acompanyant_d.png') }}" alt="Acompanyant" class="w-6 h-6 mr-2">
-                            <span>Acompanyament</span>
+            <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
+                <div class="p-8 text-gray-100 dark:text-gray-100">
+                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">{{ strtoupper($esdeveniment->nom) }}</h1>
+                    <div class="flex justify-center">
+                        <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-96 object-cover mb-4">
+                    </div>
+                    
+                    <!-- Línea de Progreso -->
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="flex-1">
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                                <div class="bg-rose-600 h-3 rounded-full" style="width: 50%;"></div>
+                            </div>
                         </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Cadira_rodes_d.png') }}" alt="Cadira_rodes" class="w-6 h-6 mr-2">
-                            <span>Cadira rodes</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_b.png') }}" alt="Seient_b" class="w-6 h-6 mr-2">
-                            <span>Bloquejat</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient_d" class="w-6 h-6 mr-2">
-                            <span>Disponible</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_nd.png') }}" alt="Seient_ns" class="w-6 h-6 mr-2">
-                            <span>No disponible</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_s.png') }}" alt="Seient_s" class="w-6 h-6 mr-2">
-                            <span>Seleccionat</span>
+                        <div class="flex items-center justify-between w-full mt-2">
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-rose-600 text-white rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-rose-600">Triar Seient</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Triar Entrada</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Resum de la compra</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Pagament</span>
+                            </div>
                         </div>
                     </div>
 
-                    @foreach($seients as $fila => $seientsFila)
-                        <div class="flex justify-center mb-4">
-                            <div class="text-center mr-2">{{ $fila }}</div>
-                            @foreach($seientsFila as $seient)
-                                <div class="relative mx-1">
-                                    <button class="seat @if($seient->estat_seient == 1) Seient_d @elseif($seient->estat_seient == 2) Seient_s @elseif($seient->estat_seient == 3) Seient_nd @elseif($seient->estat_seient == 4) Seient_b @elseif($seient->estat_seient == 5) invisible @elseif($seient->estat_seient == 6) Acompanyant_d @elseif($seient->estat_seient == 7) Acompanyant_nd @elseif($seient->estat_seient == 8) Acompanyant_s @elseif($seient->estat_seient == 9) Cadira_rodes_d @elseif($seient->estat_seient == 10) Cadira_rodes_nd @elseif($seient->estat_seient == 11) Cadira_rodes_s @else Seient_s @endif" data-seient-id="{{ $seient->id_seient }}" data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}">
-                                        @if($seient->estat_seient != 5)
-                                            <img src="@if($seient->estat_seient == 1) {{ asset('img/seients/Seient_d.png') }} @elseif($seient->estat_seient == 2) {{ asset('img/seients/Seient_s.png') }} @elseif($seient->estat_seient == 3) {{ asset('img/seients/Seient_nd.png') }} @elseif($seient->estat_seient == 4) {{ asset('img/seients/Seient_b.png') }} @elseif($seient->estat_seient == 6) {{ asset('img/seients/Acompanyant_d.png') }} @elseif($seient->estat_seient == 7) {{ asset('img/seients/Acompanyant_nd.png') }} @elseif($seient->estat_seient == 8) {{ asset('img/seients/Acompanyant_s.png') }} @elseif($seient->estat_seient == 9) {{ asset('img/seients/Cadira_rodes_d.png') }} @elseif($seient->estat_seient == 10) {{ asset('img/seients/Cadira_rodes_nd.png') }} @elseif($seient->estat_seient == 11) {{ asset('img/seients/Cadira_rodes_s.png') }} @else {{ asset('img/seients/Seient_s.png') }} @endif" alt="Seient">
-                                        @endif
-                                    </button>
-                                </div>
-                            @endforeach
+                    <div id="seats-summary" class="mb-4">
+                        <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
+                        <ul id="selected-seats-list" class="list-disc pl-5"></ul>
+                    </div>
+                    <br>
+                    <div id="entrades-summary" class="mb-4">
+                        <table class="table-auto w-full">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2">Tipus d'Entrada</th>
+                                    <th class="px-4 py-2">Descompte</th>
+                                    <th class="px-4 py-2">Quantitat</th>
+                                    <th class="px-4 py-2">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($entrades as $entrada)
+                                    <tr>
+                                        <td class="border px-4 py-2">{{ $entrada->tipus_entrada }}</td>
+                                        <td class="border px-4 py-2">{{ $entrada->descompte }}%</td>
+                                        <td class="border px-4 py-2">
+                                            <input type="number" min="0" value="0" class="entrada-quantitat w-full bg-gray-800 text-white border border-gray-600 rounded-lg px-2 py-1" data-descompte="{{ $entrada->descompte }}">
+                                        </td>
+                                        <td class="border px-4 py-2 entrada-subtotal">0€</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="flex justify-between mt-4">
+                            <h4 class="text-md font-medium text-rose-600">Entrades Seleccionades: <span id="selected-entrades-count">0/0</span></h4>
+                            <button id="pay-button" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-2" disabled>Pagar</button>
                         </div>
-                    @endforeach
-
-                    <!-- Contenedor para mostrar la información de los asientos seleccionados -->
-                    <div id="selected-seats-info" class="mt-6 p-4 bg-gray-200 dark:bg-gray-700 rounded-lg hidden">
-                        <h4 class="text-lg font-medium text-black dark:text-white">Asientos Seleccionados</h4>
-                        <div id="seats-info" class="text-black dark:text-white"></div>
-                        <p id="total-price" class="text-black dark:text-white mt-2"></p>
                     </div>
                 </div>
             </div>
@@ -67,81 +84,62 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const seients = document.querySelectorAll('button[data-seient-id]');
-            const selectedSeatsInfo = document.getElementById('selected-seats-info');
-            const seatsInfo = document.getElementById('seats-info');
-            const totalPrice = document.getElementById('total-price');
-            let selectedSeats = [];
+            const quantitatInputs = document.querySelectorAll('.entrada-quantitat');
+            const selectedEntradesCount = document.getElementById('selected-entrades-count');
+            const selectedSeatsList = document.getElementById('selected-seats-list');
+            const payButton = document.getElementById('pay-button');
+            let totalEntrades = 0;
 
-            seients.forEach(seient => {
-                seient.addEventListener('click', function(event) {
-                    // Evitar clic en asientos invisibles, bloqueados o no disponibles
-                    if (this.classList.contains('invisible') || this.classList.contains('Seient_b') || this.classList.contains('Seient_nd')) {
-                        event.preventDefault();
-                        return;
+            // Recuperar els seients seleccionats de localStorage
+            const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
+            console.log('Seients seleccionats:', selectedSeats);
+
+            // Mostrar els seients seleccionats
+            selectedSeats.forEach(seat => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€`;
+                selectedSeatsList.appendChild(listItem);
+            });
+
+            const maxEntrades = selectedSeats.length;
+            selectedEntradesCount.textContent = `0/${maxEntrades}`;
+
+            quantitatInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const descompte = parseFloat(this.dataset.descompte);
+                    const preu = selectedSeats[0].preu; // Utilitzar el preu del primer seient seleccionat
+                    const preuAmbDescompte = preu - (preu * (descompte / 100));
+                    const quantitat = parseInt(this.value);
+                    const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
+                    subtotalElement.textContent = (preuAmbDescompte * quantitat).toFixed(2) + '€';
+
+                    totalEntrades = Array.from(quantitatInputs).reduce((total, input) => total + parseInt(input.value), 0);
+                    selectedEntradesCount.textContent = `${totalEntrades}/${maxEntrades}`;
+
+                    if (totalEntrades > maxEntrades) {
+                        this.value = quantitat - (totalEntrades - maxEntrades);
+                        subtotalElement.textContent = (preuAmbDescompte * this.value).toFixed(2) + '€';
+                        totalEntrades = maxEntrades;
+                        selectedEntradesCount.textContent = `${totalEntrades}/${maxEntrades}`;
                     }
 
-                    const seientId = this.getAttribute('data-seient-id');
-                    const preu = parseFloat(this.getAttribute('data-preu'));
-                    const fila = this.getAttribute('data-fila');
-                    const columna = this.getAttribute('data-columna');
-
-                    // Cambiar el estado del asiento a seleccionado
-                    this.classList.toggle('selected');
-
-                    // Actualizar la lista de asientos seleccionados
-                    if (this.classList.contains('selected')) {
-                        selectedSeats.push({ seientId, preu, fila, columna });
-                    } else {
-                        selectedSeats = selectedSeats.filter(seat => seat.seientId !== seientId);
-                    }
-
-                    // Actualizar el contenido del botón
-                    if (this.classList.contains('selected')) {
-                        let selectedImage = '';
-                        if (this.classList.contains('Acompanyant_d')) {
-                            selectedImage = 'Acompanyant_s.png';
-                        } else if (this.classList.contains('Cadira_rodes_d')) {
-                            selectedImage = 'Cadira_rodes_s.png';
-                        } else if (this.classList.contains('Seient_d')) {
-                            selectedImage = 'Seient_s.png';
-                        } else {
-                            selectedImage = 'Seient_s.png';
-                        }
-                        this.innerHTML = `<img src="{{ asset('img/seients/') }}/${selectedImage}" alt="Seleccionat">`;
-                    } else {
-                        let estatSeient = '';
-                        if (this.classList.contains('Acompanyant_d')) {
-                            estatSeient = 'Acompanyant_d';
-                        } else if (this.classList.contains('Cadira_rodes_d')) {
-                            estatSeient = 'Cadira_rodes_d';
-                        } else if (this.classList.contains('Seient_b')) {
-                            estatSeient = 'Seient_b';
-                        } else if (this.classList.contains('Seient_d')) {
-                            estatSeient = 'Seient_d';
-                        } else if (this.classList.contains('Seient_ns')) {
-                            estatSeient = 'Seient_ns';
-                        } else {
-                            estatSeient = 'Seient_s';
-                        }
-                        this.innerHTML = estatSeient !== 'invisible' ? `<img src="{{ asset('img/seients/') }}/${estatSeient}.png" alt="Seient">` : '';
-                    }
-
-                    // Mostrar la información de los asientos seleccionados
-                    if (selectedSeats.length > 0) {
-                        let seatsInfoHtml = '';
-                        let total = 0;
-                        selectedSeats.forEach(seat => {
-                            seatsInfoHtml += `<p>Ubicación: Fila ${seat.fila}, Columna ${seat.columna} - Precio: ${seat.preu}€</p>`;
-                            total += seat.preu;
-                        });
-                        seatsInfo.innerHTML = seatsInfoHtml;
-                        totalPrice.textContent = `Total: ${total.toFixed(2)}€`;
-                        selectedSeatsInfo.classList.remove('hidden');
-                    } else {
-                        selectedSeatsInfo.classList.add('hidden');
-                    }
+                    payButton.disabled = totalEntrades !== maxEntrades;
                 });
+            });
+
+            payButton.addEventListener('click', function() {
+                const selectedEntrades = Array.from(quantitatInputs).map(input => {
+                    return {
+                        tipus_entrada: input.closest('tr').querySelector('td:first-child').textContent,
+                        descompte: parseFloat(input.dataset.descompte),
+                        preu: selectedSeats[0].preu, // Utilitzar el preu del primer seient seleccionat
+                        quantitat: parseInt(input.value),
+                        subtotal: parseFloat(input.closest('tr').querySelector('.entrada-subtotal').textContent)
+                    };
+                }).filter(entrada => entrada.quantitat > 0);
+
+                localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
+                window.location.href = "{{ route('tickets.orderSummary') }}";
             });
         });
     </script>

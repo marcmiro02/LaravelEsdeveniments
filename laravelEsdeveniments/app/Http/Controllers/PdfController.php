@@ -19,7 +19,6 @@ class PdfController extends Controller
     {
         // Obtener los datos enviados desde el formulario
         $selectedSeats = $request->input('selectedSeats');
-
         if (empty($selectedSeats)) {
             throw new \Exception('No se han seleccionado asientos.');
         }

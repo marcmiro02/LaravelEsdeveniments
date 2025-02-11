@@ -35,11 +35,16 @@
                                             <h4 class="text-2xl font-bold mb-4 text-rose-600">Horaris:</h4>
                                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                                 @if($esdeveniment->horaris && $esdeveniment->horaris->count() > 0)
-                                                    @foreach($esdeveniment->horaris->sortBy('data_hora') as $horari)
-                                                        <a href="#" class="bg-gray-600 dark:bg-gray-700 p-4 rounded-lg hover:bg-rose-600 dark:hover:bg-rose-600 transition-colors duration-200 transform hover:scale-105 shadow-lg">
+                                                @foreach($esdeveniment->horaris->sortBy('data_hora') as $horari)
+                                                    <form action="{{ route('sales.seients.redirect') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="id_sala" value="{{ $esdeveniment->id_sala }}">
+                                                        <input type="hidden" name="fecha" value="{{ $horari->data_hora }}">
+                                                        <button type="submit" class="bg-gray-600 dark:bg-gray-700 p-4 rounded-lg hover:bg-rose-600 dark:hover:bg-rose-600 transition-colors duration-200 transform hover:scale-105 shadow-lg">
                                                             <p class="text-lg text-center">{{ date('d/m/Y H:i', strtotime($horari->data_hora)) }}</p>
-                                                        </a>
-                                                    @endforeach
+                                                        </button>
+                                                    </form>
+                                                @endforeach
                                                 @else
                                                     <p class="text-lg text-gray-500">No hi ha horaris disponibles per aquest esdeveniment.</p>
                                                 @endif

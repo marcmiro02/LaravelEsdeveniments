@@ -1,26 +1,56 @@
-<!-- resources/views/tickets/success.blade.php -->
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Pagament Realitzat') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">El teu pagament s'ha realitzat correctament.</h3>
-                    <br>
-                    <button id="generate-qr-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generar QR</button>
+    <div class="min-h-screen bg-black flex justify-center items-center">
+        <div class="max-w-7xl w-full bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100 dark:text-gray-100">
+            <!-- Línea de Progreso -->
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex-1">
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                        <div class="bg-rose-600 h-3 rounded-full" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between w-full mt-2">
+                    <div class="text-center">
+                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-clapperboard text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Triar Seient</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-clapperboard text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Triar Entrada</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-clapperboard text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Resum de la compra</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-14 h-14 bg-rose-600 text-white rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-clapperboard text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-rose-600">Pagament Finalitzat</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Título -->
+            <h3 class="text-3xl font-bold text-center text-rose-600 mb-6">Pagament exitós!</h3>
+            <!-- Contenido -->
+            <div class="space-y-6">
+                <p class="text-lg">{{ $message }}</p>
+                <hr class="border-gray-700">
+                @if(isset($pdfUrl))
+                    <p>Haz clic en el enlace para descargar tus entradas:</p>
+                    <div class="flex justify-center">
+                        <a href="{{ $pdfUrl }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-2" target="_blank">Ver y Descargar Entradas</a>
+                    </div>
+                @endif
+                <div class="flex justify-center">
+                    <a href="{{ route('historial.index') }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">Ver historial de entradas</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById('generate-qr-button').addEventListener('click', function() {
-            window.location.href = "{{ route('pdf.generarEntrada') }}";
-        });
-    </script>
 </x-app-layout>

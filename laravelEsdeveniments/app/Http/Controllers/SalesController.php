@@ -21,7 +21,8 @@ class SalesController extends Controller
     {
         $sala = Sales::findOrFail($id_sala);
         $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
-        $esdeveniment = Esdeveniments::where('id_sala', $id_sala)->firstOrFail();
+        $esdeveniment = Esdeveniments::where('id_sala', $id_sala)->first();
+
         return view('sales.show', compact('sala', 'seients', 'esdeveniment'));
     }
 

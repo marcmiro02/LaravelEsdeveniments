@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Seients;
 use App\Models\Sales;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Esdeveniments;
+use App\Models\Entrades;
 
 class SeientsController extends Controller
 {
@@ -136,10 +138,29 @@ class SeientsController extends Controller
         return redirect()->route('seients.index')->with('success', 'Sala i seients eliminats correctament.');
     }
 
-    public function showSeients($id_sala)
+    public function redirectToSeients(Request $request)
     {
-        $sala = Sales::findOrFail($id_sala);
-        $seients = Seients::where('id_sala', $id_sala)->get()->groupBy('fila');
-        return view('seients.showSeients', compact('sala', 'seients'));
+        $request->validate([
+            'id_sala' => 'required|integer|exists:sales,id_sala',
+            'fecha' => 'required|date_format:Y-m-d H:i:s'
+        ]);
+
+        session(['fecha_seleccionada' => $request->fecha]); // Guardar la fecha en sesión
+
+        return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
+    }
+
+    public function showSeients($id_sala, Request $request)
+    {
+        $fechaSeleccionada = session('fecha_seleccionada');
+        $esdeveniment = Esdeveniments::where('id_sala', $id_sala)->first();
+        $seients = Seients::where('id_sala', $id_sala)->get();
+        $entrades = Entrades::all();
+
+        if (!$esdeveniment) {
+            return redirect()->route('sales.index')->with('error', 'Esdeveniment no trobat');
+        }
+
+        return view('seients.showSeients', compact('esdeveniment', 'seients', 'entrades', 'fechaSeleccionada'));
     }
 }

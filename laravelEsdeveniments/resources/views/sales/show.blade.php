@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/sales/show.blade.php -->
 <x-app-layout>
     <div class="py-12 bg-black dark:bg-black">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

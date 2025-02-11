@@ -486,20 +486,14 @@ Route::post('/pdf/validarEntrada', [PdfController::class, 'pestanyaValidar'])->n
 Route::post('/pdf/validarQr', [QrController::class, 'validarQr'])->name('pdf.validarQr');
 
 
-
-
-
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
-Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
-
-
+Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
 
 
 Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
-Route::get('/tickets/success/{session_id}', [TicketController::class, 'success'])->name('tickets.success');
-Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
+Route::get('/tickets/success', [TicketController::class, 'handleSuccess'])->name('tickets.success');
 
 
 require __DIR__ . '/auth.php';

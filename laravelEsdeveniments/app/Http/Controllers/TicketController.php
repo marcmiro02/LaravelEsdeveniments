@@ -12,6 +12,8 @@ use App\Models\Esdeveniments;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Session;
 use App\Notifications\PaymentReceived;
+use App\Http\Controllers\PdfController;
+
 
 class TicketController extends Controller
 {
@@ -56,102 +58,109 @@ class TicketController extends Controller
 
         $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
 
+        // Guardamos las entradas seleccionadas en la sesión
+        Session::put('selectedEntrades', $selectedEntrades);  // Esto es lo que asegurará que estén disponibles después
+
         $totalAmount = array_reduce($selectedEntrades, function ($carry, $entrada) {
             return $carry + $entrada['subtotal'];
         }, 0);
 
-        // Calcular els costos addicionals
-        $gestioCost = $totalAmount * 0.05; // Gastos de gestió (5% del total)
-        $ivaCost = $totalAmount * 0.21; // IVA (21% del total)
-        $recarrecCost = $totalAmount * 0.02; // Recàrrecs (2% del total)
+        // Calcular los costos adicionales
+        $gestioCost = $totalAmount * 0.05;
+        $ivaCost = $totalAmount * 0.21;
+        $recarrecCost = $totalAmount * 0.02;
         $totalAmount += $gestioCost + $ivaCost + $recarrecCost;
 
-        // Convertir l'import total a cèntims
+        // Convertir el importe total a céntimos
         $totalAmountCents = intval(round($totalAmount * 100));
 
-        // Crear la sessió de Stripe
+        // Crear la sesión de Stripe
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => 'Entrades de cinema',
+                        'name' => 'Entradas de cine',
                     ],
                     'unit_amount' => $totalAmountCents,
                 ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => url('tickets/success/{CHECKOUT_SESSION_ID}'),
-            'cancel_url' => route('tickets.cancel'),
+            'success_url' => route('tickets.success'),
         ]);
+
+        // Redirigir al usuario a Stripe para que complete el pago
         return redirect($session->url);
     }
 
-    public function handleSuccess(Request $request, $session_id)
+
+    public function handleSuccess(Request $request)
     {
         try {
-            // Verificar que la sesión de pago existe y ha sido completada
-            $session = StripeSession::retrieve($session_id);
-
-            if ($session->payment_status !== 'paid') {
-                return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
-            }
-
             // Obtener las entradas seleccionadas desde la sesión
             $selectedEntrades = Session::get('selectedEntrades');
 
+            // Verificamos si las entradas están vacías
             if (empty($selectedEntrades)) {
-                return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
+                return redirect()->route('tickets.success')->with('error', 'No se encontraron entradas seleccionadas.');
             }
 
-            // Llamar a generarEntrada() para crear el PDF
-            $pdfController = app(PdfController::class);
-            $pdfUrl = $pdfController->generarEntrada(new Request(['selectedSeats' => $selectedEntrades]));
-
-            if ($pdfUrl) {
-                // Limpiar las entradas seleccionadas de la sesión
-                Session::forget('selectedEntrades');
-
-                // Redirigir al usuario al PDF generado
-                return redirect($pdfUrl)->with('success', 'Entrada(s) generada(s) correctamente.');
-            }
-
-        } catch (\Exception $e) {
-            // En caso de error, redirigir al usuario con un mensaje de error
-            return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
-        }
-        return redirect()->route('tickets.success')->with('error', 'El pago no se ha completado.');
-    }
-
-    public function success(Request $request)
-    {
-        // Obtenir l'usuari autenticat
-        $user = Auth::user();
-
-        try {
-            // Obtenir la sessió de Stripe
-            $session = StripeSession::retrieve($request->query('session_id'));
-
-            // Crear un nou registre de ticket
+            // Crear el ticket
             $ticket = new Ticket();
-            $ticket->user_id = $user->id;
-            $ticket->event_name = 'Entrades de cinema';
-            $ticket->quantity = 1; // Pots ajustar això segons les teves necessitats
-            $ticket->price = $session->amount_total / 100; // Convertir de cèntims a euros
-            $ticket->stripe_payment_id = $session->payment_intent;
+            $ticket->user_id = Auth::id();
+            $ticket->event_name = 'Entradas de cine';
+            $ticket->quantity = count($selectedEntrades);
+            $ticket->price = array_reduce($selectedEntrades, function ($carry, $entrada) {
+                return $carry + $entrada['subtotal'];
+            }, 0);
+            $ticket->stripe_payment_id = 'No aplicable';
             $ticket->save();
 
-            // Enviar la notificació de correu electrònic
-            $user->notify(new PaymentReceived($ticket->price));
+            // Llamar al método 'generarEntrada' de PdfController
+            $pdfController = new PdfController();
+            $pdfUrl = $pdfController->generarEntrada($request);
 
-            return view('tickets.success');
+            // Limpiar las entradas seleccionadas de la sesión
+            Session::forget('selectedEntrades');
+
+            // Redirigir a la vista de éxito con el mensaje de confirmación
+            return view('tickets.success', [
+                'ticket' => $ticket,
+                'message' => 'Pago realizado con éxito, tus entradas están en tu historial.',
+                'pdfUrl' => $pdfUrl // Devolver la URL del PDF generado
+            ]);
         } catch (\Exception $e) {
-            // Capturar qualsevol error i mostrar un missatge d'error
-            return redirect()->route('tickets.cancel')->with('error', 'Error retrieving Stripe session: ' . $e->getMessage());
+            return view('tickets.success', [
+                'message' => 'Entrades generades correctament.',
+            ]);
         }
     }
+
+
+
+    public function success($session_id)
+    {
+        // Recibimos el session_id y lo usamos para verificar el pago
+        try {
+            $session = StripeSession::retrieve($session_id);
+
+            // Verificamos que el pago ha sido completado
+            if ($session->payment_status !== 'paid') {
+                return redirect()->route('tickets.cancel')->with('error', 'El pago no se ha completado.');
+            }
+
+            // Aquí puedes continuar con la lógica para generar entradas o lo que sea necesario
+
+            // Redirigimos a la vista de éxito
+            return view('tickets.success', ['session' => $session]);
+
+        } catch (\Exception $e) {
+            return redirect()->route('tickets.cancel')->with('error', 'No se ha podido recuperar la sesión de pago.');
+        }
+    }
+
 
     public function cancel()
     {
