@@ -142,13 +142,21 @@ class SeientsController extends Controller
     {
         $request->validate([
             'id_sala' => 'required|integer|exists:sales,id_sala',
-            'fecha' => 'required|date_format:Y-m-d H:i:s'
+            'fecha' => 'required|date_format:Y-m-d H:i:s',
+            'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment', // Asegúrate de validar el id_esdeveniment
         ]);
 
-        session(['fecha_seleccionada' => $request->fecha]); // Guardar la fecha en sesión
+        // Guardar la fecha seleccionada y el id_esdeveniment en la sesión
+        session([
+            'fecha_seleccionada' => $request->fecha,
+            'id_esdeveniment' => $request->id_esdeveniment,  // Guardamos id_esdeveniment
+            'id_sala' => $request->id_sala,  // Guardamos id_sala
+        ]);
 
         return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
     }
+
+
 
     public function showSeients($id_sala, Request $request)
     {

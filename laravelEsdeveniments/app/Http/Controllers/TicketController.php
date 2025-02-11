@@ -60,9 +60,6 @@ class TicketController extends Controller
         // Guardamos las entradas seleccionadas en la sesión
         Session::put('selectedEntrades', $selectedEntrades);
 
-        // Guardamos los asientos seleccionados en la sesión
-        $selectedSeats = Session::get('selectedSeats');
-
         $totalAmount = array_reduce($selectedEntrades, function ($carry, $entrada) {
             return $carry + $entrada['subtotal'];
         }, 0);
@@ -161,23 +158,24 @@ class TicketController extends Controller
         return view('tickets.cancel');
     }
 
-    public function storeSelectedSeats(Request $request)
-    {
-        $selectedSeats = $request->input('selectedSeats');
-        Session::put('selectedSeats', $selectedSeats);
-        return response()->json(['status' => 'success']);
-    }
-
     public function generateEntrades(Request $request)
     {
-        // Llamar al método 'generarEntrada' de PdfController
-        $pdfController = new PdfController();
-        $pdfUrl = $pdfController->generarEntrada($request);
+        // Obtener el ID del evento desde el request
+        $esdevenimentId = $request->input('id_esdeveniment');
 
-        // Redirigir a la vista de éxito con el mensaje de confirmación
-        return view('tickets.success', [
-            'message' => 'Entrades generades correctament.',
-            'pdfUrl' => $pdfUrl // Devolver la URL del PDF generado
-        ]);
+        // Verificar si el ID es válido
+        if (!$esdevenimentId) {
+            return redirect()->route('tickets.success')->with('error', 'No se encontró el evento.');
+        }
+
+        // Buscar el evento
+        $esdeveniment = Esdeveniments::find($esdevenimentId);
+
+        if (!$esdeveniment) {
+            return redirect()->route('tickets.success')->with('error', 'El evento no existe.');
+        }
+
+        // Debug para ver si el ID se recibe bien
+        dd("ID del evento recibido correctamente: " . $esdevenimentId);
     }
 }

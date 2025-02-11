@@ -18,67 +18,72 @@ class PdfController extends Controller
 {
     public function generarEntrada(Request $request)
     {
-        // Obtener los datos enviados desde el formulario o la sesión
-        $selectedSeats = $request->input('selectedSeats') ?? Session::get('selectedSeats');
-        if (empty($selectedSeats)) {
-            throw new \Exception('No se han seleccionado asientos.');
+        // Verificar si el id_esdeveniment existe en la sesión
+        if (!session()->has('id_esdeveniment')) {
+            // Redirigir a la página principal si el evento ya fue procesado
+            return redirect()->route('welcome'); // O cualquier otra ruta que prefieras
         }
 
-        // Recuperar el evento correspondiente
-        $esdevenimentId = $selectedSeats[0]['fila']; // Suponemos que todos los asientos pertenecen al mismo evento
-        $esdeveniment = Esdeveniments::find($esdevenimentId);
+        // Ahora podemos continuar con la lógica original
+        $esdeveniment = $request->input('id_esdeveniment');
+        $esdeveniment = Esdeveniments::find($esdeveniment);
 
         if (!$esdeveniment) {
             throw new \Exception('El evento no existe.');
         }
 
-        // Array para almacenar los datos de todas las entradas
-        $ticketData = [];
+        // Generar el QR
+        $qrController = new QrController();
+        $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
 
-        foreach ($selectedSeats as $seat) {
-            // Crear un QR único para cada entrada
-            $qrController = new QrController();
-            $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
+        $empresa = Empreses::findOrFail(Auth::user()->id_empresa);
 
-            // Datos dinámicos del asiento seleccionado
-            $data = [
-                'eventName' => $esdeveniment->nom,
-                'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
-                'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
-                'eventPhoto' => $esdeveniment->foto_portada,
-                'eventPhotoBackground' => $esdeveniment->foto_fons,
-                'ticketPrice' => $seat['price'], // Precio dinámico del asiento
-                'discount' => 0, // Descuento (puedes ajustarlo según tu lógica)
-                'totalPrice' => $seat['price'], // Precio total (sin descuento en este caso)
-                'row' => $seat['fila'], // Fila dinámica del asiento
-                'seat' => $seat['columna'], // Columna dinámica del asiento
-                'qrCode' => $qr->dibuix_qr,
-                'empresaLogo' => Auth::user()->empresa->logo, // Logo de la empresa del usuario autenticado
-            ];
+        // Datos para el PDF
+        $data = [
+            'eventName' => $esdeveniment->nom,
+            'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
+            'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
+            'eventPhoto' => $esdeveniment->foto_portada,
+            'eventPhotoBackground' => $esdeveniment->foto_fons,  
+            'ticketPrice' => 50,
+            'discount' => 10,
+            'totalPrice' => 40,
+            'row' => 'A',
+            'seat' => 12,
+            'qrCode' => $qr->dibuix_qr,
+            'empresaLogo' => $empresa->logo,
+        ];
 
-            // Agregar los datos de la entrada al array
-            $ticketData[] = $data;
-
-            // Guardar el QR generado
-            $qr->save();
+        // Generar el PDF
+        if ($request->has('imprimir_ticket')) {
+            $pdf = PDF::loadView('pdf.ticket', $data)->setPaper([0, 0, 218, 541], 'portrait'); // Ticket
+        } else {
+            $pdf = PDF::loadView('pdf.pdf', $data); // PDF normal
         }
-
-        // Generar un único PDF con todas las entradas
-        $pdf = PDF::loadView('pdf.multiple_tickets', ['tickets' => $ticketData])->setPaper([0, 0, 218, 541], 'portrait');
 
         // Convertir el PDF a base64
         $pdfContent = $pdf->output();
         $pdfBase64 = base64_encode($pdfContent);
 
-        // Guardar el PDF en la base de datos
+        // Guardamos el PDF en la base de datos
         $pdfModel = new PdfModel();
         $pdfModel->doc_pdf = $pdfBase64;
-        $pdfModel->id_usuari = auth()->id(); // Asumiendo que el usuario está autenticado
+        $pdfModel->id_usuari = auth()->id(); // Asumimos que el usuario está autenticado
+
         $pdfModel->save();
 
-        // Devolver la URL del PDF generado
-        return route('pdf.show', $pdfModel->id);
+        // Actualizamos el QR
+        $qr->id_pdf = $pdfModel->id_pdf;
+        $qr->save();
+
+        // Ahora eliminamos el id_esdeveniment de la sesión
+        session()->forget('id_esdeveniment');
+
+        // Retornar el PDF generado al navegador
+        return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
+
+    
 
     public function showEventSelection()
     {

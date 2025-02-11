@@ -495,7 +495,6 @@ Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
 Route::get('/tickets/success', [TicketController::class, 'handleSuccess'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
-Route::get('/tickets/generate-entrades', [TicketController::class, 'generateEntrades'])->name('tickets.generateEntrades');
-
+Route::get('/tickets/generate-entrades', [PdfController::class, 'generarEntrada'])->name('tickets.generateEntrades');
 
 require __DIR__ . '/auth.php';

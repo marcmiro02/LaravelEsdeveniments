@@ -1,4 +1,3 @@
-<!-- filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/tickets/success.blade.php -->
 <x-app-layout>
     <div class="min-h-screen bg-black flex justify-center items-center">
         <div class="max-w-7xl w-full bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100 dark:text-gray-100">
@@ -40,10 +39,31 @@
             <h3 class="text-3xl font-bold text-center text-rose-600 mb-6">Pagament exitós!</h3>
             <!-- Contenido -->
             <div class="space-y-6">
-                <p class="text-lg">{{ $message }}</p>
                 <hr class="border-gray-700">
-                <div class="flex justify-center">
-                    <a href="{{ route('tickets.generateEntrades') }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">Generar Entrades</a>
+
+                @if(session()->has('id_esdeveniment'))
+                    <!-- Formulario de Generar Entrada -->
+                    <div class="flex justify-center">
+                        <form action="{{ route('pdf.generarEntrada') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_esdeveniment" value="{{ session('id_esdeveniment') }}">
+                            <button type="submit" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">
+                                Generar Entrades
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <!-- Mensaje si ya se generó la entrada -->
+                    <div class="text-center text-gray-500">
+                        <p>Ya has generado tu entrada. No es posible generarla nuevamente.</p>
+                    </div>
+                @endif
+
+                <!-- Botón Volver -->
+                <div class="flex justify-center mt-8">
+                    <a href="{{ route('welcome') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Volver al inicio
+                    </a>
                 </div>
             </div>
         </div>
