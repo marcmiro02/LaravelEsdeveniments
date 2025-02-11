@@ -12,13 +12,14 @@ use App\Models\Esdeveniments;
 use App\Models\PdfModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Empreses;
+use Illuminate\Support\Facades\Session;
 
 class PdfController extends Controller
 {
     public function generarEntrada(Request $request)
     {
-        // Obtener los datos enviados desde el formulario
-        $selectedSeats = $request->input('selectedSeats');
+        // Obtener los datos enviados desde el formulario o la sesión
+        $selectedSeats = $request->input('selectedSeats') ?? Session::get('selectedSeats');
         if (empty($selectedSeats)) {
             throw new \Exception('No se han seleccionado asientos.');
         }

@@ -138,8 +138,22 @@
                     };
                 }).filter(entrada => entrada.quantitat > 0);
 
-                localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
-                window.location.href = "{{ route('tickets.orderSummary') }}";
+                // Guardar los asientos seleccionados en la sesión
+                fetch("{{ route('tickets.storeSelectedSeats') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ selectedSeats })
+                }).then(response => {
+                    if (response.ok) {
+                        localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
+                        window.location.href = "{{ route('tickets.orderSummary') }}";
+                    } else {
+                        console.error('Error al guardar los asientos seleccionados en la sesión.');
+                    }
+                });
             });
         });
     </script>

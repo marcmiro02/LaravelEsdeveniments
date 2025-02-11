@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Session;
 use App\Notifications\PaymentReceived;
 use App\Http\Controllers\PdfController;
 
-
 class TicketController extends Controller
 {
     public function __construct()
@@ -59,7 +58,10 @@ class TicketController extends Controller
         $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
 
         // Guardamos las entradas seleccionadas en la sesión
-        Session::put('selectedEntrades', $selectedEntrades);  // Esto es lo que asegurará que estén disponibles después
+        Session::put('selectedEntrades', $selectedEntrades);
+
+        // Guardamos los asientos seleccionados en la sesión
+        $selectedSeats = Session::get('selectedSeats');
 
         $totalAmount = array_reduce($selectedEntrades, function ($carry, $entrada) {
             return $carry + $entrada['subtotal'];
@@ -89,16 +91,30 @@ class TicketController extends Controller
             ]],
             'mode' => 'payment',
             'success_url' => route('tickets.success'),
+            'cancel_url' => route('tickets.cancel'),
         ]);
+
+        // Guardar el session_id en la sesión
+        Session::put('stripe_session_id', $session->id);
 
         // Redirigir al usuario a Stripe para que complete el pago
         return redirect($session->url);
     }
 
-
     public function handleSuccess(Request $request)
     {
         try {
+            // Obtener el session_id de la sesión
+            $session_id = Session::get('stripe_session_id');
+
+            // Obtener la sesión de Stripe
+            $session = StripeSession::retrieve($session_id);
+
+            // Verificamos que el pago ha sido completado
+            if ($session->payment_status !== 'paid') {
+                return redirect()->route('tickets.cancel')->with('error', 'El pago no se ha completado.');
+            }
+
             // Obtener las entradas seleccionadas desde la sesión
             $selectedEntrades = Session::get('selectedEntrades');
 
@@ -115,55 +131,53 @@ class TicketController extends Controller
             $ticket->price = array_reduce($selectedEntrades, function ($carry, $entrada) {
                 return $carry + $entrada['subtotal'];
             }, 0);
-            $ticket->stripe_payment_id = 'No aplicable';
+            $ticket->stripe_payment_id = $session->payment_intent; // Guardar el ID de pago de Stripe
             $ticket->save();
-
-            // Llamar al método 'generarEntrada' de PdfController
-            $pdfController = new PdfController();
-            $pdfUrl = $pdfController->generarEntrada($request);
 
             // Limpiar las entradas seleccionadas de la sesión
             Session::forget('selectedEntrades');
+            Session::forget('stripe_session_id');
 
             // Redirigir a la vista de éxito con el mensaje de confirmación
             return view('tickets.success', [
                 'ticket' => $ticket,
-                'message' => 'Pago realizado con éxito, tus entradas están en tu historial.',
-                'pdfUrl' => $pdfUrl // Devolver la URL del PDF generado
+                'message' => 'Pago realizado con éxito, tus entradas están en tu historial.'
             ]);
         } catch (\Exception $e) {
             return view('tickets.success', [
-                'message' => 'Entrades generades correctament.',
+                'message' => 'Ha ocurrido un error al procesar el pago.'
             ]);
         }
     }
 
-
-
-    public function success($session_id)
+    public function success()
     {
-        // Recibimos el session_id y lo usamos para verificar el pago
-        try {
-            $session = StripeSession::retrieve($session_id);
-
-            // Verificamos que el pago ha sido completado
-            if ($session->payment_status !== 'paid') {
-                return redirect()->route('tickets.cancel')->with('error', 'El pago no se ha completado.');
-            }
-
-            // Aquí puedes continuar con la lógica para generar entradas o lo que sea necesario
-
-            // Redirigimos a la vista de éxito
-            return view('tickets.success', ['session' => $session]);
-
-        } catch (\Exception $e) {
-            return redirect()->route('tickets.cancel')->with('error', 'No se ha podido recuperar la sesión de pago.');
-        }
+        // Redirigimos a la vista de éxito
+        return view('tickets.success');
     }
-
 
     public function cancel()
     {
         return view('tickets.cancel');
+    }
+
+    public function storeSelectedSeats(Request $request)
+    {
+        $selectedSeats = $request->input('selectedSeats');
+        Session::put('selectedSeats', $selectedSeats);
+        return response()->json(['status' => 'success']);
+    }
+
+    public function generateEntrades(Request $request)
+    {
+        // Llamar al método 'generarEntrada' de PdfController
+        $pdfController = new PdfController();
+        $pdfUrl = $pdfController->generarEntrada($request);
+
+        // Redirigir a la vista de éxito con el mensaje de confirmación
+        return view('tickets.success', [
+            'message' => 'Entrades generades correctament.',
+            'pdfUrl' => $pdfUrl // Devolver la URL del PDF generado
+        ]);
     }
 }

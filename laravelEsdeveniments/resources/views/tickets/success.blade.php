@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/tickets/success.blade.php -->
 <x-app-layout>
     <div class="min-h-screen bg-black flex justify-center items-center">
         <div class="max-w-7xl w-full bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100 dark:text-gray-100">
@@ -41,14 +42,8 @@
             <div class="space-y-6">
                 <p class="text-lg">{{ $message }}</p>
                 <hr class="border-gray-700">
-                @if(isset($pdfUrl))
-                    <p>Haz clic en el enlace para descargar tus entradas:</p>
-                    <div class="flex justify-center">
-                        <a href="{{ $pdfUrl }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-2" target="_blank">Ver y Descargar Entradas</a>
-                    </div>
-                @endif
                 <div class="flex justify-center">
-                    <a href="{{ route('historial.index') }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">Ver historial de entradas</a>
+                    <a href="{{ route('tickets.generateEntrades') }}" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">Generar Entrades</a>
                 </div>
             </div>
         </div>
