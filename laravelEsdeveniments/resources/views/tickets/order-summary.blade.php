@@ -91,8 +91,8 @@
             const payButton = document.getElementById('pay-button');
             let totalEntrades = 0;
 
-            // Recuperar los asientos seleccionados de localStorage
-            const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
+            // Recuperar los asientos seleccionados de la sesión
+            const selectedSeats = @json(Session::get('selectedSeats', []));
             const maxEntrades = selectedSeats.length;
             selectedEntradesCount.textContent = `0/${maxEntrades}`;
 

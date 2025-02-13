@@ -28,13 +28,11 @@ class TicketController extends Controller
         return view('tickets.payment', compact('entrades'));
     }
 
-    public function storeSelectedEntrades(Request $request)
+    public function storeSelectedSeats(Request $request)
     {
-        // Guardar las entradas seleccionadas en la sesión
-        session(['selectedEntrades' => $request->entrades]);
-
-        // Redirigir a la vista de resumen
-        return redirect()->route('tickets.order-summary');
+        $selectedSeats = $request->input('selectedSeats');
+        Session::put('selectedSeats', $selectedSeats);
+        return response()->json(['status' => 'success']);
     }
 
     public function showOrderSummary()
@@ -47,8 +45,6 @@ class TicketController extends Controller
 
         return view('tickets.order-summary', compact('esdeveniment', 'selectedEntrades'));
     }
-
-
 
     public function showSelectEntrades(Request $request)
     {

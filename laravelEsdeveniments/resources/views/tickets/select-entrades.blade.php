@@ -8,7 +8,7 @@
                     </h1>
 
                     <div class="flex justify-center">
-                        @if($esdeveniment && $esdeveniment->foto_portada)
+                        @if($esdeveniment && is_object($esdeveniment) && isset($esdeveniment->foto_portada))
                             <img src="data:image/png;base64,{{ $esdeveniment->foto_portada }}" 
                                  alt="{{ $esdeveniment->nom }}" 
                                  class="w-full h-96 object-cover mb-4">
@@ -16,8 +16,7 @@
                             <p class="text-center text-gray-500">No hi ha imatge disponible</p>
                         @endif
                     </div>
-                    
-                    <!-- Línea de Progreso -->
+
                     <div class="flex items-center justify-between mb-8">
                         <div class="flex-1">
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
@@ -52,11 +51,6 @@
                         </div>
                     </div>
 
-                    <div id="seats-summary" class="mb-4">
-                        <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
-                        <ul id="selected-seats-list" class="list-disc pl-5"></ul>
-                    </div>
-                    <br>
                     <div id="entrades-summary" class="mb-4">
                         <table class="table-auto w-full">
                             <thead>
@@ -73,7 +67,7 @@
                                         <td class="border px-4 py-2">{{ $entrada->tipus_entrada }}</td>
                                         <td class="border px-4 py-2">{{ $entrada->descompte }}%</td>
                                         <td class="border px-4 py-2">
-                                            <input type="number" min="0" value="0" class="entrada-quantitat w-full bg-gray-800 text-white border border-gray-600 rounded-lg px-2 py-1" data-descompte="{{ $entrada->descompte }}">
+                                            <input type="number" min="0" value="0" class="entrada-quantitat w-full bg-gray-800 text-white border border-gray-600 rounded-lg px-2 py-1" data-preu="{{ $entrada->preu }}" data-descompte="{{ $entrada->descompte }}">
                                         </td>
                                         <td class="border px-4 py-2 entrada-subtotal">0€</td>
                                     </tr>
@@ -94,49 +88,36 @@
         document.addEventListener('DOMContentLoaded', function() {
             const quantitatInputs = document.querySelectorAll('.entrada-quantitat');
             const selectedEntradesCount = document.getElementById('selected-entrades-count');
-            const selectedSeatsList = document.getElementById('selected-seats-list');
             const payButton = document.getElementById('pay-button');
             let totalEntrades = 0;
 
-            // Recuperar els seients seleccionats de localStorage
-            const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
-            console.log('Seients seleccionats:', selectedSeats);
-
-            // Mostrar els seients seleccionats
-            selectedSeats.forEach(seat => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€`;
-                selectedSeatsList.appendChild(listItem);
-            });
-
+            // Recuperar los asientos seleccionados de la sesión
+            const selectedSeats = @json(Session::get('selectedSeats', []));
             const maxEntrades = selectedSeats.length;
             selectedEntradesCount.textContent = `0/${maxEntrades}`;
 
+            // Actualizar las cantidades de entradas y el total
             quantitatInputs.forEach(input => {
                 input.addEventListener('input', function() {
                     const descompte = parseFloat(this.dataset.descompte);
-                    const preu = selectedSeats[0]?.preu || 0;
+                    const preu = parseFloat(this.dataset.preu);
                     const preuAmbDescompte = preu - (preu * (descompte / 100));
                     const quantitat = parseInt(this.value);
                     const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
                     subtotalElement.textContent = (preuAmbDescompte * quantitat).toFixed(2) + '€';
 
+                    // Actualizar el contador de entradas seleccionadas
                     totalEntrades = Array.from(quantitatInputs).reduce((total, input) => total + parseInt(input.value), 0);
                     selectedEntradesCount.textContent = `${totalEntrades}/${maxEntrades}`;
 
-                    if (totalEntrades > maxEntrades) {
-                        this.value = quantitat - (totalEntrades - maxEntrades);
-                        subtotalElement.textContent = (preuAmbDescompte * this.value).toFixed(2) + '€';
-                        totalEntrades = maxEntrades;
-                        selectedEntradesCount.textContent = `${totalEntrades}/${maxEntrades}`;
-                    }
-
-                    payButton.disabled = totalEntrades !== maxEntrades;
+                    // Habilitar el botón de pago si el total es mayor a 0
+                    payButton.disabled = totalEntrades === 0 || totalEntrades > maxEntrades;
                 });
             });
 
+            // Evento de pago
             payButton.addEventListener('click', function() {
-                localStorage.setItem('selectedEntrades', JSON.stringify([]));
+                localStorage.setItem('selectedEntrades', JSON.stringify([])); // Limpiar las entradas seleccionadas
                 window.location.href = "{{ route('tickets.orderSummary') }}";
             });
         });
