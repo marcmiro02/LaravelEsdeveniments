@@ -13,11 +13,10 @@ use App\Models\Horari;
 
 class EsdevenimentsController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $id_empresa = $request->get('id_empresa');
-        $esdeveniments = Esdeveniments::where('id_empresa', $id_empresa)->get();
-        return view('inici', compact('esdeveniments'));
+        $esdeveniments = Esdeveniments::all(); // Todos los eventos
+        return view('esdeveniments.index', compact('esdeveniments'));
     }
 
     public function show($id_esdeveniment)

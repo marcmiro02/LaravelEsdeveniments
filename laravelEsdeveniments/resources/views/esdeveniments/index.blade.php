@@ -42,18 +42,17 @@
                                     <td class="border px-4 py-2">{{ $esdeveniment->data_estrena }}</td>
                                     <td class="border px-4 py-2">
                                         <!-- Ver Esdeveniment -->
-                                        <a href="{{ route('esdeveniments.show', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Veure</a>
+                                        <a href="{{ route('esdeveniments.show', $esdeveniment->id_esdeveniment) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Veure</a>
 
                                         <!-- Editar Esdeveniment -->
-                                        <a href="{{ route('esdeveniments.edit', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Editar</a>
+                                        <a href="{{ route('esdeveniments.edit', $esdeveniment->id_esdeveniment) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Editar</a>
 
                                         <!-- Eliminar Esdeveniment -->
-                                        <form action="{{ route('esdeveniments.destroy', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}" method="POST" style="display:inline">
+                                        <form action="{{ route('esdeveniments.destroy', $esdeveniment->id_esdeveniment) }}" method="POST" style="display:inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
                                         </form>
-
                                     </td>
                                 </tr>
                             @endforeach

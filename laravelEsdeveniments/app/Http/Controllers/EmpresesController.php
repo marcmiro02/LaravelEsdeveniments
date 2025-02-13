@@ -128,7 +128,7 @@ class EmpresesController extends Controller
     public function inici($id_empresa)
     {
         $empresa = Empreses::findOrFail($id_empresa);
-        $esdeveniments = $empresa->esdeveniments; // Asumiendo que hay una relación definida en el modelo
+        $esdeveniments = $empresa->esdeveniments; // Relación definida en el modelo
         return view('inici', compact('empresa', 'esdeveniments'));
     }
 }

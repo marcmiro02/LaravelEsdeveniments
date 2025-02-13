@@ -3,9 +3,18 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
                 <div class="p-8 text-gray-100 dark:text-gray-100">
-                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">{{ strtoupper($esdeveniment->nom) }}</h1>
+                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">
+                        {{ strtoupper(optional($esdeveniment)->nom ?? 'Esdeveniment no trobat') }}
+                    </h1>
+
                     <div class="flex justify-center">
-                        <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-96 object-cover mb-4">
+                        @if($esdeveniment && $esdeveniment->foto_portada)
+                            <img src="data:image/png;base64,{{ $esdeveniment->foto_portada }}" 
+                                 alt="{{ $esdeveniment->nom }}" 
+                                 class="w-full h-96 object-cover mb-4">
+                        @else
+                            <p class="text-center text-gray-500">No hi ha imatge disponible</p>
+                        @endif
                     </div>
                     
                     <!-- Línea de Progreso -->
@@ -106,7 +115,7 @@
             quantitatInputs.forEach(input => {
                 input.addEventListener('input', function() {
                     const descompte = parseFloat(this.dataset.descompte);
-                    const preu = selectedSeats[0].preu; // Utilitzar el preu del primer seient seleccionat
+                    const preu = selectedSeats[0]?.preu || 0;
                     const preuAmbDescompte = preu - (preu * (descompte / 100));
                     const quantitat = parseInt(this.value);
                     const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
@@ -127,17 +136,7 @@
             });
 
             payButton.addEventListener('click', function() {
-                const selectedEntrades = Array.from(quantitatInputs).map(input => {
-                    return {
-                        tipus_entrada: input.closest('tr').querySelector('td:first-child').textContent,
-                        descompte: parseFloat(input.dataset.descompte),
-                        preu: selectedSeats[0].preu, // Utilitzar el preu del primer seient seleccionat
-                        quantitat: parseInt(input.value),
-                        subtotal: parseFloat(input.closest('tr').querySelector('.entrada-subtotal').textContent)
-                    };
-                }).filter(entrada => entrada.quantitat > 0);
-
-                localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
+                localStorage.setItem('selectedEntrades', JSON.stringify([]));
                 window.location.href = "{{ route('tickets.orderSummary') }}";
             });
         });

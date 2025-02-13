@@ -157,7 +157,6 @@ class SeientsController extends Controller
     }
 
 
-
     public function showSeients($id_sala, Request $request)
     {
         $fechaSeleccionada = session('fecha_seleccionada');
@@ -171,4 +170,14 @@ class SeientsController extends Controller
 
         return view('seients.showSeients', compact('esdeveniment', 'seients', 'entrades', 'fechaSeleccionada'));
     }
+
+
+    public function mostrarVista()
+    {
+        $idEsdeveniment = session('id_esdeveniment');
+        $esdeveniment = $idEsdeveniment ? Esdeveniments::find($idEsdeveniment) : null;
+
+        return view('tu_vista', compact('esdeveniment', 'entrades'));
+    }
+
 }
