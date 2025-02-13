@@ -1,7 +1,6 @@
 <x-app-layout>
     <div class="min-h-screen bg-black flex justify-center items-center">
-        <div
-            class="max-w-7xl w-full bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100 dark:text-gray-100">
+        <div class="max-w-7xl w-full bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100 dark:text-gray-100">
             <!-- Línea de Progreso -->
             <div class="flex items-center justify-between mb-8">
                 <div class="flex-1">
@@ -55,36 +54,39 @@
                 <div class="bg-gray-800 rounded-lg p-4">
                     <h4 class="text-lg font-medium text-rose-600 mb-4">Entrades Seleccionades:</h4>
                     <ul id="selected-entrades-list" class="list-disc pl-5 text-lg space-y-2">
-                        <!-- Las entradas se cargarán dinámicamente -->
+                        <!-- Las entradas se cargarán desde el controlador -->
+                        @foreach ($selectedEntrades as $entrada)
+                            <li>{{ $entrada['tipus_entrada'] }} - Quantitat: {{ $entrada['quantitat'] }} - Subtotal: {{ number_format($entrada['subtotal'], 2) }}€</li>
+                        @endforeach
                     </ul>
                 </div>
                 <!-- Detalles de costes -->
                 <div class="bg-gray-800 rounded-lg p-4">
                     <div class="flex justify-between items-center mb-4">
                         <p class="text-lg font-medium text-rose-600">Entrades Total:</p>
-                        <p class="text-lg"><span id="total-entrades"></span>€</p>
+                        <p class="text-lg"><span id="total-entrades">{{ number_format(array_sum(array_column($selectedEntrades, 'subtotal')), 2) }}</span>€</p>
                     </div>
                     <div class="flex justify-between items-center mb-4">
                         <p class="text-lg font-medium text-rose-600">Gastos de Gestió:</p>
-                        <p class="text-lg"><span id="gestio-cost"></span>€</p>
+                        <p class="text-lg"><span id="gestio-cost">{{ number_format($gestioCost, 2) }}</span>€</p>
                     </div>
                     <div class="flex justify-between items-center mb-4">
                         <p class="text-lg font-medium text-rose-600">IVA (21%):</p>
-                        <p class="text-lg"><span id="iva-cost"></span>€</p>
+                        <p class="text-lg"><span id="iva-cost">{{ number_format($ivaCost, 2) }}</span>€</p>
                     </div>
                     <div class="flex justify-between items-center mb-4">
                         <p class="text-lg font-medium text-rose-600">Recàrrecs:</p>
-                        <p class="text-lg"><span id="recarrec-cost"></span>€</p>
+                        <p class="text-lg"><span id="recarrec-cost">{{ number_format($recarrecCost, 2) }}</span>€</p>
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-700 pt-4">
                         <p class="text-xl font-bold text-rose-600">Preu Total:</p>
-                        <p class="text-xl font-bold"><span id="total-price"></span>€</p>
+                        <p class="text-xl font-bold"><span id="total-price">{{ number_format($totalPrice, 2) }}</span>€</p>
                     </div>
                 </div>
                 <!-- Botón de pago -->
                 <form id="payment-form" action="{{ route('tickets.processPayment') }}" method="POST" class="mt-6">
                     @csrf
-                    <input type="hidden" name="selectedEntrades" id="selected-entrades-input">
+                    <input type="hidden" name="selectedEntrades" id="selected-entrades-input" value="{{ json_encode($selectedEntrades) }}">
                     <div class="flex justify-center">
                         <button type="submit" id="pay-button"
                             class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
@@ -98,10 +100,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const selectedEntrades = JSON.parse(localStorage.getItem('selectedEntrades')) || [];
+            const selectedEntrades = @json($selectedEntrades); // Usamos la variable de Blade directamente
             const selectedEntradesList = document.getElementById('selected-entrades-list');
             const totalPriceElement = document.getElementById('total-price');
-            const totalEntradesElement = document.getElementById('total-entrades'); // Nuevo elemento para el subtotal de entradas
+            const totalEntradesElement = document.getElementById('total-entrades');
             const selectedEntradesInput = document.getElementById('selected-entrades-input');
             const gestioCostElement = document.getElementById('gestio-cost');
             const ivaCostElement = document.getElementById('iva-cost');
