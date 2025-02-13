@@ -28,39 +28,30 @@ class TicketController extends Controller
         return view('tickets.payment', compact('entrades'));
     }
 
-    public function storeSelectedSeats(Request $request)
+    public function showOrderSummary(Request $request)
     {
-        $selectedSeats = $request->input('selectedSeats');
-        Session::put('selectedSeats', $selectedSeats);
-        return response()->json(['status' => 'success']);
-    }
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-    public function showOrderSummary()
-    {
-        // Recuperar el esdeveniment
-        $esdeveniment = session('id_esdeveniment');
+        $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
+        $esdevenimentId = $request->query('id_esdeveniment');
+        $esdeveniment = Esdeveniments::find($esdevenimentId);
 
-        // Recuperar las entradas seleccionadas de la sesión
-        $selectedEntrades = session('selectedEntrades', []);
-
-        return view('tickets.order-summary', compact('esdeveniment', 'selectedEntrades'));
+        return view('tickets.order-summary', compact('selectedEntrades', 'esdeveniment'));
     }
 
     public function showSelectEntrades(Request $request)
     {
-        $idEsdeveniment = session('id_esdeveniment');
-        if (!$idEsdeveniment) {
-            return redirect()->route('esdeveniments.index')->with('error', 'Esdeveniment no trobat');
-        }
         $entrades = Entrades::all();
-        $esdeveniment = Esdeveniments::find($idEsdeveniment); // Buscar el evento usando el ID de la sesión
+        $esdevenimentId = Session::get('id_esdeveniment') ?? $request->input('id_esdeveniment');
+        $esdeveniment = Esdeveniments::find($esdevenimentId);
         if (!$esdeveniment) {
             return redirect()->route('esdeveniments.index')->with('error', 'Esdeveniment no trobat');
         }
         $seients = Seients::where('id_esdeveniment', $esdeveniment->id_esdeveniment)->get();
         return view('tickets.select-entrades', compact('entrades', 'esdeveniment', 'seients'));
     }
-
 
     public function processPayment(Request $request)
     {
@@ -173,22 +164,20 @@ class TicketController extends Controller
 
     public function generateEntrades(Request $request)
     {
-        // Obtener el ID del evento desde el request
-        $esdevenimentId = $request->input('id_esdeveniment');
-
-        // Verificar si el ID es válido
+        // Obtener el ID del evento desde la sesión o el request
+        $esdevenimentId = Session::get('esdeveniment_id') ?? $request->input('id_esdeveniment');
         if (!$esdevenimentId) {
             return redirect()->route('tickets.success')->with('error', 'No se encontró el evento.');
         }
 
-        // Buscar el evento
-        $esdeveniment = Esdeveniments::find($esdevenimentId);
+        // Llamar al método 'generarEntrada' de PdfController
+        $pdfController = new PdfController();
+        $pdfUrl = $pdfController->generarEntrada(new Request(['id_esdeveniment' => $esdevenimentId]));
 
-        if (!$esdeveniment) {
-            return redirect()->route('tickets.success')->with('error', 'El evento no existe.');
-        }
-
-        // Debug para ver si el ID se recibe bien
-        dd("ID del evento recibido correctamente: " . $esdevenimentId);
+        // Redirigir a la vista de éxito con el mensaje de confirmación
+        return view('tickets.success', [
+            'message' => 'Entrades generades correctament.',
+            'pdfUrl' => $pdfUrl // Devolver la URL del PDF generado
+        ]);
     }
 }
