@@ -28,34 +28,27 @@ class TicketController extends Controller
         return view('tickets.payment', compact('entrades'));
     }
 
-    public function showOrderSummary(Request $request)
+    public function storeSelectedEntrades(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        // Guardar las entradas seleccionadas en la sesión
+        session(['selectedEntrades' => $request->entrades]);
+
+        // Redirigir a la vista de resumen
+        return redirect()->route('tickets.order-summary');
+    }
+
+    public function showOrderSummary()
+    {
+        // Recuperar el esdeveniment
+        $esdeveniment = session('id_esdeveniment');
 
         // Recuperar las entradas seleccionadas de la sesión
-        $selectedEntrades = session('selectedEntrades', []); 
-        
-        // Obtener el ID del evento desde la sesión
-        $idEsdeveniment = session('id_esdeveniment');
+        $selectedEntrades = session('selectedEntrades', []);
 
-        // Si el evento no existe, redirigir o manejar el error
-        if (!$idEsdeveniment) {
-            return redirect()->route('tickets.selectEntrades')->withErrors('Evento no encontrado.');
-        }
-
-        // Obtener el evento desde la base de datos
-        $esdeveniment = Esdeveniments::find($idEsdeveniment);
-
-        // Verificar si el evento existe
-        if (!$esdeveniment) {
-            return redirect()->route('tickets.selectEntrades')->withErrors('No se pudo encontrar el evento.');
-        }
-
-        // Pasar las entradas seleccionadas y el evento a la vista
-        return view('tickets.order-summary', compact('selectedEntrades', 'esdeveniment'));
+        return view('tickets.order-summary', compact('esdeveniment', 'selectedEntrades'));
     }
+
+
 
     public function showSelectEntrades(Request $request)
     {
