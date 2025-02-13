@@ -34,15 +34,27 @@ class TicketController extends Controller
             return redirect()->route('login');
         }
 
-        // Recuperar las entradas seleccionadas de la sesión o de la solicitud
-        $selectedEntrades = json_decode($request->input('selectedEntrades'), true);
+        // Recuperar las entradas seleccionadas de la sesión
+        $selectedEntrades = session('selectedEntrades', []); 
+        
+        // Obtener el ID del evento desde la sesión
+        $idEsdeveniment = session('id_esdeveniment');
 
-        // Si no hay entradas seleccionadas, redirigir con un mensaje de error
-        if (empty($selectedEntrades)) {
-            return redirect()->route('sales.show', ['id_sala' => session('id_sala')])->with('error', 'No has seleccionat cap entrada.');
+        // Si el evento no existe, redirigir o manejar el error
+        if (!$idEsdeveniment) {
+            return redirect()->route('tickets.selectEntrades')->withErrors('Evento no encontrado.');
         }
 
-        return view('tickets.order-summary', compact('selectedEntrades'));
+        // Obtener el evento desde la base de datos
+        $esdeveniment = Esdeveniments::find($idEsdeveniment);
+
+        // Verificar si el evento existe
+        if (!$esdeveniment) {
+            return redirect()->route('tickets.selectEntrades')->withErrors('No se pudo encontrar el evento.');
+        }
+
+        // Pasar las entradas seleccionadas y el evento a la vista
+        return view('tickets.order-summary', compact('selectedEntrades', 'esdeveniment'));
     }
 
     public function showSelectEntrades(Request $request)

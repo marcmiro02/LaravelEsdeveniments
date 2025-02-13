@@ -486,6 +486,7 @@ Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients']
 Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
 
 
+Route::post('/tickets/save-selected-entrades', [TicketController::class, 'saveSelectedEntrades'])->name('tickets.saveSelectedEntrades');
 Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');

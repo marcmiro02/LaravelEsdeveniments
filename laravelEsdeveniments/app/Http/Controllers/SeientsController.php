@@ -180,4 +180,15 @@ class SeientsController extends Controller
         return view('tu_vista', compact('esdeveniment', 'entrades'));
     }
 
+    public function saveSelectedEntrades(Request $request)
+    {
+        // Suponiendo que las entradas seleccionadas vienen del frontend como un array de objetos
+        $entrades = $request->input('entrades');
+
+        // Guardamos las entradas seleccionadas en la sesión
+        session(['selectedEntrades' => $entrades]);
+
+        return response()->json(['status' => 'success']);
+    }
+
 }

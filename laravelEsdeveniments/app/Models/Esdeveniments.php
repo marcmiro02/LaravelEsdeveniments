@@ -90,6 +90,4 @@ class Esdeveniments extends Model
     {
         return $this->belongsTo(Empreses::class, 'id_empresa');
     }
-
-    
 }
