@@ -250,8 +250,6 @@ Route::delete('/horaris/{id_horari}', [HorariController::class, 'destroy'])->nam
 // -        ESDEVENIMENTS        -
 // -------------------------------
 
-// MOSTRAR ESDEVENIMENTS
-
 // MOSTRAR ESDEVENIMENT
 
 // CREAR ESDEVENIMENT

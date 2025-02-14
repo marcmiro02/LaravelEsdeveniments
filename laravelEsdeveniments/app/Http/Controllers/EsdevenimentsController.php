@@ -131,4 +131,10 @@ class EsdevenimentsController extends Controller
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment eliminat correctament');
     }
+
+    public function mostrarEsdeveniment($id_esdeveniment)
+    {
+        $esdeveniment = Esdeveniments::find($id_esdeveniment);
+        return view('esdeveniments.mostrarEsdeveniment', compact('esdeveniment'));
+    }
 }

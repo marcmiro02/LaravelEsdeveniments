@@ -131,16 +131,16 @@
                         const searchInput = document.getElementById('search-input');
                         const searchResults = document.getElementById('search-results');
                         const resultsList = document.getElementById('results-list');
-                
+
                         searchInput.addEventListener('input', function () {
                             const query = searchInput.value;
-                
+
                             if (query.length > 2) {
                                 fetch(`/search?query=${query}`)
                                     .then(response => response.json())
                                     .then(data => {
                                         resultsList.innerHTML = '';
-                
+
                                         if (data.esdeveniments.length > 0 || data.empreses.length > 0) {
                                             data.esdeveniments.forEach(esdeveniment => {
                                                 const li = document.createElement('li');
@@ -148,7 +148,7 @@
                                                 li.innerHTML = `
                                                     <img src="data:image/png;base64,${esdeveniment.foto_portada}" alt="${esdeveniment.nom}" class="h-10 w-10 rounded-full mr-3">
                                                     <div>
-                                                        <a href="/esdeveniments/${esdeveniment.id}" class="block text-gray-900 dark:text-gray-300">
+                                                        <a href="/esdeveniments/${esdeveniment.id_esdeveniment}" class="block text-gray-900 dark:text-gray-300">
                                                             ${esdeveniment.nom}
                                                             <span class="flex items-center text-sm text-green-600 dark:text-green-400">
                                                                 <svg class="h-2 w-2 mr-1" fill="currentColor" viewBox="0 0 8 8">
@@ -160,14 +160,14 @@
                                                     </div>`;
                                                 resultsList.appendChild(li);
                                             });
-                
+
                                             data.empreses.forEach(empresa => {
                                                 const li = document.createElement('li');
                                                 li.classList.add('p-2', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'flex', 'items-center');
                                                 li.innerHTML = `
                                                     <img src="data:image/png;base64,${empresa.logo}" alt="${empresa.nom_empresa}" class="h-10 w-10 rounded-full mr-3">
                                                     <div>
-                                                        <a href="/empreses/${empresa.id}" class="block text-gray-900 dark:text-gray-300">
+                                                        <a href="/inici/${empresa.id_empresa}" class="block text-gray-900 dark:text-gray-300">
                                                             ${empresa.nom_empresa}
                                                             <span class="flex items-center text-sm text-red-600 dark:text-red-400">
                                                                 <svg class="h-2 w-2 mr-1" fill="currentColor" viewBox="0 0 8 8">
@@ -179,7 +179,7 @@
                                                     </div>`;
                                                 resultsList.appendChild(li);
                                             });
-                
+
                                             searchResults.classList.remove('hidden');
                                         } else {
                                             searchResults.classList.add('hidden');
@@ -189,7 +189,7 @@
                                 searchResults.classList.add('hidden');
                             }
                         });
-                
+
                         document.addEventListener('click', function (event) {
                             if (!searchResults.contains(event.target) && event.target !== searchInput) {
                                 searchResults.classList.add('hidden');
