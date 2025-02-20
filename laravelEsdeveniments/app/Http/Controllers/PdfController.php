@@ -57,7 +57,6 @@ class PdfController extends Controller
                 'eventPhotoBackground' => $esdeveniment->foto_fons,
                 'row' => $entrada['fila'],
                 'seat' => $entrada['columna'],
-                'price' => $entrada['subtotal'],
                 'qrCode' => $qr->dibuix_qr,
                 'empresaLogo' => $empresa->logo,
             ];
