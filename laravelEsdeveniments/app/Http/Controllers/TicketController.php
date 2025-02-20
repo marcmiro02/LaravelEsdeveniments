@@ -105,25 +105,21 @@ class TicketController extends Controller
     public function handleSuccess(Request $request)
     {
         try {
+
             // Obtener el session_id de la sesión
             $session_id = Session::get('stripe_session_id');
-
             // Obtener la sesión de Stripe
             $session = StripeSession::retrieve($session_id);
-
             // Verificamos que el pago ha sido completado
             if ($session->payment_status !== 'paid') {
                 return redirect()->route('tickets.cancel')->with('error', 'El pago no se ha completado.');
             }
-
             // Obtener las entradas seleccionadas desde la sesión
             $selectedEntrades = Session::get('selectedEntrades');
-
             // Verificamos si las entradas están vacías
             if (empty($selectedEntrades)) {
                 return redirect()->route('tickets.success')->with('error', 'No se encontraron entradas seleccionadas.');
             }
-
             // Crear el ticket
             $ticket = new Ticket();
             $ticket->user_id = Auth::id();
@@ -136,7 +132,6 @@ class TicketController extends Controller
             $ticket->save();
 
             // Limpiar las entradas seleccionadas de la sesión
-            Session::forget('selectedEntrades');
             Session::forget('stripe_session_id');
 
             // Redirigir a la vista de éxito con el mensaje de confirmación

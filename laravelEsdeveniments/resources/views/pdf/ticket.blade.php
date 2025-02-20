@@ -1,4 +1,3 @@
-// filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/pdf/ticket.blade.php
 <!DOCTYPE html>
 <html>
 <head>
@@ -91,32 +90,31 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title-bar">
-            <img src="data:image/jpeg;base64,{{ $empresaLogo }}" alt="Logo Empresa">
+    @foreach ($entradas as $entrada)
+        <div class="container">
+            <div class="title-bar">
+                <img src="data:image/jpeg;base64,{{ $entrada['empresaLogo'] }}" alt="Logo Empresa">
+            </div>
+            <div class="header">
+                <h1>Entrada d'Esdeveniment</h1>
+            </div>
+            <div class="event-logo">
+                <img src="data:image/jpeg;base64,{{ $entrada['eventPhoto'] }}" alt="Event Logo">
+            </div>
+            <div class="event-details">
+                <h2>Nom: {{ $entrada['eventName'] }}</h2>
+                <p>Data: {{ $entrada['eventDate'] }}</p>
+                <p>Hora: {{ $entrada['eventTime'] }}</p>
+            </div>
+            <div class="ticket-details">
+                <div><b>Fila:</b> {{ $entrada['row'] }}</div>
+                <div><b>Seient:</b> {{ $entrada['seat'] }}</div>
+            </div>
+            <div class="qr-code">
+                <p>Escaneja el codi QR:</p>
+                <img src="data:image/png;base64,{{ $entrada['qrCode'] }}" alt="Codi QR">
+            </div>
         </div>
-        <div class="header">
-            <h1>Entrada d'Esdeveniment</h1>
-        </div>
-        <div class="event-logo">
-            <img src="data:image/jpeg;base64,{{ $eventPhoto }}" alt="Event Logo">
-        </div>
-        <div class="event-details">
-            <h2>Nom: {{ $eventName }}</h2>
-            <p>Data: {{ $eventDate }}</p>
-            <p>Hora: {{ $eventTime }}</p>
-        </div>
-        <div class="ticket-details">
-            <div><b>Preu:</b> {{ $ticketPrice }} €</div>
-            <div><b>Descompte:</b> {{ $discount }} €</div>
-            <div><b>Total:</b> {{ $totalPrice }} €</div>
-            <div><b>Fila:</b> {{ $row }}</div>
-            <div><b>Seient:</b> {{ $seat }}</div>
-        </div>
-        <div class="qr-code">
-            <p>Escaneja el codi QR:</p>
-            <img src="data:image/png;base64,{{ $qrCode }}" alt="Codi QR">
-        </div>
-    </div>
+    @endforeach
 </body>
 </html>

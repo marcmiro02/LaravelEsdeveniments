@@ -103,10 +103,10 @@
             const maxEntrades = selectedSeats.length;
             selectedEntradesCount.textContent = `0/${maxEntrades}`;
 
-            quantitatInputs.forEach(input => {
+            quantitatInputs.forEach((input, index) => { // Usamos `index` para asociar cada entrada con un asiento
                 input.addEventListener('input', function() {
                     const descompte = parseFloat(this.dataset.descompte);
-                    const preu = selectedSeats[0].preu; // Utilitzar el preu del primer seient seleccionat
+                    const preu = selectedSeats[index].preu; // Usamos el precio del asiento correspondiente
                     const preuAmbDescompte = preu - (preu * (descompte / 100));
                     const quantitat = parseInt(this.value);
                     const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
@@ -127,18 +127,13 @@
             });
 
             payButton.addEventListener('click', function() {
-                const selectedEntrades = Array.from(quantitatInputs).map(input => {
-                    return {
-                        tipus_entrada: input.closest('tr').querySelector('td:first-child').textContent,
-                        descompte: parseFloat(input.dataset.descompte),
-                        preu: selectedSeats[0].preu, // Utilitzar el preu del primer seient seleccionat
-                        quantitat: parseInt(input.value),
-                        subtotal: parseFloat(input.closest('tr').querySelector('.entrada-subtotal').textContent)
-                    };
-                }).filter(entrada => entrada.quantitat > 0);
+                const entradesSeleccionades = Array.from(quantitatInputs).map(input => ({
+                    tipus_entrada: input.closest('tr').querySelector('td').textContent,
+                    quantitat: input.value,
+                    subtotal: input.closest('tr').querySelector('.entrada-subtotal').textContent
+                }));
 
-                localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
-                window.location.href = "{{ route('tickets.orderSummary', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}";
+                console.log('Entrades seleccionades:', entradesSeleccionades);
             });
         });
     </script>

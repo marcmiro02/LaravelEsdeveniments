@@ -98,33 +98,32 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title-bar">
-            <img src="{{ public_path('img/Logos/Clar.png') }}" alt="Logo">
-            <h2>DAM EVENT PRODUCTION</h2>
+    @foreach ($entradas as $entrada)
+        <div class="container">
+            <div class="title-bar">
+                <img src="{{ public_path('img/Logos/Clar.png') }}" alt="Logo">
+                <h2>DAM EVENT PRODUCTION</h2>
+            </div>
+            <div class="header">
+                <h1>Entrada d'Esdeveniment</h1>
+            </div>
+            <div class="event-logo">
+                <img src="data:image/jpeg;base64,{{ $entrada['eventPhoto'] }}" alt="Event Logo">
+            </div>
+            <div class="event-details">
+                <h2>{{ $entrada['eventName'] }}</h2>
+                <p>Data: {{ $entrada['eventDate'] }}</p>
+                <p>Hora: {{ $entrada['eventTime'] }}</p>
+            </div>
+            <div class="ticket-details">
+                <p>Fila: {{ $entrada['row'] }}</p>
+                <p>Seient: {{ $entrada['seat'] }}</p>
+            </div>
+            <div class="qr-code">
+                <p>Escaneja el codi QR per accedir a l'esdeveniment:</p>
+                <img src="data:image/png;base64,{{ $entrada['qrCode'] }}" alt="Código QR">
+            </div>
         </div>
-        <div class="header">
-            <h1>Entrada d'Esdeveniment</h1>
-        </div>
-        <div class="event-logo">
-            <img src="data:image/jpeg;base64,{{ $eventPhoto }}" alt="Event Logo">
-        </div>
-        <div class="event-details">
-            <h2>{{ $eventName }}</h2>
-            <p>Data: {{ $eventDate }}</p>
-            <p>Hora: {{ $eventTime }}</p>
-        </div>
-        <div class="ticket-details">
-            <p>Preu de l'Entrada: {{ $ticketPrice }} €</p>
-            <p>Descompte de Codi Promocional: {{ $discount }} €</p>
-            <p>Preu Total: {{ $totalPrice }} €</p>
-            <p>Fila: {{ $row }}</p>
-            <p>Seient: {{ $seat }}</p>
-        </div>
-        <div class="qr-code">
-            <p>Escaneja el codi QR per accedir a l'esdeveniment:</p>
-            <img src="data:image/png;base64,{{ $qrCode }}" alt="Código QR">
-        </div>
-    </div>
+    @endforeach
 </body>
 </html>
