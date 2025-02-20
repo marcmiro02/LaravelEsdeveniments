@@ -24,7 +24,6 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
-            border-bottom: 2px solid #333;
             padding-bottom: 10px;
         }
         .title-bar img {
@@ -95,6 +94,15 @@
             padding: 10px;
             border-radius: 10px;
         }
+        .empresa-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .empresa-logo img {
+            width: 100%;
+            height: auto;
+            max-width: 130px;
+        }
     </style>
 </head>
 <body>
@@ -102,16 +110,17 @@
         <div class="container">
             <div class="title-bar">
                 <img src="{{ public_path('img/Logos/Clar.png') }}" alt="Logo">
-                <h2>DAM EVENT PRODUCTION</h2>
+            </div>
+            <div class="empresa-logo">
+                <img src="data:image/jpeg;base64,{{ $entrada['empresaLogo'] }}" alt="Event Logo">
             </div>
             <div class="header">
-                <h1>Entrada d'Esdeveniment</h1>
+                <h2>{{ $entrada['eventName'] }}</h2>
             </div>
             <div class="event-logo">
                 <img src="data:image/jpeg;base64,{{ $entrada['eventPhoto'] }}" alt="Event Logo">
             </div>
             <div class="event-details">
-                <h2>{{ $entrada['eventName'] }}</h2>
                 <p>Data: {{ $entrada['eventDate'] }}</p>
                 <p>Hora: {{ $entrada['eventTime'] }}</p>
             </div>

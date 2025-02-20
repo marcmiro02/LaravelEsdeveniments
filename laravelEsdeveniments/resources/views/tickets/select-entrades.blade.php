@@ -89,11 +89,11 @@
             const payButton = document.getElementById('pay-button');
             let totalEntrades = 0;
 
-            // Recuperar els seients seleccionats de localStorage
+            // Recuperar los asientos seleccionados de localStorage
             const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || [];
             console.log('Seients seleccionats:', selectedSeats);
 
-            // Mostrar els seients seleccionats
+            // Mostrar los asientos seleccionados en la lista
             selectedSeats.forEach(seat => {
                 const listItem = document.createElement('li');
                 listItem.textContent = `Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€`;
@@ -105,23 +105,15 @@
 
             quantitatInputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    const descompte = parseFloat(this.dataset.descompte);
-                    let preuTotal = 0;
+                    const descompte = parseFloat(this.dataset.descompte) || 0;
+                    const preu = selectedSeats.length > 0 ? selectedSeats[0].preu : 0; // Evitar errores si no hay asientos
+                    const preuAmbDescompte = preu - (preu * (descompte / 100));
+                    let quantitat = parseInt(this.value) || 0;
+                    const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
 
-                    // Recorremos todos los asientos seleccionados y calculamos el subtotal para cada uno
-                    selectedSeats.forEach((seat, index) => {
-                        const preuAmbDescompte = seat.preu - (seat.preu * (descompte / 100));
-                        const quantitat = parseInt(input.value);
-                        const subtotalElement = this.closest('tr').querySelector('.entrada-subtotal');
+                    subtotalElement.textContent = (preuAmbDescompte * quantitat).toFixed(2) + '€';
 
-                        // Establecer el subtotal por asiento
-                        subtotalElement.textContent = (preuAmbDescompte * quantitat).toFixed(2) + '€';
-
-                        // Acumular el total de entradas seleccionadas
-                        preuTotal += preuAmbDescompte * quantitat;
-                    });
-
-                    totalEntrades = Array.from(quantitatInputs).reduce((total, input) => total + parseInt(input.value), 0);
+                    totalEntrades = Array.from(quantitatInputs).reduce((total, input) => total + (parseInt(input.value) || 0), 0);
                     selectedEntradesCount.textContent = `${totalEntrades}/${maxEntrades}`;
 
                     if (totalEntrades > maxEntrades) {
@@ -136,32 +128,49 @@
             });
 
             payButton.addEventListener('click', function() {
-                const selectedEntrades = Array.from(quantitatInputs).map(input => {
-                const tipusEntrada = input.closest('tr').querySelector('td:first-child').textContent;
-                const descompte = parseFloat(input.dataset.descompte);
-                const quantitat = parseInt(input.value);
-                const subtotal = parseFloat(input.closest('tr').querySelector('.entrada-subtotal').textContent);
+                const selectedEntrades = [];
+                let seatIndex = 0; // Índice para asignar los asientos en orden
 
-                // Asignar fila y columna a cada entrada
-                const entradesConSeients = [];
-                for (let i = 0; i < quantitat; i++) {
-                    const seat = selectedSeats[i]; // Asignar un asiento a cada entrada
-                    entradesConSeients.push({
-                        tipus_entrada: tipusEntrada,
-                        descompte: descompte,
-                        preu: seat.preu, // Precio del asiento
-                        quantitat: 1, // Cada entrada es para un asiento
-                        fila: seat.fila, // Fila del asiento
-                        columna: seat.columna // Columna del asiento
-                    });
-                }
+                quantitatInputs.forEach(input => {
+                    const quantitat = parseInt(input.value) || 0;
+                    const tipusEntrada = input.closest('tr').querySelector('td:first-child').textContent.trim();
+                    const descompte = parseFloat(input.dataset.descompte) || 0;
 
-                return entradesConSeients;
-            }).flat().filter(entrada => entrada.quantitat > 0);
+                    for (let i = 0; i < quantitat; i++) {
+                        if (seatIndex < selectedSeats.length) {
+                            const preuBase = selectedSeats[seatIndex].preu;
+                            const preuAmbDescompte = preuBase - (preuBase * (descompte / 100));
+                            const fila = selectedSeats[seatIndex].fila;
+                            const columna = selectedSeats[seatIndex].columna;
 
-            localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
-            window.location.href = "{{ route('tickets.orderSummary', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}";
+                            // Buscamos si ya existe una entrada del mismo tipo
+                            let existingEntry = selectedEntrades.find(entry => entry.tipus_entrada === tipusEntrada);
+
+                            if (existingEntry) {
+                                // Si ya existe, sumamos la cantidad y el subtotal
+                                existingEntry.quantitat += 1;
+                                existingEntry.subtotal += preuAmbDescompte;
+
+                                // Guardamos los asientos en un array dentro de la misma entrada
+                                existingEntry.seients.push({ fila, columna });
+                            } else {
+                                // Si no existe, lo añadimos como una nueva entrada con el asiento en array
+                                selectedEntrades.push({
+                                    tipus_entrada: tipusEntrada,
+                                    descompte: descompte,
+                                    preu: preuAmbDescompte,
+                                    quantitat: 1, // Se agrega de uno en uno
+                                    subtotal: preuAmbDescompte,
+                                    seients: [{ fila, columna }] // Guardamos los asientos en un array
+                                });
+                            }
+                            seatIndex++; // Pasamos al siguiente asiento
+                        }
+                    }
+                });
+                localStorage.setItem('selectedEntrades', JSON.stringify(selectedEntrades));
+                window.location.href = "{{ route('tickets.orderSummary', ['id_esdeveniment' => $esdeveniment->id_esdeveniment]) }}";
+            });
         });
-    });
     </script>
 </x-app-layout>
