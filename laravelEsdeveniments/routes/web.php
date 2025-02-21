@@ -480,6 +480,7 @@ Route::post('/pdf/validarQr', [QrController::class, 'validarQr'])->name('pdf.val
 
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
+Route::post('/sales/seients/redirect2', [SeientsController::class, 'redirectToSeients2'])->name('sales.seients.redirect2');
 
 
 Route::post('/tickets/save-selected-entrades', [TicketController::class, 'saveSelectedEntrades'])->name('tickets.saveSelectedEntrades');

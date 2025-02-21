@@ -156,6 +156,34 @@ class SeientsController extends Controller
         return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
     }
 
+    public function redirectToSeients2(Request $request)
+    {
+        $request->validate([
+            'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment',
+        ]);
+
+        // Obtener el esdeveniment seleccionado
+        $esdeveniment = Esdeveniments::findOrFail($request->id_esdeveniment);
+
+        // Obtener automáticamente la sala del esdeveniment
+        $id_sala = $esdeveniment->id_sala;
+
+        // Guardar los datos en sesión
+        session([
+            'id_esdeveniment' => $request->id_esdeveniment,
+            'id_sala' => $id_sala,
+        ]);
+
+        // Guardar la preferencia del ticket (si se marcó el checkbox)
+        if ($request->has('imprimir_ticket')) {
+            session(['imprimir_ticket' => true]);
+        } else {
+            session(['imprimir_ticket' => false]);
+        }
+
+        // Redirigir a la vista de selección de asientos con la sala correspondiente
+        return redirect()->route('sales.show', ['id_sala' => $id_sala]);
+    }
 
     public function showSeients($id_sala, Request $request)
     {

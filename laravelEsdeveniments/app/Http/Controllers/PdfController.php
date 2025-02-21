@@ -26,6 +26,11 @@ class PdfController extends Controller
         if (!$esdeveniment) {
             throw new \Exception('El evento no existe.');
         }
+        $imprimir_ticket = false;
+        if (session()->has('imprimir_ticket')) {
+            $imprimir_ticket = true;
+        }
+        $dataTriada = session('fecha_seleccionada');
         // ✅ Recuperamos las entradas desde la sesión
         $selectedEntrades = session('selectedEntrades', []);
         if (empty($selectedEntrades)) {
@@ -42,8 +47,7 @@ class PdfController extends Controller
 
                 $entradaData = [
                     'eventName' => $esdeveniment->nom,
-                    'eventDate' => Carbon::parse($esdeveniment->data_estrena)->format('d/m/Y'),
-                    'eventTime' => Carbon::parse($esdeveniment->duracio)->format('H:i'),
+                    'eventDate' => Carbon::parse($dataTriada)->format('\D\i\a d/m/Y \a \l\e\s H:i\h'),
                     'eventPhoto' => $esdeveniment->foto_portada,
                     'eventPhotoBackground' => $esdeveniment->foto_fons,
                     'row' => $seient['fila'],
@@ -54,10 +58,9 @@ class PdfController extends Controller
                 $entradasData[] = $entradaData;
             }
         }
-
         // ✅ Generamos el PDF dependiendo de si es un ticket o un PDF normal
-        if ($request->has('imprimir_ticket')) {
-            $pdf = PDF::loadView('pdf.ticket', ['entradas' => $entradasData])->setPaper([0, 0, 218, 541], 'portrait');
+        if ($imprimir_ticket) {
+            $pdf = PDF::loadView('pdf.ticket', ['entradas' => $entradasData])->setPaper([0, 0, 65, 115], 'portrait');
         } else {
             $pdf = PDF::loadView('pdf.pdf', ['entradas' => $entradasData]);
         }
@@ -76,15 +79,18 @@ class PdfController extends Controller
         }
         // Limpiamos la sesión después de generar el ticket
         session()->forget(['id_esdeveniment', 'selectedEntrades']);
-        // Enviar correo con el PDF adjunto
-        $user = auth()->user();  // Obtenemos el usuario autenticado
-        $pdfData = base64_decode($pdfModel->doc_pdf); // Decodificamos el PDF guardado en la base de datos
 
-        Mail::send('emails.ticket', ['entradas' => $entradasData], function ($message) use ($user, $pdfData) {
-            $message->to($user->email)  // Correo del usuario autenticado
-                    ->subject('Les teves entrades per l\'esdeveniment')
-                    ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);  // Adjuntamos el PDF desde la base64
-        });
+        if(!$imprimir_ticket) {
+            // Enviar correo con el PDF adjunto
+            $user = auth()->user();  // Obtenemos el usuario autenticado
+            $pdfData = base64_decode($pdfModel->doc_pdf); // Decodificamos el PDF guardado en la base de datos
+
+            Mail::send('emails.ticket', ['entradas' => $entradasData], function ($message) use ($user, $pdfData) {
+                $message->to($user->email)  // Correo del usuario autenticado
+                        ->subject('Les teves entrades per l\'esdeveniment')
+                        ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);  // Adjuntamos el PDF desde la base64
+            });
+        }
         // Retornamos el PDF generado al navegador
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }

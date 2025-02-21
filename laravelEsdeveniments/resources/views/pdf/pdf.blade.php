@@ -121,8 +121,7 @@
                 <img src="data:image/jpeg;base64,{{ $entrada['eventPhoto'] }}" alt="Event Logo">
             </div>
             <div class="event-details">
-                <p>Data: {{ $entrada['eventDate'] }}</p>
-                <p>Hora: {{ $entrada['eventTime'] }}</p>
+                <p>{{ $entrada['eventDate'] }}</p>
             </div>
             <div class="ticket-details">
                 <p>Fila: {{ $entrada['row'] }}</p>

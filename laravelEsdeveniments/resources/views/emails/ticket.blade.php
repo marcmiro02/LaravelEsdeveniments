@@ -12,8 +12,7 @@
     
     <p><strong>DETALLS ESDEVENIMENT:</strong></p>
     <ul>
-        <li>Fecha: {{ $entradas[0]['eventDate'] }}</li>
-        <li>Hora: {{ $entradas[0]['eventTime'] }}</li>
+        <li>Data: {{ $entradas[0]['eventDate'] }}</li>
     </ul>
 
     <p>Adjuntem les entrades en format PDF.</p>

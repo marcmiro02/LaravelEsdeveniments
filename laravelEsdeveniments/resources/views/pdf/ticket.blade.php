@@ -9,100 +9,107 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+        /* Configuración de la página */
+        @page {
+            size: 65mm 115mm; /* Tamaño más pequeño adecuado para tickets */
+            margin: 0; /* Sin márgenes para aprovechar todo el espacio */
+        }
         .container {
-            width: 170px;
+            width: 100%; /* Usamos todo el ancho de la página */
+            height: auto; /* Altura automática según el contenido */
+            max-height: 115mm; /* Máxima altura de la página */
             background-color: #fff;
-            padding: 10px;
+            padding: 5px; /* Reducimos el padding para maximizar el espacio */
             border-radius: 8px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            border: 1px solid #333;
-            margin-left: -10px;
-            margin-top: -25px;
             text-align: center;
+            box-sizing: border-box; /* Aseguramos que el padding no afecte el tamaño */
+            page-break-inside: avoid; /* Evita que se divida el contenido entre páginas */
+            border: none; /* Eliminamos el borde */
         }
+        /* Aplicamos el salto de página solo a partir del segundo contenedor */
+        .container + .container {
+            page-break-before: always;
+        }
+        /* Estilos específicos para los elementos */
         .title-bar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+            justify-content: center;
+            margin-bottom: 5px;
         }
         .title-bar img {
-            width: 40px;
+            width: 30px; /* Reducimos el tamaño del logo */
             height: auto;
         }
-        .title-bar h2 {
-            margin: 0;
-            font-size: 14px;
-            color: #333;
-            flex-grow: 1;
+        .empresa-logo {
             text-align: center;
+            margin-bottom: 5px;
+        }
+        .empresa-logo img {
+            width: 55px; /* Ajustamos el tamaño del logo de la empresa */
+            height: auto;
+            max-width: 70px;
         }
         .header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .header h1 {
             margin: 0;
-            font-size: 12px;
+            font-size: 12px; /* Aumentamos un poco el tamaño del texto */
             color: #333;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: bold; /* Ponemos en negrita */
         }
         .event-logo {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .event-logo img {
-            width: 100%;
+            width: 75px; /* Ajustamos el tamaño de la imagen */
             height: auto;
-            max-width: 80px;
+            max-width: 95px;
             border-radius: 10px;
         }
         .event-details {
             text-align: center;
-            margin-bottom: 10px;
-        }
-        .event-details h2 {
-            margin: 0;
-            font-size: 12px;
-            color: #555;
+            margin-bottom: 5px;
         }
         .event-details p {
-            margin: 5px 0;
-            font-size: 12px;
+            margin: 2px 0;
+            font-size: 9px; /* Mantenemos el tamaño del texto */
             color: #666;
+            font-weight: bold; /* Ponemos en negrita */
         }
         .ticket-details {
             text-align: center;
-            margin-bottom: 10px;
-            border-top: 2px solid #333;
-            padding-top: 10px;
+            margin-bottom: 5px;
+            border-top: none; /* Eliminamos el borde superior */
+            padding-top: 0;
         }
         .ticket-details p {
-            margin: 5px 0;
-            font-size: 12px;
+            margin: 2px 0;
+            font-size: 9px; /* Mantenemos el tamaño del texto */
             color: #666;
+            font-weight: bold; /* Ponemos en negrita */
         }
         .qr-code {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 10px; /* Ajustamos el margen superior */
+        }
+        .qr-code p {
+            font-size: 9px; /* Igualamos el tamaño del texto con los demás */
+            margin: 2px 0;
+            font-weight: bold; /* Ponemos en negrita */
         }
         .qr-code img {
-            width: 60px;
+            width: 60px; /* Aumentamos significativamente el tamaño del QR */
             height: 60px;
             border: 1px solid #ddd;
             padding: 5px;
             border-radius: 10px;
-        }
-        .empresa-logo {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .empresa-logo img {
-            width: 100%;
-            height: auto;
-            max-width: 60px;
         }
     </style>
 </head>
@@ -122,8 +129,7 @@
                 <img src="data:image/jpeg;base64,{{ $entrada['eventPhoto'] }}" alt="Event Logo">
             </div>
             <div class="event-details">
-                <p>Data: {{ $entrada['eventDate'] }}</p>
-                <p>Hora: {{ $entrada['eventTime'] }}</p>
+                <p>{{ $entrada['eventDate'] }}</p>
             </div>
             <div class="ticket-details">
                 <p>Fila: {{ $entrada['row'] }}</p>
