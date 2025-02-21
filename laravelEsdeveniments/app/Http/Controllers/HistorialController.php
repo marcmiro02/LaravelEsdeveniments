@@ -16,12 +16,17 @@ class HistorialController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
-        $pdfs = PdfModel::where('id_usuari', $userId)->get();  
-        return view('historial.index', compact('pdfs'));
-    }
-    public function aconseguirCoses()
-    {
-        
+        $userId = auth()->id();
+        $pdfsVigents = PdfModel::where('id_usuari', $userId)
+            ->whereHas('qr', function ($query) {
+                $query->where('validat', false);
+            })
+            ->get();
+        $pdfsExpirats = PdfModel::where('id_usuari', $userId)
+            ->whereHas('qr', function ($query) {
+                $query->where('validat', true);
+            })
+            ->get();
+        return view('historial.index', compact('pdfsVigents', 'pdfsExpirats'));
     }
 }

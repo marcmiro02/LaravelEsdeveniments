@@ -8,16 +8,16 @@
     <title>Tus entradas para el evento</title>
 </head>
 <body>
-    <p>Gracias por tu compra. Aquí tienes tus entradas para el evento <strong>{{ $entradas[0]['eventName'] }}</strong>.</p>
+    <p>Gràcies per la teva compra. Aquí tens les teves entrades per a l'esdeveniment:  <strong>{{ $entradas[0]['eventName'] }}</strong>.</p>
     
-    <p><strong>Detalles del evento:</strong></p>
+    <p><strong>DETALLS ESDEVENIMENT:</strong></p>
     <ul>
         <li>Fecha: {{ $entradas[0]['eventDate'] }}</li>
         <li>Hora: {{ $entradas[0]['eventTime'] }}</li>
     </ul>
 
-    <p>Adjuntamos tu entrada en formato PDF.</p>
+    <p>Adjuntem les entrades en format PDF.</p>
 
-    <p>¡Gracias por asistir! Nos vemos en el evento.</p>
+    <p>Disfruta! Ens veiem fotent-li canya!</p>
 </body>
 </html>

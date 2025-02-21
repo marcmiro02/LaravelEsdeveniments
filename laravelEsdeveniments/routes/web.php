@@ -467,8 +467,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
 Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index');
 
 

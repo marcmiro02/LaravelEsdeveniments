@@ -23,4 +23,10 @@ class PdfModel extends Model
         'doc_pdf',
         'id_usuari',
     ];
+
+    public function qr()
+    {
+        return $this->hasOne(Qr::class, 'id_pdf');
+    }
+
 }

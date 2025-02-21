@@ -19,32 +19,26 @@ class PdfController extends Controller
 {
     public function generarEntrada(Request $request)
     {
-        // Verificar si el id_esdeveniment existe en la sesión
         if (!session()->has('id_esdeveniment')) {
             return redirect()->route('welcome');
         }
-
-        // Recuperamos el evento desde la sesión
         $esdeveniment = Esdeveniments::find(session('id_esdeveniment'));
         if (!$esdeveniment) {
             throw new \Exception('El evento no existe.');
         }
-
         // ✅ Recuperamos las entradas desde la sesión
         $selectedEntrades = session('selectedEntrades', []);
         if (empty($selectedEntrades)) {
             throw new \Exception('No hay entradas seleccionadas.');
         }
-
         $empresa = $esdeveniment->empresa;
         $entradasData = [];
         $qrCodes = []; // Guardaremos los QR generados aquí
-
         foreach ($selectedEntrades as $entrada) {
             foreach ($entrada['seients'] as $seient) {
                 $qrController = new QrController();
                 $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
-                $qrCodes[] = $qr; // Guardamos el QR en un array para actualizar después
+                $qrCodes[] = $qr;
 
                 $entradaData = [
                     'eventName' => $esdeveniment->nom,
@@ -67,36 +61,30 @@ class PdfController extends Controller
         } else {
             $pdf = PDF::loadView('pdf.pdf', ['entradas' => $entradasData]);
         }
-
         // Convertimos el PDF a base64
         $pdfContent = $pdf->output();
         $pdfBase64 = base64_encode($pdfContent);
-
         // Guardamos el PDF en la base de datos
         $pdfModel = new PdfModel();
         $pdfModel->doc_pdf = $pdfBase64;
         $pdfModel->id_usuari = auth()->id();
         $pdfModel->save();
-
         // ✅ Actualizamos TODOS los QR con el mismo id_pdf
         foreach ($qrCodes as $qr) {
             $qr->id_pdf = $pdfModel->id_pdf;
             $qr->save();
         }
-
         // Limpiamos la sesión después de generar el ticket
         session()->forget(['id_esdeveniment', 'selectedEntrades']);
-
         // Enviar correo con el PDF adjunto
         $user = auth()->user();  // Obtenemos el usuario autenticado
         $pdfData = base64_decode($pdfModel->doc_pdf); // Decodificamos el PDF guardado en la base de datos
 
         Mail::send('emails.ticket', ['entradas' => $entradasData], function ($message) use ($user, $pdfData) {
             $message->to($user->email)  // Correo del usuario autenticado
-                    ->subject('Tus entradas para el evento')
+                    ->subject('Les teves entrades per l\'esdeveniment')
                     ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);  // Adjuntamos el PDF desde la base64
         });
-
         // Retornamos el PDF generado al navegador
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
