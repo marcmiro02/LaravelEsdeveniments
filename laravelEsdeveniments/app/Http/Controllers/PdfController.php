@@ -11,6 +11,7 @@ use App\Models\Qr;
 use App\Models\Esdeveniments;
 use App\Models\PdfModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Empreses;
 use Illuminate\Support\Facades\Session;
 
@@ -86,10 +87,19 @@ class PdfController extends Controller
         // Limpiamos la sesión después de generar el ticket
         session()->forget(['id_esdeveniment', 'selectedEntrades']);
 
+        // Enviar correo con el PDF adjunto
+        $user = auth()->user();  // Obtenemos el usuario autenticado
+        $pdfData = base64_decode($pdfModel->doc_pdf); // Decodificamos el PDF guardado en la base de datos
+
+        Mail::send('emails.ticket', ['entradas' => $entradasData], function ($message) use ($user, $pdfData) {
+            $message->to($user->email)  // Correo del usuario autenticado
+                    ->subject('Tus entradas para el evento')
+                    ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);  // Adjuntamos el PDF desde la base64
+        });
+
         // Retornamos el PDF generado al navegador
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
-
 
     public function showEventSelection()
     {

@@ -1,67 +1,80 @@
-<!-- filepath: /c:/Users/marcm/Desktop/DAM/2n/M09_Programacio_de_Serveis_i_Processos/GestorEsdeveniments/laravelEsdeveniments/resources/views/sales/show.blade.php -->
 <x-app-layout>
-    <div class="py-12 bg-black dark:bg-black">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
-                <div class="p-8 text-gray-100 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-rose-600">Sala: {{ strtoupper($sala->nom_sala) }}</h3><br>
-                    <!-- Leyenda de los estados de los asientos -->
-                    <div class="mb-6 flex justify-between">
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Acompanyant_d.png') }}" alt="Acompanyant" class="w-6 h-6 mr-2">
-                            <span>Acompanyament</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Cadira_rodes_d.png') }}" alt="Cadira_rodes" class="w-6 h-6 mr-2">
-                            <span>Cadira rodes</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_b.png') }}" alt="Seient_b" class="w-6 h-6 mr-2">
-                            <span>Bloquejat</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient_d" class="w-6 h-6 mr-2">
-                            <span>Disponible</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_nd.png') }}" alt="Seient_nd" class="w-6 h-6 mr-2">
-                            <span>No disponible</span>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <img src="{{ asset('img/seients/Seient_s.png') }}" alt="Seient_s" class="w-6 h-6 mr-2">
-                            <span>Seleccionat</span>
-                        </div>
-                    </div>
+    <div class="min-h-screen bg-black flex justify-center items-center">
+        <div class="max-w-7xl w-full bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100">
+            <!-- Encabezado -->
+            <h3 class="text-3xl font-bold text-center text-rose-600 mb-6">
+                Selecciona tu asiento en la sala: {{ strtoupper($sala->nom_sala) }}
+            </h3>
 
-                    @foreach($seients as $fila => $seientsFila)
-                    <div class="flex justify-center mb-4">
-                        <div class="text-center mr-2 text-rose-600">{{ $fila }}</div>
-                        @foreach($seientsFila as $seient)
+            <!-- Leyenda de asientos -->
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+                @php
+                    $legend = [
+                        ['Acompanyant_d.png', 'Acompanyament'],
+                        ['Cadira_rodes_d.png', 'Cadira de rodes'],
+                        ['Seient_b.png', 'Bloquejat'],
+                        ['Seient_d.png', 'Disponible'],
+                        ['Seient_nd.png', 'No disponible'],
+                        ['Seient_s.png', 'Seleccionat']
+                    ];
+                @endphp
+                @foreach($legend as $item)
+                    <div class="flex items-center">
+                        <img src="{{ asset('img/seients/' . $item[0]) }}" alt="{{ $item[1] }}" class="w-6 h-6 mr-2">
+                        <span>{{ $item[1] }}</span>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Selección de asientos -->
+            @foreach($seients as $fila => $seientsFila)
+                <div class="flex justify-center mb-4">
+                    <div class="text-center text-rose-600 font-bold mr-4">{{ $fila }}</div>
+                    @foreach($seientsFila as $seient)
                         <div class="relative mx-1">
-                            <button class="seat @if($seient->estat_seient == 1) Seient_d @elseif($seient->estat_seient == 2) Cadira_rodes_d @elseif($seient->estat_seient == 3) Acompanyant_d @elseif($seient->estat_seient == 4) Seient_b @elseif($seient->estat_seient == 5) invisible @elseif($seient->estat_seient == 6) Seient_s @elseif($seient->estat_seient == 7) Seient_nd @elseif($seient->estat_seient == 8) Cadira_rodes_s @elseif($seient->estat_seient == 9) Cadira_rodes_nd @elseif($seient->estat_seient == 10) Acompanyant_s @elseif($seient->estat_seient == 11) Acompanyant_nd @else Seient_s @endif" data-seient-id="{{ $seient->id_seient }}" data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}" data-columna="{{ $seient->columna }}">
+                            <button 
+                                class="seat @if($seient->estat_seient == 1) Seient_d 
+                                    @elseif($seient->estat_seient == 2) Cadira_rodes_d 
+                                    @elseif($seient->estat_seient == 3) Acompanyant_d 
+                                    @elseif($seient->estat_seient == 4) Seient_b 
+                                    @elseif($seient->estat_seient == 5) invisible 
+                                    @elseif($seient->estat_seient == 6) Seient_s 
+                                    @elseif($seient->estat_seient == 7) Seient_nd @endif"
+                                data-seient-id="{{ $seient->id_seient }}"
+                                data-preu="{{ $seient->preu }}"
+                                data-fila="{{ $seient->fila }}"
+                                data-columna="{{ $seient->columna }}"
+                            >
                                 @if($seient->estat_seient != 5)
-                                <img src="@if($seient->estat_seient == 1) {{ asset('img/seients/Seient_d.png') }} @elseif($seient->estat_seient == 2) {{ asset('img/seients/Cadira_rodes_d.png') }} @elseif($seient->estat_seient == 3) {{ asset('img/seients/Acompanyant_d.png') }} @elseif($seient->estat_seient == 4) {{ asset('img/seients/Seient_b.png') }} @elseif($seient->estat_seient == 6) {{ asset('img/seients/Seient_s.png') }} @elseif($seient->estat_seient == 7) {{ asset('img/seients/Seient_nd.png') }} @elseif($seient->estat_seient == 8) {{ asset('img/seients/Cadira_rodes_s.png') }} @elseif($seient->estat_seient == 9) {{ asset('img/seients/Cadira_rodes_nd.png') }} @elseif($seient->estat_seient == 10) {{ asset('img/seients/Acompanyant_s.png') }} @elseif($seient->estat_seient == 11) {{ asset('img/seients/Acompanyant_nd.png') }} @else {{ asset('img/seients/Seient_s.png') }} @endif" alt="Seient">
+                                    <img src="{{ asset('img/seients/' . 
+                                        ($seient->estat_seient == 1 ? 'Seient_d.png' : 
+                                        ($seient->estat_seient == 2 ? 'Cadira_rodes_d.png' : 
+                                        ($seient->estat_seient == 3 ? 'Acompanyant_d.png' : 
+                                        ($seient->estat_seient == 4 ? 'Seient_b.png' : 
+                                        ($seient->estat_seient == 6 ? 'Seient_s.png' : 
+                                        ($seient->estat_seient == 7 ? 'Seient_nd.png' : 'Seient_d.png'))))))) }}" alt="Seient">
                                 @endif
                             </button>
                         </div>
-                        @endforeach
-                    </div>
                     @endforeach
-
-                    <!-- Contenedor per mostrar la informació dels seients seleccionats -->
-                    <div id="selected-seats-info" class="hidden">
-                        <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
-                        <div id="seats-info"></div>
-                        <p id="total-price"></p>
-                        <button id="pay-button" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded">Continuar</button>
-                    </div>
                 </div>
+            @endforeach
+
+            <!-- Información de asientos seleccionados -->
+            <div id="selected-seats-info" class="hidden bg-gray-800 p-4 rounded-lg mt-6">
+                <h4 class="text-lg font-medium text-rose-600 mb-4">Seients Seleccionats:</h4>
+                <div id="seats-info"></div>
+                <p id="total-price" class="font-bold text-lg mt-2"></p>
+                <button id="pay-button"
+                    class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-3 px-6 rounded-full mt-4 transition duration-300 ease-in-out transform hover:scale-105">
+                    Continuar
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const seients = document.querySelectorAll('button[data-seient-id]');
             const selectedSeatsInfo = document.getElementById('selected-seats-info');
             const seatsInfo = document.getElementById('seats-info');
@@ -70,8 +83,7 @@
             let selectedSeats = [];
 
             seients.forEach(seient => {
-                seient.addEventListener('click', function(event) {
-                    // Evitar clic en seients invisibles, bloquejats o no disponibles
+                seient.addEventListener('click', function (event) {
                     if (this.classList.contains('invisible') || this.classList.contains('Seient_b') || this.classList.contains('Seient_nd')) {
                         event.preventDefault();
                         return;
@@ -82,64 +94,27 @@
                     const fila = this.getAttribute('data-fila');
                     const columna = this.getAttribute('data-columna');
 
-                    // Canviar l'estat del seient a seleccionat
                     this.classList.toggle('selected');
 
-                    // Actualitzar la llista de seients seleccionats
                     if (this.classList.contains('selected')) {
-                        selectedSeats.push({
-                            seientId,
-                            preu,
-                            fila,
-                            columna
-                        });
+                        selectedSeats.push({ seientId, preu, fila, columna });
+                        this.innerHTML = `<img src="{{ asset('img/seients/Seient_s.png') }}" alt="Seleccionat">`;
                     } else {
                         selectedSeats = selectedSeats.filter(seat => seat.seientId !== seientId);
+                        this.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
                     }
-                    // Actualizar la imagen del botón
-                    if (this.classList.contains('selected')) {
-                        let selectedImage = '';
-                        if (this.classList.contains('Acompanyant_d')) {
-                            selectedImage = 'Acompanyant_s.png';
-                        } else if (this.classList.contains('Cadira_rodes_d')) {
-                            selectedImage = 'Cadira_rodes_s.png';
-                        } else if (this.classList.contains('Seient_d')) {
-                            selectedImage = 'Seient_s.png';
-                        } else {
-                            selectedImage = 'Seient_s.png';
-                        }
-                        this.innerHTML = `<img src="{{ asset('img/seients/') }}/${selectedImage}" alt="Seleccionat">`;
-                    } else {
-                        let estatSeient = '';
-                        if (this.classList.contains('Acompanyant_d')) {
-                            estatSeient = 'Acompanyant_d';
-                        } else if (this.classList.contains('Cadira_rodes_d')) {
-                            estatSeient = 'Cadira_rodes_d';
-                        } else if (this.classList.contains('Seient_b')) {
-                            estatSeient = 'Seient_b';
-                        } else if (this.classList.contains('Seient_d')) {
-                            estatSeient = 'Seient_d';
-                        } else if (this.classList.contains('Seient_nd')) {
-                            estatSeient = 'Seient_nd';
-                        } else {
-                            estatSeient = 'Seient_s';
-                        }
-                        this.innerHTML = estatSeient !== 'invisible' ? `<img src="{{ asset('img/seients/') }}/${estatSeient}.png" alt="Seient">` : '';
-                    }
-                    // Mostrar la informació dels seients seleccionats
+
                     if (selectedSeats.length > 0) {
                         let seatsInfoHtml = '';
                         let total = 0;
                         selectedSeats.forEach(seat => {
-                            seatsInfoHtml += `<p>Ubicació: Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€</p>`;
+                            seatsInfoHtml += `<p>Fila ${seat.fila}, Columna ${seat.columna} - Preu: ${seat.preu}€</p>`;
                             total += seat.preu;
                         });
                         seatsInfo.innerHTML = seatsInfoHtml;
                         totalPrice.textContent = `Total: ${total.toFixed(2)}€`;
                         selectedSeatsInfo.classList.remove('hidden');
                         payButton.classList.remove('hidden');
-
-                        // Guardar els seients seleccionats en localStorage
                         localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
                     } else {
                         selectedSeatsInfo.classList.add('hidden');
@@ -148,8 +123,8 @@
                 });
             });
 
-            payButton.addEventListener('click', function() {
-                const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}"; // Assegura't que tens l'ID de l'esdeveniment disponible
+            payButton.addEventListener('click', function () {
+                const esdevenimentId = "{{ $esdeveniment->id_esdeveniment }}";
                 window.location.href = "{{ route('tickets.selectEntrades') }}?id_esdeveniment=" + esdevenimentId;
             });
         });
