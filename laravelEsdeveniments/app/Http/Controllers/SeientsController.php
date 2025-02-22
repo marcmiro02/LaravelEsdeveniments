@@ -147,17 +147,25 @@ class SeientsController extends Controller
             'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment',
         ]);
 
+        // Obtener la sala asociada al evento
+        $sala = Sales::find($request->id_sala);
+
         // Guardar datos en sesión
         session([
             'fecha_seleccionada' => $request->fecha,
             'id_esdeveniment' => $request->id_esdeveniment,
             'id_sala' => $request->id_sala,
+            'id_tipus_sala' => $sala ? $sala->id_tipus_sala : null,
         ]);
+
+        if ($sala->id_tipus_sala == 2) {
+            return redirect()->route('tickets.quantitatEntradesDisco');
+        }
 
         // Obtener los asientos reservados para el evento y fecha seleccionados
         $asientosReservados = Reserves::where('id_esdeveniment', $request->id_esdeveniment)
             ->where('data_event', $request->fecha)
-            ->get(['fila', 'columna']); // ❌ No usar ->toArray() aquí
+            ->get(['fila', 'columna']);
 
         // Guardar los asientos reservados en la sesión
         session(['asientosReservados' => $asientosReservados]);

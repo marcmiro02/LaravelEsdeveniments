@@ -12,7 +12,7 @@
                         <h3 class="text-lg font-medium">
                             {{ __("Llistat de Sales") }}
                         </h3>
-                        <a href="{{ route('sales.create') }}"
+                        <a href="{{ route('sales.triaremSala') }}"
                             class="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             <span class="mr-2">➕</span> Afegir Sala
                         </a>
@@ -39,12 +39,22 @@
                                 <td class="border px-4 py-2">{{ $sala->nom_sala }}</td>
                                 <td class="border px-4 py-2">{{ $sala->aforament }}</td>
                                 <td class="border px-4 py-2">
-                                    <a href="{{ route('sales.show', $sala->id_sala) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Mostrar</a>
-                                    <a href="{{ route('sales.edit', $sala->id_sala) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Editar</a>
+                                    @if ($sala->id_tipus_sala != 2) 
+                                        <a href="{{ route('sales.show', $sala->id_sala) }}" 
+                                           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            Mostrar
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('sales.edit', $sala->id_sala) }}" 
+                                       class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        Editar
+                                    </a>
                                     <form action="{{ route('sales.destroy', $sala->id_sala) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                            Eliminar
+                                        </button>
                                     </form>
                                 </td>
                             </tr>

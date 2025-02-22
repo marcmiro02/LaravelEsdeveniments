@@ -24,6 +24,7 @@ class Sales extends Model
         'nom_sala',
         'aforament',
         'id_empresa',
+        'id_tipus_sala',
     ];
 
     /**
@@ -69,5 +70,10 @@ class Sales extends Model
     public function sales()
     {
         return $this->hasMany(Horari::class, 'id_sala');
+    }
+
+    public function tipusSala()
+    {
+        return $this->belongsTo(TipusSala::class, 'id_tipus_sala');
     }
 }

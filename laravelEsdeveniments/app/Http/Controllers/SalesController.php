@@ -7,6 +7,8 @@ use App\Models\Seients;
 use App\Models\Sales;
 use App\Models\Esdeveniments;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TipusSala;
+
 
 class SalesController extends Controller
 {
@@ -139,5 +141,39 @@ class SalesController extends Controller
         Sales::destroy($id_sala);
 
         return redirect()->route('sales.index')->with('success', 'Sala i seients eliminats correctament.');
+    }
+
+    public function escollirSala()
+    {
+        $sales = TipusSala::all();
+        return view('sales.triarSala', compact('sales'));
+    }
+
+    public function crearSalaDisco(Request $request)
+    {
+        $tipusSala = $request->query('tipus_sala');
+        return view('sales.createDisco', compact('tipusSala'));
+    }
+
+    public function storeDisco(Request $request)
+    {
+        // 1️⃣ Validación de los datos enviados
+        $validated = $request->validate([
+            'nom_sala' => 'required|string|max:255', // Nombre de la sala
+            'aforament' => 'required|integer|min:1', // Aforo mínimo 1
+            'id_empresa' => 'required|integer|exists:empreses,id_empresa', // Verifica en empreses
+            'id_tipus_sala' => 'required|integer|exists:tipus_sala,id', // Verifica en tipus_sala
+        ]);
+
+        // 2️⃣ Crear la nueva sala discoteca
+        $sala = Sales::create([
+            'nom_sala' => $validated['nom_sala'],
+            'aforament' => $validated['aforament'],
+            'id_empresa' => $validated['id_empresa'],
+            'id_tipus_sala' => $validated['id_tipus_sala'],
+        ]);
+
+        // 3️⃣ Redireccionar al listado de salas con mensaje de éxito
+        return redirect()->route('sales.index')->with('success', 'Sala creada correctamente.');
     }
 }

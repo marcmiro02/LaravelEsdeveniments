@@ -41,6 +41,16 @@ class TicketController extends Controller
         return view('tickets.order-summary', compact('selectedEntrades', 'esdeveniment'));
     }
 
+    public function showOrderSummaryDisco(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+        session(['quantitatEntrades' => $request->input('quantitat')]);
+
+        return view('tickets.order-summary');
+    }
+
     public function showSelectEntrades(Request $request)
     {
         $entrades = Entrades::all();

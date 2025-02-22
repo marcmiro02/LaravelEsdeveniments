@@ -123,10 +123,12 @@
             <div class="event-details">
                 <p>{{ $entrada['eventDate'] }}</p>
             </div>
-            <div class="ticket-details">
-                <p>Fila: {{ $entrada['row'] }}</p>
-                <p>Seient: {{ $entrada['seat'] }}</p>
-            </div>
+            @if(session('id_tipus_sala') != 2)
+                <div class="ticket-details">
+                    <p>Fila: {{ $entrada['row'] }}</p>
+                    <p>Seient: {{ $entrada['seat'] }}</p>
+                </div>
+            @endif
             <div class="qr-code">
                 <p>Escaneja el codi QR per accedir a l'esdeveniment:</p>
                 <img src="data:image/png;base64,{{ $entrada['qrCode'] }}" alt="Código QR">

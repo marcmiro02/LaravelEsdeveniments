@@ -429,11 +429,23 @@ Route::resource('rols_usuaris', RolsUsuarisController::class)->parameters([
 
 
 //------------------------------------ SALES ------------------------------------//
+
+
+Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
+Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
+Route::post('/sales/seients/redirect2', [SeientsController::class, 'redirectToSeients2'])->name('sales.seients.redirect2');
+
+Route::get('/sales/triarSala', [SalesController::class, 'escollirSala'])->name('sales.triaremSala');
+Route::get('/sales/createDisco', [SalesController::class, 'crearSalaDisco'])->name('sales.createDisco');
+Route::post('/sales/createDisco', [SalesController::class, 'storeDisco'])->name('sales.guardarDisco');
+Route::get('/quantitat-entrades-disco', function () {
+    return view('tickets.quantitatEntradesDisco'); 
+})->name('tickets.quantitatEntradesDisco');
+
+
 Route::resource('sales', SalesController::class)->parameters([
     'sales' => 'id_sala'
 ])->middleware(['auth', 'verified']);
-
-
 
 
 //------------------------------------ TIPUS_ESDEVENIMENTS ------------------------------------//
@@ -471,6 +483,7 @@ Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index
 
 
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
+Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntradaDisco'])->name('pdf.generarEntradaDisco');
 
 
 Route::get('/pdf/validarEntrada', [PdfController::class, 'indexValidar'])->name('pdf.indexValidar');
@@ -478,14 +491,14 @@ Route::post('/pdf/validarEntrada', [PdfController::class, 'pestanyaValidar'])->n
 Route::post('/pdf/validarQr', [QrController::class, 'validarQr'])->name('pdf.validarQr');
 
 
-Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
-Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
-Route::post('/sales/seients/redirect2', [SeientsController::class, 'redirectToSeients2'])->name('sales.seients.redirect2');
+
+
 
 
 Route::post('/tickets/save-selected-entrades', [TicketController::class, 'saveSelectedEntrades'])->name('tickets.saveSelectedEntrades');
 Route::get('/tickets/select-entrades', [TicketController::class, 'showSelectEntrades'])->name('tickets.selectEntrades');
 Route::get('/tickets/order-summary', [TicketController::class, 'showOrderSummary'])->name('tickets.orderSummary');
+Route::post('/tickets/order-summary-disco', [TicketController::class, 'showOrderSummaryDisco'])->name('tickets.orderSummaryDisco');
 Route::post('/tickets/process-payment', [TicketController::class, 'processPayment'])->name('tickets.processPayment');
 Route::get('/tickets/success', [TicketController::class, 'handleSuccess'])->name('tickets.success');
 Route::get('/tickets/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');

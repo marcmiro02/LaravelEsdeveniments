@@ -44,7 +44,7 @@
                 @if(session()->has('id_esdeveniment'))
                     <!-- Formulario de Generar Entrada -->
                     <div class="flex justify-center">
-                        <form action="{{ route('pdf.generarEntrada') }}" method="POST">
+                        <form action="{{ session('id_tipus_sala') == 2 ? route('pdf.generarEntradaDisco') : route('pdf.generarEntrada') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id_esdeveniment" value="{{ session('id_esdeveniment') }}">
                             <button type="submit" class="bg-rose-600 hover:bg-rose-800 text-white font-bold py-2 px-4 rounded mt-3">
@@ -53,6 +53,7 @@
                         </form>
                     </div>
                 @else
+
                     <!-- Mensaje si ya se generó la entrada -->
                     <div class="text-center text-gray-500">
                         <p>Ya has generado tu entrada. No es posible generarla nuevamente.</p>
