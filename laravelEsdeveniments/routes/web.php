@@ -483,7 +483,7 @@ Route::get('pdf', [PdfController::class, 'showEventSelection'])->name('pdf.index
 
 
 Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntrada'])->name('pdf.generarEntrada');
-Route::post('/pdf/generarEntrada', [PdfController::class, 'generarEntradaDisco'])->name('pdf.generarEntradaDisco');
+Route::post('/pdf/generarEntradaDisco', [PdfController::class, 'generarEntradaDisco'])->name('pdf.generarEntradaDisco');
 
 
 Route::get('/pdf/validarEntrada', [PdfController::class, 'indexValidar'])->name('pdf.indexValidar');

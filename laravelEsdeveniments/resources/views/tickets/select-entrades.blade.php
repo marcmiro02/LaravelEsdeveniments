@@ -3,11 +3,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8">
                 <div class="p-8 text-gray-100 dark:text-gray-100">
-                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">{{ strtoupper($esdeveniment->nom) }}</h1>
-                    <div class="flex justify-center">
-                        <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-96 object-cover mb-4">
-                    </div>
-                    
                     <!-- Línea de Progreso -->
                     <div class="flex items-center justify-between mb-8">
                         <div class="flex-1">
@@ -17,16 +12,16 @@
                         </div>
                         <div class="flex items-center justify-between w-full mt-2">
                             <div class="text-center">
-                                <div class="w-14 h-14 bg-rose-600 text-white rounded-full flex items-center justify-center">
-                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
-                                </div>
-                                <span class="text-sm text-rose-600">Triar Seient</span>
-                            </div>
-                            <div class="text-center">
                                 <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
                                     <i class="fa-solid fa-clapperboard text-2xl"></i>
                                 </div>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Triar Entrada</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Triar Seient</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 bg-rose-600 text-white rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-clapperboard text-2xl"></i>
+                                </div>
+                                <span class="text-sm text-rose-600">Triar Entrada</span>
                             </div>
                             <div class="text-center">
                                 <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
@@ -42,7 +37,11 @@
                             </div>
                         </div>
                     </div>
-
+                    <h1 class="text-3xl font-bold text-center text-rose-600 mb-4">{{ strtoupper($esdeveniment->nom) }}</h1>
+                    <div class="flex justify-center">
+                        <img src="data:image/png;base64,{{ $esdeveniment->foto_portada ?? '' }}" alt="{{ $esdeveniment->nom }}" class="w-full h-96 object-cover mb-4">
+                    </div>
+                               
                     <div id="seats-summary" class="mb-4">
                         <h4 class="text-md font-medium text-rose-600">Seients Seleccionats:</h4>
                         <ul id="selected-seats-list" class="list-disc pl-5"></ul>

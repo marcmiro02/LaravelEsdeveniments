@@ -71,7 +71,6 @@ class PdfController extends Controller
                 $entradasData[] = $entradaData;
             }
         }
-
         // ✅ Generamos el PDF dependiendo de si es un ticket o un PDF normal
         if ($imprimir_ticket) {
             $pdf = PDF::loadView('pdf.ticket', ['entradas' => $entradasData])->setPaper([0, 0, 65, 115], 'portrait');

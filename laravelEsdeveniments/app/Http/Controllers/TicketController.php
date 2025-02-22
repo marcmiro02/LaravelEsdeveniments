@@ -115,7 +115,6 @@ class TicketController extends Controller
     public function handleSuccess(Request $request)
     {
         try {
-
             // Obtener el session_id de la sesión
             $session_id = Session::get('stripe_session_id');
             // Obtener la sesión de Stripe
