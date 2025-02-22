@@ -21,7 +21,7 @@
                         <div class="flex gap-4 text-sm">
                             <span>{{ date('d M Y', strtotime($esdeveniment->data_estrena)) }}</span>
                             <span>•</span>
-                            <span>{{ $esdeveniment->duracio }}</span>
+                            <span>{{ $esdeveniment->duracio }}h</span>
                             <span>•</span>
                             <span>{{ $esdeveniment->edats }}+</span>
                         </div>

@@ -3,12 +3,13 @@
         <div class="max-w-7xl w-full bg-gray-900 overflow-hidden shadow-2xl sm:rounded-lg p-8 text-gray-100">
             <!-- Encabezado -->
             <h3 class="text-3xl font-bold text-center text-rose-600 mb-6">
-                Selecciona tu asiento en la sala: {{ strtoupper($sala->nom_sala) }}
+                Selecciona el teu seient a la sala: {{ strtoupper($sala->nom_sala) }}
             </h3>
 
             <!-- Leyenda de asientos -->
             <div class="grid grid-cols-3 md:grid-cols-6 gap-4 mb-8">
                 @php
+                    $asientosReservados = session('asientosReservados', []);
                     $legend = [
                         ['Acompanyant_d.png', 'Acompanyament'],
                         ['Cadira_rodes_d.png', 'Cadira de rodes'],
@@ -31,6 +32,15 @@
                 <div class="flex justify-center mb-4">
                     <div class="text-center text-rose-600 font-bold mr-4">{{ $fila }}</div>
                     @foreach($seientsFila as $seient)
+                        @php
+                            $isOccupied = collect($asientosReservados)->contains(function ($asiento) use ($seient) {
+                                return $asiento['fila'] == $seient->fila && $asiento['columna'] == $seient->columna;
+                            });
+                            // Si el asiento está ocupado, forzamos a que se vea como "No disponible"
+                            if ($isOccupied) {
+                                $seient->estat_seient = 7; // Seient_nd (No disponible)
+                            }
+                        @endphp
                         <div class="relative mx-1">
                             <button 
                                 class="seat @if($seient->estat_seient == 1) Seient_d 
@@ -39,11 +49,13 @@
                                     @elseif($seient->estat_seient == 4) Seient_b 
                                     @elseif($seient->estat_seient == 5) invisible 
                                     @elseif($seient->estat_seient == 6) Seient_s 
-                                    @elseif($seient->estat_seient == 7) Seient_nd @endif"
+                                    @elseif($seient->estat_seient == 7) Seient_nd 
+                                    @elseif($isOccupied) Seient_b @endif"
                                 data-seient-id="{{ $seient->id_seient }}"
                                 data-preu="{{ $seient->preu }}"
                                 data-fila="{{ $seient->fila }}"
                                 data-columna="{{ $seient->columna }}"
+                                @if($isOccupied) disabled @endif
                             >
                                 @if($seient->estat_seient != 5)
                                     <img src="{{ asset('img/seients/' . 

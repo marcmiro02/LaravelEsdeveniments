@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Empreses;
 use Illuminate\Support\Facades\Session;
+use App\Models\Reserves;
 
 class PdfController extends Controller
 {
@@ -22,28 +23,40 @@ class PdfController extends Controller
         if (!session()->has('id_esdeveniment')) {
             return redirect()->route('welcome');
         }
+
         $esdeveniment = Esdeveniments::find(session('id_esdeveniment'));
         if (!$esdeveniment) {
             throw new \Exception('El evento no existe.');
         }
-        $imprimir_ticket = false;
-        if (session()->has('imprimir_ticket')) {
-            $imprimir_ticket = true;
-        }
+
+        $imprimir_ticket = session()->has('imprimir_ticket');
         $dataTriada = session('fecha_seleccionada');
+
         // ✅ Recuperamos las entradas desde la sesión
         $selectedEntrades = session('selectedEntrades', []);
         if (empty($selectedEntrades)) {
             throw new \Exception('No hay entradas seleccionadas.');
         }
+
         $empresa = $esdeveniment->empresa;
         $entradasData = [];
         $qrCodes = []; // Guardaremos los QR generados aquí
+
         foreach ($selectedEntrades as $entrada) {
             foreach ($entrada['seients'] as $seient) {
                 $qrController = new QrController();
                 $qr = $qrController->generarQr($esdeveniment->id_esdeveniment);
                 $qrCodes[] = $qr;
+
+                // ✅ Guardamos la reserva en la BD
+                Reserves::create([
+                    'id_esdeveniment' => $esdeveniment->id_esdeveniment,
+                    'id_usuari' => auth()->id(),
+                    'fila' => $seient['fila'],
+                    'columna' => $seient['columna'],
+                    'estat' => 'confirmada',
+                    'data_event' => $dataTriada,
+                ]);
 
                 $entradaData = [
                     'eventName' => $esdeveniment->nom,
@@ -58,42 +71,49 @@ class PdfController extends Controller
                 $entradasData[] = $entradaData;
             }
         }
+
         // ✅ Generamos el PDF dependiendo de si es un ticket o un PDF normal
         if ($imprimir_ticket) {
             $pdf = PDF::loadView('pdf.ticket', ['entradas' => $entradasData])->setPaper([0, 0, 65, 115], 'portrait');
         } else {
             $pdf = PDF::loadView('pdf.pdf', ['entradas' => $entradasData]);
         }
+
         // Convertimos el PDF a base64
         $pdfContent = $pdf->output();
         $pdfBase64 = base64_encode($pdfContent);
+
         // Guardamos el PDF en la base de datos
         $pdfModel = new PdfModel();
         $pdfModel->doc_pdf = $pdfBase64;
         $pdfModel->id_usuari = auth()->id();
         $pdfModel->save();
+
         // ✅ Actualizamos TODOS los QR con el mismo id_pdf
         foreach ($qrCodes as $qr) {
             $qr->id_pdf = $pdfModel->id_pdf;
             $qr->save();
         }
+
         // Limpiamos la sesión después de generar el ticket
         session()->forget(['id_esdeveniment', 'selectedEntrades']);
 
-        if(!$imprimir_ticket) {
+        if (!$imprimir_ticket) {
             // Enviar correo con el PDF adjunto
-            $user = auth()->user();  // Obtenemos el usuario autenticado
-            $pdfData = base64_decode($pdfModel->doc_pdf); // Decodificamos el PDF guardado en la base de datos
+            $user = auth()->user();
+            $pdfData = base64_decode($pdfModel->doc_pdf);
 
             Mail::send('emails.ticket', ['entradas' => $entradasData], function ($message) use ($user, $pdfData) {
-                $message->to($user->email)  // Correo del usuario autenticado
+                $message->to($user->email)
                         ->subject('Les teves entrades per l\'esdeveniment')
-                        ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);  // Adjuntamos el PDF desde la base64
+                        ->attachData($pdfData, 'entrada.pdf', ['mime' => 'application/pdf']);
             });
         }
+
         // Retornamos el PDF generado al navegador
         return $pdf->stream('entrada-' . $qr->codi_qr . '.pdf');
     }
+
 
     public function showEventSelection()
     {

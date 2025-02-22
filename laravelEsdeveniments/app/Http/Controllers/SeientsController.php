@@ -8,6 +8,7 @@ use App\Models\Sales;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Esdeveniments;
 use App\Models\Entrades;
+use App\Models\Reserves;
 
 class SeientsController extends Controller
 {
@@ -143,16 +144,25 @@ class SeientsController extends Controller
         $request->validate([
             'id_sala' => 'required|integer|exists:sales,id_sala',
             'fecha' => 'required|date_format:Y-m-d H:i:s',
-            'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment', // Asegúrate de validar el id_esdeveniment
+            'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment',
         ]);
 
-        // Guardar la fecha seleccionada y el id_esdeveniment en la sesión
+        // Guardar datos en sesión
         session([
             'fecha_seleccionada' => $request->fecha,
-            'id_esdeveniment' => $request->id_esdeveniment,  // Guardamos id_esdeveniment
-            'id_sala' => $request->id_sala,  // Guardamos id_sala
+            'id_esdeveniment' => $request->id_esdeveniment,
+            'id_sala' => $request->id_sala,
         ]);
 
+        // Obtener los asientos reservados para el evento y fecha seleccionados
+        $asientosReservados = Reserves::where('id_esdeveniment', $request->id_esdeveniment)
+            ->where('data_event', $request->fecha)
+            ->get(['fila', 'columna']); // ❌ No usar ->toArray() aquí
+
+        // Guardar los asientos reservados en la sesión
+        session(['asientosReservados' => $asientosReservados]);
+
+        // Redirigir a la vista con los datos correctos
         return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
     }
 
@@ -162,11 +172,12 @@ class SeientsController extends Controller
             'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment',
         ]);
 
-        // Obtener el esdeveniment seleccionado
+        // Obtener el evento y la sala
         $esdeveniment = Esdeveniments::findOrFail($request->id_esdeveniment);
-
-        // Obtener automáticamente la sala del esdeveniment
         $id_sala = $esdeveniment->id_sala;
+
+        // Obtener la fecha desde la sesión
+        $fechaSeleccionada = session('fecha_seleccionada');
 
         // Guardar los datos en sesión
         session([
@@ -174,16 +185,25 @@ class SeientsController extends Controller
             'id_sala' => $id_sala,
         ]);
 
-        // Guardar la preferencia del ticket (si se marcó el checkbox)
         if ($request->has('imprimir_ticket')) {
             session(['imprimir_ticket' => true]);
         } else {
             session(['imprimir_ticket' => false]);
         }
 
-        // Redirigir a la vista de selección de asientos con la sala correspondiente
+        // Obtener los asientos ocupados para el evento y fecha seleccionados
+        $asientosReservados = Reserves::where('id_esdeveniment', $request->id_esdeveniment)
+            ->where('data_event', $request->fecha)
+            ->get(['fila', 'columna']);
+
+        // Guardar los asientos reservados en la sesión
+        session(['asientosReservados' => $asientosReservados]);
+
+        // Redirigir a la vista con los datos correctos
         return redirect()->route('sales.show', ['id_sala' => $id_sala]);
     }
+
+
 
     public function showSeients($id_sala, Request $request)
     {
