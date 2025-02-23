@@ -373,6 +373,8 @@ Route::resource('empreses', EmpresesController::class)->parameters([
 
 
 //----------------------------------- ESDEVENIMENTS -----------------------------------//
+Route::post('/esdeveniment/mostrarDades', [EsdevenimentsController::class, 'show2'])->name('dades.esdeveniment');
+
 Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
     'esdeveniments' => 'id_esdeveniment'
 ])->middleware(['auth', 'verified']);
@@ -429,11 +431,9 @@ Route::resource('rols_usuaris', RolsUsuarisController::class)->parameters([
 
 
 //------------------------------------ SALES ------------------------------------//
-
-
 Route::get('/sales/{id_sala}/seients', [SeientsController::class, 'showSeients'])->name('sales.seients')->middleware(['auth', 'verified']);
 Route::post('/sales/seients/redirect', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect');
-Route::post('/sales/seients/redirect2', [SeientsController::class, 'redirectToSeients2'])->name('sales.seients.redirect2');
+//Route::post('/sales/seients/redirect2', [SeientsController::class, 'redirectToSeients'])->name('sales.seients.redirect2');
 
 Route::get('/sales/triarSala', [SalesController::class, 'escollirSala'])->name('sales.triaremSala');
 Route::get('/sales/createDisco', [SalesController::class, 'crearSalaDisco'])->name('sales.createDisco');

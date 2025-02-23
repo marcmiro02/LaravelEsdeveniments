@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Horari;
+use Illuminate\Support\Facades\Session;
 
 class EsdevenimentsController extends Controller
 {
@@ -21,6 +22,21 @@ class EsdevenimentsController extends Controller
 
     public function show($id_esdeveniment)
     {
+        $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+        $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
+        return view('esdeveniments.show', compact('esdeveniment','horaris'));
+    }
+
+    public function show2(Request $request)
+    {
+        if ($request->has('imprimir_ticket')) {
+            session(['imprimir_ticket' => true]);
+        } else {
+            session(['imprimir_ticket' => false]);
+        }
+
+        $id_esdeveniment = $request->input('id_esdeveniment');
+
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
         $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
         return view('esdeveniments.show', compact('esdeveniment','horaris'));

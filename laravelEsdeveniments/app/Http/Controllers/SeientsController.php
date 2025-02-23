@@ -142,8 +142,13 @@ class SeientsController extends Controller
 
     public function redirectToSeients(Request $request)
     {
-        
-        Session::forget('imprimir_ticket');
+        // Obtener la URL previa
+        $previousUrl = url()->previous();
+
+        // Si la URL contiene "inici", eliminamos la sesión de imprimir_ticket
+        if (str_contains($previousUrl, '/inici')) {
+            session()->forget('imprimir_ticket');
+        }
 
         $request->validate([
             'id_sala' => 'required|integer|exists:sales,id_sala',
@@ -176,9 +181,9 @@ class SeientsController extends Controller
         return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
     }
 
+    /*
     public function redirectToSeients2(Request $request)
     {
-
         Session::forget('imprimir_ticket');
 
         $request->validate([
@@ -219,6 +224,7 @@ class SeientsController extends Controller
         // Redirigir a la vista con los datos correctos
         return redirect()->route('sales.show', ['id_sala' => $id_sala]);
     }
+    */
 
     public function showSeients($id_sala, Request $request)
     {

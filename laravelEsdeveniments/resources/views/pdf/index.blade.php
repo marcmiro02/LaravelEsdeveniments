@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-black-900 dark:text-white-100">
-                    <form action="{{ route('sales.seients.redirect2') }}" method="POST">
+                    <form action="{{ route('dades.esdeveniment') }}" method="POST">
                         @csrf
                         <div class="mb-4">
                             <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -20,12 +20,6 @@
                                     <option value="{{ $esdeveniment->id_esdeveniment }}">{{ $esdeveniment->nom }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="imprimir_ticket" class="inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <input type="checkbox" name="imprimir_ticket" id="imprimir_ticket" class="form-checkbox h-5 w-5 text-blue-600">
-                                <span class="ml-2">Imprimir com a ticket</span>
-                            </label>
                         </div>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Confirmar
