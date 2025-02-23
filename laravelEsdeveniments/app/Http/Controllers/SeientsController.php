@@ -143,11 +143,9 @@ class SeientsController extends Controller
     public function redirectToSeients(Request $request)
     {
         // Obtener la URL previa
-        $previousUrl = url()->previous();
-
-        // Si la URL contiene "inici", eliminamos la sesión de imprimir_ticket
-        if (str_contains($previousUrl, '/inici')) {
+        if (session('origen') === 'inici' || session('origen') === 'navbar') {
             session()->forget('imprimir_ticket');
+            session()->forget('origen');
         }
 
         $request->validate([

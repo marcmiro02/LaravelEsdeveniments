@@ -1,3 +1,6 @@
+@php
+    session(['origen' => 'inici']);
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -41,6 +44,15 @@
                                             <p class="text-lg"><strong>Duració:</strong> {{ $esdeveniment->duracio ? date('H:i', strtotime($esdeveniment->duracio)) : 'No disponible' }}h</p><br>
                                             <p class="text-lg"><strong>Edat Recomanada:</strong> {{ $esdeveniment->edats ?? 'No especificada' }}</p>
                                         </div>
+
+                                        <!-- Botón para ver información del evento -->
+                                        <form action="{{ route('dades.esdeveniment') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id_esdeveniment" value="{{ $esdeveniment->id_esdeveniment }}">
+                                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg transition-transform transform hover:scale-105">
+                                                Més
+                                            </button>
+                                        </form>
 
                                         <!-- Horarios Section -->
                                         <div class="mt-6">
