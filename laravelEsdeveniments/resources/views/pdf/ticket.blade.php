@@ -17,7 +17,7 @@
         .container {
             width: 100%; /* Usamos todo el ancho de la página */
             height: auto; /* Altura automática según el contenido */
-            max-height: 115mm; /* Máxima altura de la página */
+            max-height: 114mm; /* Máxima altura de la página */
             background-color: #fff;
             padding: 5px; /* Reducimos el padding para maximizar el espacio */
             border-radius: 8px;
@@ -105,8 +105,8 @@
             font-weight: bold; /* Ponemos en negrita */
         }
         .qr-code img {
-            width: 60px; /* Aumentamos significativamente el tamaño del QR */
-            height: 60px;
+            width: 120px; /* Aumentamos significativamente el tamaño del QR */
+            height: 120px;
             border: 1px solid #ddd;
             padding: 5px;
             border-radius: 10px;
