@@ -46,7 +46,7 @@
                                         </div>
 
                                         <!-- Botón para ver información del evento -->
-                                        <form action="{{ route('dades.esdeveniment') }}" method="POST">
+                                        <form action="{{ route('dades.esdevenimentInici') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="id_esdeveniment" value="{{ $esdeveniment->id_esdeveniment }}">
                                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg transition-transform transform hover:scale-105">
