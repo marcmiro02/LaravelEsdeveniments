@@ -21,6 +21,7 @@
                 </div>
 
                 <!-- Esdeveniments Dropdown -->
+                @can('isSuperadmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
@@ -55,9 +56,19 @@
                         </x-slot>
                     </x-dropdown>
                 </div>
+                @endcan
 
                 <!-- Sales Dropdown -->
-                @can('isAdmin')
+                @can('isAdmin')                
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')">
+                        {{ __('Sales') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+
+                <!-- Sales Dropdown -->
+                @can('isSuperadmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
@@ -70,13 +81,7 @@
                                 </div>
                             </button>
                         </x-slot>
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('sales.index')">
-                                {{ __('Sales') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('seients.index')">
-                                {{ __('Seients') }}
-                            </x-dropdown-link>
+                        <x-slot name="content">                                                   
                             <x-dropdown-link :href="route('tipus_seients.index')">
                                 {{ __('Tipus Seients') }}
                             </x-dropdown-link>
