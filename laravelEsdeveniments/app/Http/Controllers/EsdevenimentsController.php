@@ -22,6 +22,8 @@ class EsdevenimentsController extends Controller
 
     public function show($id_esdeveniment)
     {
+        Session::forget('imprimir_ticket');
+
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
         $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
         return view('esdeveniments.show', compact('esdeveniment','horaris'));
@@ -29,11 +31,18 @@ class EsdevenimentsController extends Controller
 
     public function show2(Request $request)
     {
-        if ($request->has('imprimir_ticket')) {
-            session(['imprimir_ticket' => true]);
-        } else {
-            session(['imprimir_ticket' => false]);
-        }
+        session(['imprimir_ticket' => true]);
+
+        $id_esdeveniment = $request->input('id_esdeveniment');
+
+        $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+        $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
+        return view('esdeveniments.show', compact('esdeveniment','horaris'));
+    }
+
+    public function show3(Request $request)
+    {
+        Session::forget('imprimir_ticket');
 
         $id_esdeveniment = $request->input('id_esdeveniment');
 

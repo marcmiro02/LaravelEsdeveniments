@@ -142,12 +142,6 @@ class SeientsController extends Controller
 
     public function redirectToSeients(Request $request)
     {
-        // Obtener la URL previa
-        if (session('origen') === 'inici' || session('origen') === 'navbar') {
-            session()->forget('imprimir_ticket');
-            session()->forget('origen');
-        }
-
         $request->validate([
             'id_sala' => 'required|integer|exists:sales,id_sala',
             'fecha' => 'required|date_format:Y-m-d H:i:s',
@@ -178,51 +172,6 @@ class SeientsController extends Controller
         // Redirigir a la vista con los datos correctos
         return redirect()->route('sales.show', ['id_sala' => $request->id_sala]);
     }
-
-    /*
-    public function redirectToSeients2(Request $request)
-    {
-        Session::forget('imprimir_ticket');
-
-        $request->validate([
-            'id_esdeveniment' => 'required|integer|exists:esdeveniments,id_esdeveniment',
-        ]);
-    
-        // Obtener el evento y la sala
-        $esdeveniment = Esdeveniments::findOrFail($request->id_esdeveniment);
-        $id_sala = $esdeveniment->id_sala;
-        $id_tipus_sala = $id_sala ? Sales::find($id_sala)->id_tipus_sala : null;
-    
-        // Guardar los datos en sesión
-        session([
-            'id_esdeveniment' => $request->id_esdeveniment,
-            'id_sala' => $id_sala,
-            'id_tipus_sala' => $id_tipus_sala,
-        ]);
-    
-        // Solo asignar imprimir_ticket si está presente en la solicitud
-        if ($request->has('imprimir_ticket')) {
-            session(['imprimir_ticket' => true]);
-        } else {
-            session(['imprimir_ticket' => false]);
-        }
-    
-        if ($id_tipus_sala == 2) {
-            return redirect()->route('tickets.quantitatEntradesDisco');
-        }
-    
-        // Obtener los asientos ocupados para el evento y fecha seleccionados
-        $asientosReservados = Reserves::where('id_esdeveniment', $request->id_esdeveniment)
-            ->where('data_event', $request->fecha)
-            ->get(['fila', 'columna']);
-    
-        // Guardar los asientos reservados en la sesión
-        session(['asientosReservados' => $asientosReservados]);
-    
-        // Redirigir a la vista con los datos correctos
-        return redirect()->route('sales.show', ['id_sala' => $id_sala]);
-    }
-    */
 
     public function showSeients($id_sala, Request $request)
     {

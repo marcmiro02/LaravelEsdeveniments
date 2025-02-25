@@ -374,6 +374,8 @@ Route::resource('empreses', EmpresesController::class)->parameters([
 
 //----------------------------------- ESDEVENIMENTS -----------------------------------//
 Route::post('/esdeveniment/mostrarDades', [EsdevenimentsController::class, 'show2'])->name('dades.esdeveniment');
+Route::post('/esdeveniment/mostrarDadesDesdeInici', [EsdevenimentsController::class, 'show3'])->name('dades.esdevenimentInici');
+
 
 Route::resource('esdeveniments', EsdevenimentsController::class)->parameters([
     'esdeveniments' => 'id_esdeveniment'
