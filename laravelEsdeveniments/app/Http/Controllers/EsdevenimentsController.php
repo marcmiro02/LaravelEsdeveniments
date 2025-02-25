@@ -25,7 +25,7 @@ class EsdevenimentsController extends Controller
         Session::forget('imprimir_ticket');
 
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
-        $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();
+        $horaris = Horari::where('id_esdeveniment', $id_esdeveniment)->get();       
         return view('esdeveniments.show', compact('esdeveniment','horaris'));
     }
 

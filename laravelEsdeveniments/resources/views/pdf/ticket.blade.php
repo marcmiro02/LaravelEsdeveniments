@@ -131,7 +131,7 @@
             <div class="event-details">
                 <p>{{ $entrada['eventDate'] }}</p>
             </div>
-            @if(session('id_tipus_sala') != 2)
+            @if(session(key: 'id_tipus_sala') != 2)
                 <div class="ticket-details">
                     <p>Fila: {{ $entrada['row'] }}</p>
                     <p>Seient: {{ $entrada['seat'] }}</p>
