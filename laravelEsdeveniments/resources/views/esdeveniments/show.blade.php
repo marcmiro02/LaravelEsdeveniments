@@ -101,9 +101,38 @@
                     </div>
                 @endif
                 @if($esdeveniment->id_tipus != 1)
+                    <!-- Left Column: Sinopsis (Cinematic Design) -->
+                    <div class="space-y-8 text-gray-100 relative">
+                        <div class="p-8 bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+                            <h3 class="text-3xl font-bold text-rose-600 mb-4">Descrpició</h3>
+                            <p class="text-gray-300 leading-relaxed">{{ $esdeveniment->sinopsis }}</p>
+                        </div>
+                    </div>
 
-
-
+                    <!-- Right Column: Metadata and Cast (Interactive Cards) -->
+                    <div class="space-y-8 text-gray-100">
+                        <!-- Metadata -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg p-8">
+                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Información Técnica</h3>
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 0v3a1 1 0 001 1h2a1 1 0 001-1v-3M7 10h2v3a1 1 0 001 1h2a1 1 0 001-1v-3" />
+                                    </svg>
+                                    <span><strong>Tipo:</strong> {{ $esdeveniment->tipus->nom_tipus }}</span>
+                                </li>                                
+                                <li class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    </svg>
+                                    <span><strong>Sala:</strong> {{ $esdeveniment->sala->nom_sala }}</span>
+                                </li>
+                            </ul>
+                        </div>
                 @endif
 
             </div>
