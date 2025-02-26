@@ -53,6 +53,7 @@ class RegisteredUserController extends Controller
                 'targeta_bancaria' => $request->targeta_bancaria,
                 'data_naixement' => $request->data_naixement,
                 'password' => Hash::make($request->password),
+                'rol' => 5,
             ]);
         
             if ($request->hasFile('foto_perfil')) {
