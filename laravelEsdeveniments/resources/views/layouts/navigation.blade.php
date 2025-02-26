@@ -4,7 +4,7 @@
 <nav x-data="{ open: false }" class="bg-gray-900 border-b border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16  flex items-center">
+        <div class="flex justify-center h-16  flex items-center">
             <div class="flex">
                 <!-- Logo -->   
                 <div class="shrink-0 flex items-center">
@@ -12,14 +12,14 @@
                         <img src="{{ asset('img/Logos/Fosc_sense_bg.png') }}" alt="" class="block h-9 w-auto fill-current text-gray-200">  
                     </a>
                 </div>
-
+                
                 <!-- Navigation Links -->
                 <div class="hidden space-x-20 sm:60px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         {{ __('INICI') }}
                     </x-nav-link>
                 </div>
-
+                
                 <!-- Esdeveniments Dropdown -->
                 @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -35,26 +35,26 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('esdeveniments.index')">
+                            <x-dropdown-link :href="route('esdeveniments.index')" :active="request()->routeIs('esdeveniments.index')">
                                 {{ __('Esdeveniments') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('entrades.index')">
+                            <x-dropdown-link :href="route('entrades.index')" :active="request()->routeIs('entrades.index')">
                                 {{ __('Entrades') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('categories.index')">
+                            <x-dropdown-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
                                 {{ __('Categories') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('tipus_esdeveniments.index')">
+                            <x-dropdown-link :href="route('tipus_esdeveniments.index')" :active="request()->routeIs('tipus_esdeveniments.index')">
                                 {{ __('Tipus Esdeveniments') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('qrs.index')">
+                            <x-dropdown-link :href="route('qrs.index')" :active="request()->routeIs('qrs.index')">
                                 {{ __('QR') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
                 @endcan
-
+                
                 <!-- Sales Dropdown -->
                 @can('isAdmin')                
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -63,13 +63,13 @@
                     </x-nav-link>
                 </div>
                 @endcan
-
+                
                 <!-- Sales Dropdown -->
                 @can('isSuperadmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 1.5rem;">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 0.9rem;">
                                 <div>{{ __('Sales') }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -79,10 +79,10 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">                                                   
-                            <x-dropdown-link :href="route('tipus_seients.index')">
+                            <x-dropdown-link :href="route('tipus_seients.index')" :active="request()->routeIs('tipus_seients.index')">
                                 {{ __('Tipus Seients') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('estat_seients.index')">
+                            <x-dropdown-link :href="route('estat_seients.index')" :active="request()->routeIs('estat_seients.index')">
                                 {{ __('Estat Seients') }}
                             </x-dropdown-link>
                         </x-slot>
@@ -94,7 +94,7 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 1.5rem;">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 0.9rem;">
                                 <div>{{ __('Usuaris') }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -104,13 +104,13 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('users.index')">
+                            <x-dropdown-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                                 {{ __('Users') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('empreses.index')">
+                            <x-dropdown-link :href="route('empreses.index')" :active="request()->routeIs('empreses.index')">
                                 {{ __('Empreses') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('rols_usuaris.index')">
+                            <x-dropdown-link :href="route('rols_usuaris.index')" :active="request()->routeIs('rols_usuaris.index')">
                                 {{ __('Rols Usuaris') }}
                             </x-dropdown-link>
                         </x-slot>
@@ -294,14 +294,62 @@
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
+        <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                {{ __('welcome') }}
+                {{ __('INICI') }}
+            </x-responsive-nav-link>
+            @can('isAdmin')
+            <x-responsive-nav-link :href="route('esdeveniments.index')" :active="request()->routeIs('esdeveniments.index')">
+                {{ __('Esdeveniments') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('entrades.index')" :active="request()->routeIs('entrades.index')">
+                {{ __('Entrades') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                {{ __('Categories') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('tipus_esdeveniments.index')" :active="request()->routeIs('tipus_esdeveniments.index')">
+                {{ __('Tipus Esdeveniments') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('qrs.index')" :active="request()->routeIs('qrs.index')">
+                {{ __('QR') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')">
+                {{ __('Sales') }}
+            </x-responsive-nav-link>
+            @endcan
+            @can('isSuperadmin')
+            <x-responsive-nav-link :href="route('tipus_seients.index')" :active="request()->routeIs('tipus_seients.index')">
+                {{ __('Tipus Seients') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('estat_seients.index')" :active="request()->routeIs('estat_seients.index')">
+                {{ __('Estat Seients') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('empreses.index')" :active="request()->routeIs('empreses.index')">
+                {{ __('Empreses') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('rols_usuaris.index')" :active="request()->routeIs('rols_usuaris.index')">
+                {{ __('Rols Usuaris') }}
+            </x-responsive-nav-link>
+            @endcan
+            @can('isAdmin')
+            <x-responsive-nav-link :href="route('pdf.index')" :active="request()->routeIs('pdf.index')">
+                {{ __('GENERAR ENTRADA') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('pdf.indexValidar')" :active="request()->routeIs('pdf.indexValidar')">
+                {{ __('VALIDAR ENTRADA') }}
+            </x-responsive-nav-link>
+            @endcan
+            <x-responsive-nav-link :href="route('historial.index')" :active="request()->routeIs('historial.index')">
+                {{ __('HISTORIAL') }}
             </x-responsive-nav-link>
         </div>
-
+    
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-700">
             <div class="px-4">
@@ -312,17 +360,17 @@
                 <div class="font-medium text-base text-gray-200">{{ __('Guest') }}</div>
                 @endauth
             </div>
-
+    
             <div class="mt-3 space-y-1">
                 @auth
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
-
+    
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
+    
                     <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
