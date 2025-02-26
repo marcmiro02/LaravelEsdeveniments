@@ -1,40 +1,42 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear Sala Discoteca') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('sales.guardarDisco') }}" method="POST">
-                        @csrf
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear Sala Discoteca</h3>
 
-                        <!-- Campo: Nom Sala -->
-                        <div class="mb-4">
-                            <label for="nom_sala" class="block text-sm font-medium text-gray-700">Nom Sala</label>
-                            <input type="text" id="nom_sala" name="nom_sala" class="mt-1 block w-full text-black" required>
-                        </div>
 
-                        <!-- Campo: Aforament -->
-                        <div class="mb-4">
-                            <label for="aforament" class="block text-sm font-medium text-gray-700">Aforament</label>
-                            <input type="number" id="aforament" name="aforament" class="mt-1 block w-full text-black" required>
-                        </div>
+            <form action="{{ route('sales.guardarDisco') }}" method="POST" class="space-y-6">
+                @csrf
 
-                        <!-- Campos Ocultos -->
-                        <input type="hidden" name="id_empresa" value="{{ auth()->user()->id_empresa }}">
-                        <input type="hidden" name="id_tipus_sala" value="{{ $tipusSala }}">
-
-                        <!-- Botón de Envío -->
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Crear Sala
-                        </button>
-                    </form>
+                <!-- Campo: Nom Sala -->
+                <div class="mb-4">
+                    <label for="nom_sala" class="block text-lg font-medium text-gray-100">Nom Sala</label>
+                    <input type="text" id="nom_sala" name="nom_sala"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
                 </div>
-            </div>
+
+                <!-- Campo: Aforament -->
+                <div class="mb-4">
+                    <label for="aforament" class="block text-lg font-medium text-gray-100">Aforament</label>
+                    <input type="number" id="aforament" name="aforament"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+
+                <!-- Campos Ocultos -->
+                <input type="hidden" name="id_empresa" value="{{ auth()->user()->id_empresa }}">
+                <input type="hidden" name="id_tipus_sala" value="{{ $tipusSala }}">
+
+                <!-- Botón de Envío -->
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">
+                    Crear Sala
+                </button>
+            </form>
         </div>
     </div>
 </x-app-layout>

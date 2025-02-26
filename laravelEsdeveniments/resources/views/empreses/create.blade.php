@@ -1,54 +1,70 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear Empresa') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('empreses.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear Empresa</h3>
 
-                        <div class="mb-4">
-                            <label for="nif" class="block text-sm font-medium text-gray-700">NIF</label>
-                            <input type="text" id="nif" name="nif" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="nom_empresa" class="block text-sm font-medium text-gray-700">Nom de l'empresa</label>
-                            <input type="text" id="nom_empresa" name="nom_empresa" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="adreca" class="block text-sm font-medium text-gray-700">Adreça</label>
-                            <input type="text" id="adreca" name="adreca" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="ciutat" class="block text-sm font-medium text-gray-700">Ciutat</label>
-                            <input type="text" id="ciutat" name="ciutat" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="telefon" class="block text-sm font-medium text-gray-700">Telèfon</label>
-                            <input type="text" id="telefon" name="telefon" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="logo" class="block text-sm font-medium text-gray-700">Logo</label>
-                            <input type="file" id="logo" name="logo" class="mt-1 block w-full text-black">
-                        </div>
-                        <div class="mb-4">
-                            <label for="logo_capsalera" class="block text-sm font-medium text-gray-700">Logo Capsalera</label>
-                            <input type="file" id="logo_capsalera" name="logo_capsalera" class="mt-1 block w-full text-black">
-                        </div>
+            <form action="{{ route('empreses.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
 
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Empresa</button>
-                    </form>
+                <div class="mb-4">
+                    <label for="nif" class="block text-lg font-medium text-gray-100">NIF</label>
+                    <input type="text" id="nif" name="nif"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
                 </div>
-            </div>
+                <div class="mb-4">
+                    <label for="nom_empresa" class="block text-lg font-medium text-gray-100">Nom de
+                        l'empresa</label>
+                    <input type="text" id="nom_empresa" name="nom_empresa"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="adreca" class="block text-lg font-medium text-gray-100">Adreça</label>
+                    <input type="text" id="adreca" name="adreca"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="ciutat" class="block text-lg font-medium text-gray-100">Ciutat</label>
+                    <input type="text" id="ciutat" name="ciutat"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="telefon" class="block text-lg font-medium text-gray-100">Telèfon</label>
+                    <input type="text" id="telefon" name="telefon"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-lg font-medium text-gray-100">Email</label>
+                    <input type="email" id="email" name="email"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="logo" class="block text-lg font-medium text-gray-100">Logo</label>
+                    <input type="file" id="logo" name="logo"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
+                </div>
+                <div class="mb-4">
+                    <label for="logo_capsalera" class="block text-lg font-medium text-gray-100">Logo
+                        Capsalera</label>
+                    <input type="file" id="logo_capsalera" name="logo_capsalera"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">
+                    Crear Empresa
+                </button>
+            </form>
         </div>
+    </div>
     </div>
 </x-app-layout>

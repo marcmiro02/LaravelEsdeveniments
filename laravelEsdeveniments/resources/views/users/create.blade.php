@@ -1,122 +1,138 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear Usuario') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="mb-4">Crear Usuario</h1>
-
-                    @if ($errors->any())
-                        <div class="mb-4">
-                            <div class="font-medium text-red-600">{{ __('Whoops! Something went wrong.') }}</div>
-                            <ul class="mt-3 list-disc list-inside text-sm text-red-600">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-
-                        <!-- Nombre -->
-                        <div class="mb-4">
-                            <label for="name" class="form-label">Nombre</label>
-                            <input type="text" name="name" id="name" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('name') }}" required>
-                        </div>
-
-                        <!-- Apellido -->
-                        <div class="mb-4">
-                            <label for="surname" class="form-label">Apellido</label>
-                            <input type="text" name="surname" id="surname" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('surname') }}" required>
-                        </div>
-
-                        <!-- Nombre de usuario -->
-                        <div class="mb-4">
-                            <label for="nom_usuari" class="form-label">Nombre de usuario</label>
-                            <input type="text" name="nom_usuari" id="nom_usuari" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('nom_usuari') }}" required>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="mb-4">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" name="email" id="email" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('email') }}" required>
-                        </div>
-
-                        <!-- Dirección -->
-                        <div class="mb-4">
-                            <label for="adreca" class="form-label">Dirección</label>
-                            <input type="text" name="adreca" id="adreca" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('adreca') }}" required>
-                        </div>
-
-                        <!-- Tarjeta bancaria -->
-                        <div class="mb-4">
-                            <label for="targeta_bancaria" class="form-label">Tarjeta bancaria</label>
-                            <input type="text" name="targeta_bancaria" id="targeta_bancaria" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('targeta_bancaria') }}" required>
-                        </div>
-
-                        <!-- Fecha de nacimiento -->
-                        <div class="mb-4">
-                            <label for="data_naixement" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" name="data_naixement" id="data_naixement" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" value="{{ old('data_naixement') }}" required>
-                        </div>
-
-                        <!-- Contraseña -->
-                        <div class="mb-4">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" name="password" id="password" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
-                        </div>
-
-                        <!-- Confirmar contraseña -->
-                        <div class="mb-4">
-                            <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
-                        </div>
-
-                        <!-- Foto de perfil -->
-                        <div class="mb-4">
-                            <label for="foto_perfil" class="form-label">Foto de perfil</label>
-                            <input type="file" name="foto_perfil" id="foto_perfil" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white">
-                        </div>
-
-                        <!-- Rol -->
-                        <div class="mb-4">
-                            <label for="rol_id" class="form-label">Rol</label>
-                            <select name="rol_id" id="rol_id" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id_rol }}" {{ old('rol_id') == $role->id_rol ? 'selected' : '' }}>
-                                        {{ $role->nom_rol }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Campo de empresa (solo visible para SuperAdmin) -->
-                        @if(Auth::user()->rol == 1)  <!-- Solo SuperAdmins pueden ver este campo -->
-                            <div class="mb-4">
-                                <label for="id_empresa" class="form-label">Empresa</label>
-                                <select name="id_empresa" id="id_empresa" class="form-control bg-white text-black dark:bg-gray-700 dark:text-white" required>
-                                    @foreach($empresas as $empresa)
-                                        <option value="{{ $empresa->id_empresa }}" {{ old('id_empresa') == $empresa->id_empresa ? 'selected' : '' }}>
-                                            {{ $empresa->nom_empresa }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @else
-                            <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
-                        @endif
-
-                        <button type="submit" class="btn btn-primary">Crear Usuari</button>
-                    </form>
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear Usuari</h3>
+            @if ($errors->any())
+                <div class="mb-4">
+                    <div class="font-medium text-red-600">{{ __('Whoops! Something went wrong.') }}</div>
+                    <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
+            @endif
+
+            <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+
+                <!-- Nom -->
+                <div class="mb-4">
+                    <label for="name" class="block text-lg font-medium text-gray-100">Nom</label>
+                    <input type="text" name="name" id="name" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('name') }}" required>
+                </div>
+
+                <!-- Apellido -->
+                <div class="mb-4">
+                    <label for="surname" class="block text-lg font-medium text-gray-100">Cognoms</label>
+                    <input type="text" name="surname" id="surname" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('surname') }}" required>
+                </div>
+
+                <!-- Nom de usuario -->
+                <div class="mb-4">
+                    <label for="nom_usuari" class="block text-lg font-medium text-gray-100">Nom d'usuari</label>
+                    <input type="text" name="nom_usuari" id="nom_usuari" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('nom_usuari') }}" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    <label for="email" class="block text-lg font-medium text-gray-100">Correu electrònic</label>
+                    <input type="email" name="email" id="email" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('email') }}" required>
+                </div>
+
+                <!-- Dirección -->
+                <div class="mb-4">
+                    <label for="adreca" class="block text-lg font-medium text-gray-100">Direcció</label>
+                    <input type="text" name="adreca" id="adreca" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('adreca') }}" required>
+                </div>
+
+                <!-- Tarjeta bancaria -->
+                <div class="mb-4">
+                    <label for="targeta_bancaria" class="block text-lg font-medium text-gray-100">Tarjeta bancaria</label>
+                    <input type="text" name="targeta_bancaria" id="targeta_bancaria" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('targeta_bancaria') }}" required>
+                </div>
+
+                <!-- Fecha de nacimiento -->
+                <div class="mb-4">
+                    <label for="data_naixement" class="block text-lg font-medium text-gray-100">Data de naixement</label>
+                    <input type="date" name="data_naixement" id="data_naixement" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            value="{{ old('data_naixement') }}" required>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="mb-4">
+                    <label for="password" class="block text-lg font-medium text-gray-100">Contrasenya</label>
+                    <input type="password" name="password" id="password" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            required>
+                </div>
+
+                <!-- Confirmar contraseña -->
+                <div class="mb-4">
+                    <label for="password_confirmation" class="block text-lg font-medium text-gray-100">Confirmar contrasenya</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            required>
+                </div>
+
+                <!-- Foto de perfil -->
+                <div class="mb-4">
+                    <label for="foto_perfil" class="block text-lg font-medium text-gray-100">Foto de perfil</label>
+                    <input type="file" name="foto_perfil" id="foto_perfil" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
+                </div>
+
+                <!-- Rol -->
+                <div class="mb-4">
+                    <label for="rol_id" class="block text-lg font-medium text-gray-100">Rol</label>
+                    <select name="rol_id" id="rol_id" 
+                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                            required>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id_rol }}" {{ old('rol_id') == $role->id_rol ? 'selected' : '' }}>
+                                {{ $role->nom_rol }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Campo de empresa (solo visible para SuperAdmin) -->
+                @if(Auth::user()->rol == 1)  <!-- Solo SuperAdmins pueden ver este campo -->
+                    <div class="mb-4">
+                        <label for="id_empresa" class="block text-lg font-medium text-gray-100">Empresa</label>
+                        <select name="id_empresa" id="id_empresa" 
+                                class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
+                                required>
+                            @foreach($empresas as $empresa)
+                                <option value="{{ $empresa->id_empresa }}" {{ old('id_empresa') == $empresa->id_empresa ? 'selected' : '' }}>
+                                    {{ $empresa->nom_empresa }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
+                @endif
+
+                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">Crear Usuari</button>
+            </form>                        
         </div>
     </div>
 </x-app-layout>

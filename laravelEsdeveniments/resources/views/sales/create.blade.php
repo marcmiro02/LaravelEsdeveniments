@@ -1,52 +1,62 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear Seients') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form id="seat-form" action="{{ route('sales.store') }}" method="POST">
-                        @csrf
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear Seients</h3>
 
-                        <div class="mb-4">
-                            <label for="nom_sala" class="block text-sm font-medium text-gray-700">Nom Sala</label>
-                            <input type="text" id="nom_sala" name="nom_sala" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="num_files" class="block text-sm font-medium text-gray-700">Número de Files</label>
-                            <input type="number" id="num_files" name="num_files" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="num_columnes" class="block text-sm font-medium text-gray-700">Número de Columnes</label>
-                            <input type="number" id="num_columnes" name="num_columnes" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="preu_estandard" class="block text-sm font-medium text-gray-700">Preu Estàndard</label>
-                            <input type="number" id="preu_estandard" name="preu_estandard" class="mt-1 block w-full text-black" required>
-                        </div>
+            <form id="seat-form" action="{{ route('sales.store') }}" method="POST" class="space-y-6">
+                @csrf
 
-                        <button type="button" id="generate-seats" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generar Seients</button>
-
-                        <div id="seats-container" class="mt-6 grid grid-cols-1 gap-4"></div>
-
-                        <div class="mt-4">
-                            <label for="preu" class="block text-sm font-medium text-gray-700">Preu Seient Seleccionat</label>
-                            <input type="number" id="preu" class="mt-1 block w-full text-black">
-                        </div>
-
-                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 hidden" id="submit-seats">Crear Seients</button>
-                    </form>
+                <div class="mb-4">
+                    <label for="nom_sala" class="block text-lg font-medium text-gray-100">Nom Sala</label>
+                    <input type="text" id="nom_sala" name="nom_sala"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
                 </div>
-            </div>
+                <div class="mb-4">
+                    <label for="num_files" class="block text-lg font-medium text-gray-100">Número de Files</label>
+                    <input type="number" id="num_files" name="num_files"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="num_columnes" class="block text-lg font-medium text-gray-100">Número de Columnes</label>
+                    <input type="number" id="num_columnes" name="num_columnes"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="preu_estandard" class="block text-lg font-medium text-gray-100">Preu Estàndard</label>
+                    <input type="number" id="preu_estandard" name="preu_estandard"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+
+                <button type="button" id="generate-seats"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">Generar
+                    Seients</button>
+
+                <div id="seats-container" class="mt-6 grid grid-cols-1 gap-4"></div>
+
+                <div class="mt-4">
+                    <label for="preu" class="block text-lg font-medium text-gray-100">Preu Seient Seleccionat</label>
+                    <input type="number" id="preu"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300 mt-4 hidden"
+                    id="submit-seats">Crear Seients</button>
+            </form>
+
         </div>
     </div>
 
     <script>
-        document.getElementById('generate-seats').addEventListener('click', function() {
+        document.getElementById('generate-seats').addEventListener('click', function () {
             const numFiles = document.getElementById('num_files').value;
             const numColumnes = document.getElementById('num_columnes').value;
             const preuEstandard = document.getElementById('preu_estandard').value;
@@ -71,7 +81,7 @@
                     seatButton.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
                     seatButton.title = `Fila: ${fila}, Columna: ${columna}, Preu: ${preuEstandard}`;
 
-                    seatButton.addEventListener('click', function(event) {
+                    seatButton.addEventListener('click', function (event) {
                         event.preventDefault();
                         const currentState = parseInt(this.dataset.estatSeient);
                         let nextState = (currentState % 5) + 1; // Cycle through states 1 to 5
@@ -93,7 +103,7 @@
                         this.innerHTML = `<img src="{{ asset('img/seients/') }}/${nextImage}" alt="Seient">`;
                     });
 
-                    seatButton.addEventListener('click', function(event) {
+                    seatButton.addEventListener('click', function (event) {
                         event.preventDefault();
                         const preuSeientInput = document.getElementById('preu');
                         preuSeientInput.value = this.dataset.preu;
@@ -117,7 +127,7 @@
             document.getElementById('submit-seats').classList.remove('hidden');
         });
 
-        document.getElementById('preu').addEventListener('change', function() {
+        document.getElementById('preu').addEventListener('change', function () {
             const fila = this.dataset.fila;
             const columna = this.dataset.columna;
             const newPreu = this.value;
@@ -133,7 +143,7 @@
             }
         });
 
-        document.getElementById('seat-form').addEventListener('submit', function(event) {
+        document.getElementById('seat-form').addEventListener('submit', function (event) {
             const seatsContainer = document.getElementById('seats-container');
             const seatButtons = seatsContainer.querySelectorAll('button.seat');
 
