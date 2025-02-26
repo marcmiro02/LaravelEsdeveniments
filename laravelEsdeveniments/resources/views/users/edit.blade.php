@@ -4,7 +4,7 @@
         <!-- Centered Form Container -->
         <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Editar Usuario</h3>
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Editar Usuari</h3>
 
             <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
@@ -12,7 +12,7 @@
 
                 <!-- Nombre -->
                 <div class="mb-4">
-                    <label for="name" class="block text-lg font-medium text-gray-100">Nombre</label>
+                    <label for="name" class="block text-lg font-medium text-gray-100">Nom</label>
                     <input type="text" name="name" id="name" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->name }}" required>
@@ -20,7 +20,7 @@
 
                 <!-- Apellido -->
                 <div class="mb-4">
-                    <label for="surname" class="block text-lg font-medium text-gray-100">Apellido</label>
+                    <label for="surname" class="block text-lg font-medium text-gray-100">Cognoms</label>
                     <input type="text" name="surname" id="surname" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->surname }}" required>
@@ -28,7 +28,7 @@
 
                 <!-- Nombre de usuario -->
                 <div class="mb-4">
-                    <label for="nom_usuari" class="block text-lg font-medium text-gray-100">Nombre de usuario</label>
+                    <label for="nom_usuari" class="block text-lg font-medium text-gray-100">Nom d'usuari</label>
                     <input type="text" name="nom_usuari" id="nom_usuari" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->nom_usuari }}" required>
@@ -36,7 +36,7 @@
 
                 <!-- Email -->
                 <div class="mb-4">
-                    <label for="email" class="block text-lg font-medium text-gray-100">Correo electrónico</label>
+                    <label for="email" class="block text-lg font-medium text-gray-100">E-mail</label>
                     <input type="email" name="email" id="email" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->email }}" required>
@@ -44,23 +44,15 @@
 
                 <!-- Dirección -->
                 <div class="mb-4">
-                    <label for="adreca" class="block text-lg font-medium text-gray-100">Dirección</label>
+                    <label for="adreca" class="block text-lg font-medium text-gray-100">Adreça</label>
                     <input type="text" name="adreca" id="adreca" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->adreca }}" required>
                 </div>
 
-                <!-- Tarjeta bancaria -->
-                <div class="mb-4">
-                    <label for="targeta_bancaria" class="block text-lg font-medium text-gray-100">Tarjeta bancaria</label>
-                    <input type="text" name="targeta_bancaria" id="targeta_bancaria" 
-                           class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
-                           value="{{ $user->targeta_bancaria }}" required>
-                </div>
-
                 <!-- Fecha de nacimiento -->
                 <div class="mb-4">
-                    <label for="data_naixement" class="block text-lg font-medium text-gray-100">Fecha de nacimiento</label>
+                    <label for="data_naixement" class="block text-lg font-medium text-gray-100">Data Naixement</label>
                     <input type="date" name="data_naixement" id="data_naixement" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                            value="{{ $user->data_naixement }}" required>
@@ -68,14 +60,14 @@
 
                 <!-- Contraseña -->
                 <div class="mb-4">
-                    <label for="password" class="block text-lg font-medium text-gray-100">Contraseña</label>
+                    <label for="password" class="block text-lg font-medium text-gray-100">Contrasenya</label>
                     <input type="password" name="password" id="password" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
                 </div>
 
                 <!-- Confirmar contraseña -->
                 <div class="mb-4">
-                    <label for="password_confirmation" class="block text-lg font-medium text-gray-100">Confirmar contraseña</label>
+                    <label for="password_confirmation" class="block text-lg font-medium text-gray-100">Confirmar contrasenya</label>
                     <input type="password" name="password_confirmation" id="password_confirmation" 
                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white">
                 </div>
@@ -119,7 +111,7 @@
                     <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
                 @endif
 
-                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">Actualizar Usuario</button>
+                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">Actualitzar Usuari</button>
             </form>
         </div>
     </div>

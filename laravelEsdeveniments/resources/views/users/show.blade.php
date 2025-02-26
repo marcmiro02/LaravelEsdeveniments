@@ -1,48 +1,37 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Ver Usuario') }}
-        </h2>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="mb-4">Detalles del Usuario</h1>
+                    <h1 class="mb-4">Detalls Usuari</h1>
 
                     <div class="mb-4">
-                        <label class="form-label">Nombre:</label>
+                        <label class="form-label">Nom:</label>
                         <p>{{ $user->name }}</p>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Apellido:</label>
+                        <label class="form-label">Cognoms:</label>
                         <p>{{ $user->surname }}</p>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Nombre de usuario:</label>
+                        <label class="form-label">Nom usuari:</label>
                         <p>{{ $user->nom_usuari }}</p>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Correo electrónico:</label>
+                        <label class="form-label">E-mail:</label>
                         <p>{{ $user->email }}</p>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Dirección:</label>
+                        <label class="form-label">Adreça:</label>
                         <p>{{ $user->adreca }}</p>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Tarjeta bancaria:</label>
-                        <p>{{ $user->targeta_bancaria }}</p>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Fecha de nacimiento:</label>
+                        <label class="form-label">Data naixement:</label>
                         <p>{{ $user->data_naixement }}</p>
                     </div>
 
