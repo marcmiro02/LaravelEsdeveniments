@@ -14,7 +14,7 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales = Sales::all();
+        $sales = Sales::where('id_empresa', Auth::user()->id_empresa)->get();
         return view('sales.index', compact('sales'));
     }
 
