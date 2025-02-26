@@ -1,40 +1,52 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear QR') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('qrs.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-4">
-                            <label for="codi_qr" class="block text-sm font-medium text-gray-700">Codi QR</label>
-                            <input type="text" name="codi_qr" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="data_generacio" class="block text-sm font-medium text-gray-700">Data Generació</label>
-                            <input type="date" name="data_generacio" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="data_expiracio" class="block text-sm font-medium text-gray-700">Data Expiració</label>
-                            <input type="date" name="data_expiracio" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700">Esdeveniment</label>
-                            <input type="number" name="id_esdeveniment" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="id_usuari" class="block text-sm font-medium text-gray-700">Usuari</label>
-                            <input type="number" name="id_usuari" class="mt-1 block w-full text-black" required>
-                        </div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear</button>
-                    </form>
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear QR</h3>
+
+
+            <form action="{{ route('qrs.store') }}" method="POST" class="space-y-6">
+                @csrf
+                <div class="mb-4">
+                    <label for="codi_qr" class="block text-lg font-medium text-gray-100">Codi QR</label>
+                    <input type="text" name="codi_qr"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
                 </div>
-            </div>
+                <div class="mb-4">
+                    <label for="data_generacio" class="block text-lg font-medium text-gray-100">Data
+                        Generació</label>
+                    <input type="date" name="data_generacio"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="data_expiracio" class="block text-lg font-medium text-gray-100">Data
+                        Expiració</label>
+                    <input type="date" name="data_expiracio"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="id_esdeveniment" class="block text-lg font-medium text-gray-100">Esdeveniment</label>
+                    <input type="number" name="id_esdeveniment"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="id_usuari" class="block text-lg font-medium text-gray-100">Usuari</label>
+                    <input type="number" name="id_usuari"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
+                </div>
+                <button type="submit"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3  rounded-lg transition-colors duration-300">Crear</button>
+            </form>
+
         </div>
+    </div>
     </div>
 </x-app-layout>

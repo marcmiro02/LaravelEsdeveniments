@@ -1,26 +1,29 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Crear Estat del Seient') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Form Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{ route('estat_seients.store') }}" method="POST">
-                        @csrf
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Crear Estat del Seient</h3>
 
-                        <div class="mb-4">
-                            <label for="nom_estat_seient" class="block text-sm font-medium text-gray-700">Nom de l'Estat del Seient</label>
-                            <input type="text" id="nom_estat_seient" name="nom_estat_seient" class="mt-1 block w-full text-black" required>
-                        </div>
 
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Estat del Seient</button>
-                    </form>
+            <form action="{{ route('estat_seients.store') }}" method="POST" class="space-y-6">
+                @csrf
+
+                <div class="mb-4">
+                    <label for="nom_estat_seient" class="block text-lg font-medium text-gray-100">Nom de l'Estat del
+                        Seient</label>
+                    <input type="text" id="nom_estat_seient" name="nom_estat_seient"
+                        class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white"
+                        required>
                 </div>
-            </div>
+
+                <button type="submit"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-colors duration-300">
+                    Crear Estat del Seient
+                </button>
+            </form>
         </div>
     </div>
 </x-app-layout>
