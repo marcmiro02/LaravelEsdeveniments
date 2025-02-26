@@ -113,7 +113,7 @@
                             <input type="hidden" name="id_empresa" value="{{ Auth::user()->id_empresa }}">
                         @endif
 
-                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                        <button type="submit" class="btn btn-primary">Crear Usuari</button>
                     </form>
                 </div>
             </div>

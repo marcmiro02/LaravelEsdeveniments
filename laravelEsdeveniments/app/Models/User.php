@@ -22,7 +22,7 @@ class User extends Authenticatable
         'data_naixement',
         'password',
         'foto_perfil',  // Solo guardaremos la ruta de la imagen
-        'rol_id',
+        'rol',
         'id_empresa',
     ];
 

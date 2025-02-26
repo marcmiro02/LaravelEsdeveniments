@@ -50,6 +50,14 @@ class UsersController extends Controller
     
             return view('users.index', compact('users', 'empresaId'));
         }
+
+        if (Auth::user()->can('isUser')) {
+            $users = User::with(['role'])
+                ->where('id', Auth::id())
+                ->get();
+    
+            return view('users.index', compact('users'));
+        }
     
         return redirect()->route('inici')->with('error', 'No tienes permisos para acceder a esta página.');
     }
