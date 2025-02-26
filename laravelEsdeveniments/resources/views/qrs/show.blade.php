@@ -1,20 +1,57 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Detalls del QR') }}
-        </h2>
-    </x-slot>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Details Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-md w-full text-gray-100">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-black">Codi QR: {{ $qr->codi_qr }}</h3>
-                    <p class="text-black"><strong>Data Generació:</strong> {{ $qr->data_generacio }}</p>
-                    <p class="text-black"><strong>Data Expiració:</strong> {{ $qr->data_expiracio }}</p>
-                    <p class="text-black"><strong>Esdeveniment:</strong> {{ $qr->id_esdeveniment }}</p>
-                    <p class="text-black"><strong>Usuari:</strong> {{ $qr->id_usuari }}</p>
-                </div>
+            <!-- Title -->
+            <h3 class="text-3xl font-bold text-rose-600 mb-6 text-center">Detalls del QR</h3>
+
+            <!-- QR Details -->
+            <div class="mb-6">
+                <strong class="block text-lg font-medium text-gray-100 mb-2">Codi QR:</strong>
+                <p class="text-xl font-semibold text-white">{{ $qr->codi_qr }}</p>
+            </div>
+            <div class="mb-6">
+                <strong class="block text-lg font-medium text-gray-100 mb-2">Data Generació:</strong>
+                <p class="text-xl font-semibold text-white">{{ $qr->data_generacio }}</p>
+            </div>
+            <div class="mb-6">
+                <strong class="block text-lg font-medium text-gray-100 mb-2">Data Expiració:</strong>
+                <p class="text-xl font-semibold text-white">{{ $qr->data_expiracio }}</p>
+            </div>
+            <div class="mb-6">
+                <strong class="block text-lg font-medium text-gray-100 mb-2">Esdeveniment:</strong>
+                <p class="text-xl font-semibold text-white">{{ $qr->id_esdeveniment }}</p>
+            </div>
+            <div class="mb-6">
+                <strong class="block text-lg font-medium text-gray-100 mb-2">Usuari:</strong>
+                <p class="text-xl font-semibold text-white">{{ $qr->id_usuari }}</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-center space-x-4">
+                <!-- Edit Button -->
+                <a href="{{ route('qrs.edit', $qr->id_qr) }}" 
+                   class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Editar
+                </a>
+
+                <!-- Delete Button -->
+                <form action="{{ route('qrs.destroy', $qr->id_qr) }}" method="POST" class="inline-block">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" 
+                            class="inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Eliminar
+                    </button>
+                </form>
             </div>
         </div>
     </div>
