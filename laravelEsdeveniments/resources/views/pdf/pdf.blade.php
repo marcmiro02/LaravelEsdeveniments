@@ -53,9 +53,8 @@
             margin-bottom: 20px;
         }
         .event-logo img {
-            width: 100%;
-            height: auto;
-            max-width: 250px;
+            width: auto;
+            height: 230px;
             border-radius: 10px;
         }
         .event-details {

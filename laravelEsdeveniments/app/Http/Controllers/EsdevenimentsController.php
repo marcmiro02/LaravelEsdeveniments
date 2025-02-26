@@ -16,7 +16,7 @@ class EsdevenimentsController extends Controller
 {
     public function index()
     {
-        $esdeveniments = Esdeveniments::all(); // Todos los eventos
+        $esdeveniments = Esdeveniments::where('id_empresa', Auth::user()->id_empresa)->get();
         return view('esdeveniments.index', compact('esdeveniments'));
     }
 
