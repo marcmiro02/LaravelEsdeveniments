@@ -36,7 +36,6 @@ class RegisteredUserController extends Controller
             'nom_usuari' => ['required', 'string', 'max:255', 'unique:users,nom_usuari'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'adreca' => ['required', 'string', 'max:255'],
-            'targeta_bancaria' => ['required', 'string', 'max:255'],
             'data_naixement' => ['required', 'date'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
@@ -50,19 +49,16 @@ class RegisteredUserController extends Controller
                 'nom_usuari' => $request->nom_usuari,
                 'email' => $request->email,
                 'adreca' => $request->adreca,
-                'targeta_bancaria' => $request->targeta_bancaria,
                 'data_naixement' => $request->data_naixement,
                 'password' => Hash::make($request->password),
                 'rol' => 5,
             ]);
         
             if ($request->hasFile('foto_perfil')) {
-                $image = $request->file('foto_perfil');
-                $imageName = $user->id . '_' . $user->name . '_' . $user->surname . '.' . $image->getClientOriginalExtension();
-                $imagePath = '/resources/img/avatars/' . $imageName;
-                $image->move(base_path('../resources/img/avatars'), $imageName);
-                $user->update(['foto_perfil' => $imagePath]);
-            }
+                $fotoPerfil = $request->file('foto_perfil');
+                $fotoPerfilBase64 = base64_encode(file_get_contents($fotoPerfil));
+                $user->foto_perfil = $fotoPerfilBase64;
+            }                       
         
             Auth::login($user);
         

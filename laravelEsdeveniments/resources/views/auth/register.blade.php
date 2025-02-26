@@ -43,13 +43,6 @@
             <x-input-error :messages="$errors->get('adreca')" class="mt-2" />
         </div>
 
-        <!-- Bank Card -->
-        <div class="mt-4">
-            <x-input-label for="targeta_bancaria" :value="__('Bank Card')" />
-            <x-text-input id="targeta_bancaria" class="block mt-1 w-full" type="text" name="targeta_bancaria" :value="old('targeta_bancaria')" required autocomplete="cc-number" />
-            <x-input-error :messages="$errors->get('targeta_bancaria')" class="mt-2" />
-        </div>
-
         <!-- Date of Birth -->
         <div class="mt-4">
             <x-input-label for="data_naixement" :value="__('Date of Birth')" />
