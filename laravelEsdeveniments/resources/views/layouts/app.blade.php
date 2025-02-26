@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +22,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
+
+<body class="font-sans antialiased bg-dark">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
@@ -39,5 +41,20 @@
             {{ $slot ?? '' }}
         </main>
     </div>
+    
 </body>
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-100 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm">&copy; {{ date('Y') }} DAM EVENTS (Aleix P - Marc M - Marc S). All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://policies.google.com/privacy?hl=en" class="text-gray-400 hover:text-gray-200">Privacy Policy</a>
+                    <a href="https://policies.google.com/terms?hl=en-US" class="text-gray-400 hover:text-gray-200">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </html>
