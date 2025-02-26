@@ -18,7 +18,6 @@ class User extends Authenticatable
         'nom_usuari',
         'email',
         'adreca',
-        'targeta_bancaria',
         'data_naixement',
         'password',
         'foto_perfil',  // Solo guardaremos la ruta de la imagen
