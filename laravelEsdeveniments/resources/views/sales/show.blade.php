@@ -16,19 +16,22 @@
                         <span class="text-sm text-rose-600">Triar Seient</span>
                     </div>
                     <div class="text-center">
-                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
                             <i class="fa-solid fa-clapperboard text-2xl"></i>
                         </div>
                         <span class="text-sm text-gray-500 dark:text-gray-400">Triar Entrada</span>
                     </div>
                     <div class="text-center">
-                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
                             <i class="fa-solid fa-clapperboard text-2xl"></i>
                         </div>
                         <span class="text-sm text-gray-500 dark:text-gray-400">Resum de la compra</span>
                     </div>
                     <div class="text-center">
-                        <div class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full flex items-center justify-center">
                             <i class="fa-solid fa-clapperboard text-2xl"></i>
                         </div>
                         <span class="text-sm text-gray-500 dark:text-gray-400">Pagament</span>
@@ -63,47 +66,43 @@
 
             <!-- Selección de asientos -->
             @foreach($seients as $fila => $seientsFila)
-                <div class="flex justify-center mb-4">
-                    <div class="text-center text-rose-600 font-bold mr-4">{{ $fila }}</div>
-                    @foreach($seientsFila as $seient)
-                        @php
-                            $isOccupied = collect($asientosReservados)->contains(function ($asiento) use ($seient) {
-                                return $asiento['fila'] == $seient->fila && $asiento['columna'] == $seient->columna;
-                            });
-                            // Si el asiento está ocupado, forzamos a que se vea como "No disponible"
-                            if ($isOccupied) {
-                                $seient->estat_seient = 7; // Seient_nd (No disponible)
-                            }
-                        @endphp
-                        <div class="relative mx-1">
-                            <button 
-                                class="seat @if($seient->estat_seient == 1) Seient_d 
-                                    @elseif($seient->estat_seient == 2) Cadira_rodes_d 
-                                    @elseif($seient->estat_seient == 3) Acompanyant_d 
-                                    @elseif($seient->estat_seient == 4) Seient_b 
-                                    @elseif($seient->estat_seient == 5) invisible 
-                                    @elseif($seient->estat_seient == 6) Seient_s 
-                                    @elseif($seient->estat_seient == 7) Seient_nd 
-                                    @elseif($isOccupied) Seient_b @endif"
-                                data-seient-id="{{ $seient->id_seient }}"
-                                data-preu="{{ $seient->preu }}"
-                                data-fila="{{ $seient->fila }}"
-                                data-columna="{{ $seient->columna }}"
-                                @if($isOccupied) disabled @endif
-                            >
-                                @if($seient->estat_seient != 5)
-                                    <img src="{{ asset('img/seients/' . 
-                                        ($seient->estat_seient == 1 ? 'Seient_d.png' : 
-                                        ($seient->estat_seient == 2 ? 'Cadira_rodes_d.png' : 
-                                        ($seient->estat_seient == 3 ? 'Acompanyant_d.png' : 
-                                        ($seient->estat_seient == 4 ? 'Seient_b.png' : 
-                                        ($seient->estat_seient == 6 ? 'Seient_s.png' : 
-                                        ($seient->estat_seient == 7 ? 'Seient_nd.png' : 'Seient_d.png'))))))) }}" alt="Seient">
-                                @endif
-                            </button>
-                        </div>
-                    @endforeach
-                </div>
+                    <div class="flex justify-center mb-4">
+                        <div class="text-center text-rose-600 font-bold mr-4">{{ $fila }}</div>
+                        @foreach($seientsFila as $seient)
+                                    @php
+                                        $isOccupied = collect($asientosReservados)->contains(function ($asiento) use ($seient) {
+                                            return $asiento['fila'] == $seient->fila && $asiento['columna'] == $seient->columna;
+                                        });
+                                        // Si el asiento está ocupado, forzamos a que se vea como "No disponible"
+                                        if ($isOccupied) {
+                                            $seient->estat_seient = 7; // Seient_nd (No disponible)
+                                        }
+                                    @endphp
+                                    <div class="relative mx-1">
+                                        <button class="seat @if($seient->estat_seient == 1) Seient_d 
+                                        @elseif($seient->estat_seient == 2) Cadira_rodes_d 
+                                        @elseif($seient->estat_seient == 3) Acompanyant_d 
+                                        @elseif($seient->estat_seient == 4) Seient_b 
+                                        @elseif($seient->estat_seient == 5) invisible 
+                                        @elseif($seient->estat_seient == 6) Seient_s 
+                                        @elseif($seient->estat_seient == 7) Seient_nd 
+                                        @elseif($isOccupied) Seient_b @endif" data-seient-id="{{ $seient->id_seient }}"
+                                            data-preu="{{ $seient->preu }}" data-fila="{{ $seient->fila }}"
+                                            data-columna="{{ $seient->columna }}" @if($isOccupied) disabled @endif>
+                                            @if($seient->estat_seient != 5)
+                                                        <img src="{{ asset('img/seients/' .
+                                                ($seient->estat_seient == 1 ? 'Seient_d.png' :
+                                                    ($seient->estat_seient == 2 ? 'Cadira_rodes_d.png' :
+                                                        ($seient->estat_seient == 3 ? 'Acompanyant_d.png' :
+                                                            ($seient->estat_seient == 4 ? 'Seient_b.png' :
+                                                                ($seient->estat_seient == 6 ? 'Seient_s.png' :
+                                                                    ($seient->estat_seient == 7 ? 'Seient_nd.png' : 'Seient_d.png'))))))) }}"
+                                                            alt="Seient">
+                                            @endif
+                                        </button>
+                                    </div>
+                        @endforeach
+                    </div>
             @endforeach
 
             <!-- Información de asientos seleccionados -->
@@ -144,10 +143,24 @@
 
                     if (this.classList.contains('selected')) {
                         selectedSeats.push({ seientId, preu, fila, columna });
-                        this.innerHTML = `<img src="{{ asset('img/seients/Seient_s.png') }}" alt="Seleccionat">`;
+
+                        if (this.classList.contains('Cadira_rodes_d')) {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Cadira_rodes_s.png') }}" alt="Seleccionat">`;
+                        } else if (this.classList.contains('Acompanyant_d')) {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Acompanyant_s.png') }}" alt="Seleccionat">`;
+                        } else {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Seient_s.png') }}" alt="Seleccionat">`;
+                        }
                     } else {
                         selectedSeats = selectedSeats.filter(seat => seat.seientId !== seientId);
-                        this.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
+
+                        if (this.classList.contains('Cadira_rodes_d')) {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Cadira_rodes_d.png') }}" alt="Cadira de rodes">`;
+                        } else if (this.classList.contains('Acompanyant_d')) {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Acompanyant_d.png') }}" alt="Acompanyant">`;
+                        } else {
+                            this.innerHTML = `<img src="{{ asset('img/seients/Seient_d.png') }}" alt="Seient">`;
+                        }
                     }
 
                     if (selectedSeats.length > 0) {

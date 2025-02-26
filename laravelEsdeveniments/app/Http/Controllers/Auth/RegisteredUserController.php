@@ -51,6 +51,7 @@ class RegisteredUserController extends Controller
                 'adreca' => $request->adreca,
                 'data_naixement' => $request->data_naixement,
                 'password' => Hash::make($request->password),
+                'rol' => 5,
             ]);
         
             if ($request->hasFile('foto_perfil')) {
