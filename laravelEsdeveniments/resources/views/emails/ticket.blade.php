@@ -1,5 +1,4 @@
 <!-- resources/views/emails/ticket.blade.php -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

@@ -53,15 +53,17 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'rol' => 5,
             ]);
-        
+
             if ($request->hasFile('foto_perfil')) {
                 $fotoPerfil = $request->file('foto_perfil');
+                // Obtén el contenido del archivo y codifícalo en base64
                 $fotoPerfilBase64 = base64_encode(file_get_contents($fotoPerfil));
-                $user->foto_perfil = $fotoPerfilBase64;
-            }                       
-        
+                // Guarda la cadena Base64 en la base de datos
+                $user->update(['foto_perfil' => $fotoPerfilBase64]);
+            }
+
             Auth::login($user);
-        
+
             return redirect(route('inici'));
         } catch (\Exception $e) {
             Log::error('Error during registration: ' . $e->getMessage());

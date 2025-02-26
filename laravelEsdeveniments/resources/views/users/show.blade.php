@@ -8,7 +8,7 @@
                     <div class="mb-4">
                         <label class="form-label">Nom:</label>
                         <p>{{ $user->name }}</p>
-                    </div>
+          a         </div>
 
                     <div class="mb-4">
                         <label class="form-label">Cognoms:</label>
