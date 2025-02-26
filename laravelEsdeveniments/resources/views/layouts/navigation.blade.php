@@ -16,12 +16,12 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                        {{ __('Welcome') }}
+                        {{ __('INICI') }}
                     </x-nav-link>
                 </div>
 
                 <!-- Esdeveniments Dropdown -->
-                @can('isSuperadmin')
+                @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
@@ -49,9 +49,6 @@
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('qrs.index')">
                                 {{ __('QR') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('codis_promocionals.index')">
-                                {{ __('Codis Promocionals') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
@@ -205,24 +202,27 @@
                         });
                     });
                 </script>
-
+                @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('pdf.index')" :active="request()->routeIs('pdf.index')">
-                        {{ __('TEST QR') }}
+                        {{ __('GENERAR ENTRADA') }}
                     </x-nav-link>
                 </div>
-
+                @endcan
+                @can('isAdmin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('pdf.indexValidar')" :active="request()->routeIs('pdf.indexValidar')">
-                        {{ __('VALIDAR QR') }}
+                        {{ __('VALIDAR ENTRADA') }}
                     </x-nav-link>
                 </div>
-
+                @endcan
+                @can('isUser')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('historial.index')" :active="request()->routeIs('historial.index')">
                         {{ __('HISTORIAL') }}
                     </x-nav-link>
                 </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->
