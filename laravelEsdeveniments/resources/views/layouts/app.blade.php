@@ -21,6 +21,12 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .uniform-margin {
+            margin: 20px;
+            /* Pots ajustar aquest valor segons les teves necessitats */
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased bg-black">

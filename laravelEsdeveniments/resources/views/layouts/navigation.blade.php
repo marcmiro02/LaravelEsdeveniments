@@ -14,7 +14,7 @@
                 </div>
                 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-20 sm:60px sm:ms-10 sm:flex">
+                <div class="hidden space-x-20 sm:60px sm:ms-10 sm:flex uniform-margin">
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         {{ __('INICI') }}
                     </x-nav-link>
@@ -22,10 +22,10 @@
                 
                 <!-- Esdeveniments Dropdown -->
                 @can('isAdmin')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 1.5rem;">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 0.9rem;">
                                 <div>{{ __('Esdeveniments') }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -57,7 +57,7 @@
                 
                 <!-- Sales Dropdown -->
                 @can('isAdmin')                
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')">
                         {{ __('Sales') }}
                     </x-nav-link>
@@ -66,7 +66,7 @@
                 
                 <!-- Sales Dropdown -->
                 @can('isSuperadmin')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 0.9rem;">
@@ -91,7 +91,7 @@
                 @endcan
                 @can('isSuperadmin')
                 <!-- Usuaris Dropdown -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-900 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150" style="padding-top: 0.9rem;">
@@ -119,7 +119,7 @@
                 @endcan
 
                 <!-- Barra de Búsqueda -->
-                <div class="flex-grow flex items-center justify-center relative">
+                <div class="flex-grow flex items-center justify-center relative uniform-margin">
                     <div class="relative w-full max-w-2xl">
                         <input type="text" id="search-input" placeholder="Buscar..." class="w-full px-6 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-500 focus:outline-none">
                         <svg class="absolute right-4 top-2.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -203,20 +203,20 @@
                     });
                 </script>
                 @can('isAdmin')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-nav-link :href="route('pdf.index')" :active="request()->routeIs('pdf.index')">
                         {{ __('GENERAR ENTRADA') }}
                     </x-nav-link>
                 </div>
                 @endcan
                 @can('isAdmin')
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-nav-link :href="route('pdf.indexValidar')" :active="request()->routeIs('pdf.indexValidar')">
                         {{ __('VALIDAR ENTRADA') }}
                     </x-nav-link>
                 </div>
                 @endcan
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uniform-margin">
                     <x-nav-link :href="route('historial.index')" :active="request()->routeIs('historial.index')">
                         {{ __('HISTORIAL') }}
                     </x-nav-link>

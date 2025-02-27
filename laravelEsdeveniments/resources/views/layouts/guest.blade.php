@@ -21,9 +21,15 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .uniform-margin {
+            margin: 20px;
+            /* Pots ajustar aquest valor segons les teves necessitats */
+        }
+    </style>
 </head>
 
-<body class="font-sans antialiased bg-dark">
+<body class="font-sans antialiased bg-black">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
@@ -35,26 +41,30 @@
                 </div>
             </header>
         @endisset
-
         <!-- Page Content -->
         <main>
             {{ $slot ?? '' }}
         </main>
     </div>
-    
+
 </body>
+<br><br><br>
 <!-- Footer -->
 <footer class="bg-gray-900 text-gray-100 py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm">&copy; {{ date('Y') }} DAM EVENTS (Aleix P - Marc M - Marc S). All rights reserved.</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="https://policies.google.com/privacy?hl=en" class="text-gray-400 hover:text-gray-200">Privacy Policy</a>
-                    <a href="https://policies.google.com/terms?hl=en-US" class="text-gray-400 hover:text-gray-200">Terms of Service</a>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <p class="text-sm">&copy; {{ date('Y') }} DAM EVENTS (Aleix P - Marc M - Marc S). All rights reserved.
+                </p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="https://policies.google.com/privacy?hl=en" class="text-gray-400 hover:text-gray-200">Privacy
+                    Policy</a>
+                <a href="https://policies.google.com/terms?hl=en-US" class="text-gray-400 hover:text-gray-200">Terms of
+                    Service</a>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
 </html>
