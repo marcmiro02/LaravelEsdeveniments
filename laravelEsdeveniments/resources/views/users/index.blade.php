@@ -9,7 +9,7 @@
                 <h3 class="text-3xl font-bold text-rose-600">{{ __('Listado de Usuarios') }}</h3>
                 <a href="{{ route('users.create') }}" 
                    class="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                    <span class="mr-2">👤</span> Añadir Usuario
+                    <span class="mr-2">👤</span> Afegir Usuari
                 </a>
             </div>
 
@@ -17,10 +17,10 @@
                 <form method="GET" action="{{ route('users.index') }}" class="mb-6">
                     <div class="flex items-center space-x-4">
                         <label for="empresa_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                            Filtrar por Empresa:
+                            Filtrar per Empresa:
                         </label>
                         <select name="empresa_id" id="empresa_id" class="form-control rounded border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            <option value="">Todas las Empresas</option>
+                            <option value="">Totes les empreses</option>
                             @foreach($empresas as $empresa)
                                 <option value="{{ $empresa->id_empresa }}" 
                                     {{ $empresaId == $empresa->id_empresa ? 'selected' : '' }}>

@@ -56,7 +56,7 @@
 
                     <!-- Mensaje si ya se generó la entrada -->
                     <div class="text-center text-gray-500">
-                        <p>Ya has generado tu entrada. No es posible generarla nuevamente.</p>
+                        <p>Ja has generat l'entrada, no la pots tornar a generar.</p>
                     </div>
                 @endif
 

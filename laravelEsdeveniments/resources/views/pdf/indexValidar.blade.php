@@ -1,30 +1,32 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Selecciona un Esdeveniment') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-black-900 dark:text-white-100">
-                <form action="{{ route('pdf.validarEntrada') }}" method="POST">
-                    @csrf
-                    <div class="mb-4">
-                        <label for="id_esdeveniment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Esdeveniment:
-                        </label>
-                        <select name="id_esdeveniment" id="id_esdeveniment" class="form-control mt-1 block w-full">
-                            @foreach ($esdeveniments as $esdeveniment)
-                                <option value="{{ $esdeveniment->id_esdeveniment }}">{{ $esdeveniment->nom }}</option>
-                            @endforeach
-                        </select>
+    <!-- Fullscreen Black Background -->
+    <div class="min-h-screen bg-black flex items-center justify-center">
+        <!-- Centered Container -->
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
+            <div class="py-12">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border-2 border-pink-600">
+                        <div class="p-6 text-gray-100">
+                            <form action="{{ route('pdf.validarEntrada') }}" method="POST">
+                                @csrf
+                                <div class="mb-6">
+                                    <label for="id_esdeveniment" class="block text-sm font-medium text-pink-400">
+                                        Esdeveniment:
+                                    </label>
+                                    <select name="id_esdeveniment" id="id_esdeveniment" class="mt-1 block w-full bg-gray-700 border border-pink-600 text-pink-100 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm py-2 px-3">
+                                        @foreach ($esdeveniments as $esdeveniment)
+                                            <option value="{{ $esdeveniment->id_esdeveniment }}" class="bg-gray-800">{{ $esdeveniment->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-lg transition-colors transform hover:scale-105">
+                                        CONFIRMAR
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        CONFIRMAR
-                    </button>
-                </form>
                 </div>
             </div>
         </div>

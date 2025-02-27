@@ -213,8 +213,8 @@ class PdfController extends Controller
 
     public function indexValidar()
     {
-        // Obtener los eventos disponibles
-        $esdeveniments = Esdeveniments::all();
+        $empresaId = Auth::user()->id_empresa;
+        $esdeveniments = Esdeveniments::where('id_empresa', $empresaId)->get();
 
         // Pasar los eventos a la vista
         return view('pdf.indexValidar', compact('esdeveniments'));

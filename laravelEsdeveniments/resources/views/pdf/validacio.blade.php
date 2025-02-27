@@ -3,13 +3,6 @@
     <div class="min-h-screen bg-black flex items-center justify-center">
         <!-- Centered Table Container -->
         <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-7xl w-full sm:px-6 lg:px-8 text-gray-100">
-
-            <x-slot name="header">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('Validar QR') }}
-                </h2>
-            </x-slot>
-
             <div class="py-12">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -28,7 +21,7 @@
                             <!-- Botón para volver a escanear -->
                             <div id="retryButtonContainer" class="text-center mt-4" style="display: none;">
                                 <button id="retryButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                                    Volver a Escanear
+                                    Tornar a escanejar
                                 </button>
                             </div>
                         </div>
@@ -81,7 +74,7 @@
 
                     // Detener el escáner antes de validar el QR
                     html5QrCode.stop().then(() => {
-                        console.log("Enviando código QR al servidor:", codigoQrFinal);
+                        console.log("Enviant codi QR al servidor:", codigoQrFinal);
 
                         // Llama al servidor para validar el QR
                         fetch("{{ route('pdf.validarQr') }}", {
@@ -112,14 +105,14 @@
                         })
                         .catch(error => {
                             console.error("Error al validar el QR:", error);
-                            scanResult.textContent = "Hubo un error al validar el QR.";
+                            scanResult.textContent = "Error al validar el QR.";
                             scanResult.style.color = "red";
                             // Mostrar el botón para volver a escanear
                             retryButtonContainer.style.display = "block";
                         });
                     }).catch(err => {
                         console.error("Error al detener el lector QR:", err);
-                        scanResult.textContent = "Hubo un error al detener el lector QR.";
+                        scanResult.textContent = "Error amb el lector del QR.";
                         scanResult.style.color = "red";
                         // Mostrar el botón para volver a escanear
                         retryButtonContainer.style.display = "block";

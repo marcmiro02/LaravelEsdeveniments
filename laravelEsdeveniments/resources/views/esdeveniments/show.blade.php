@@ -44,7 +44,7 @@
                     <div class="space-y-8 text-gray-100">
                         <!-- Metadata -->
                         <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Información Técnica</h3>
+                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Informació Tècnica</h3>
                             <ul class="space-y-2">
                                 <li class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600 mr-2" fill="none"
@@ -75,7 +75,7 @@
 
                         <!-- Cast -->
                         <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Reparto</h3>
+                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Actors</h3>
                             <p class="text-lg">{{ $esdeveniment->actors }}</p>
                             <h3 class="text-2xl font-bold text-rose-600 mt-6">Director</h3>
                             <p class="text-lg">{{ $esdeveniment->director }}</p>
@@ -84,7 +84,7 @@
                         <!-- Trailer -->
                         @if($esdeveniment->trailer)
                             <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-                                <h3 class="text-2xl font-bold text-rose-600 mb-4">Tráiler</h3>
+                                <h3 class="text-2xl font-bold text-rose-600 mb-4">Tràiler</h3>
                                 <div class="mt-4">
                                     <a href="{{ $esdeveniment->trailer }}" target="_blank"
                                         class="inline-flex items-center px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">
@@ -113,7 +113,7 @@
                     <div class="space-y-8 text-gray-100">
                         <!-- Metadata -->
                         <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Información Técnica</h3>
+                            <h3 class="text-2xl font-bold text-rose-600 mb-4">Informació Tècnica</h3>
                             <ul class="space-y-2">
                                 <li class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600 mr-2" fill="none"
@@ -142,7 +142,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="bg-black dark:bg-black rounded-lg shadow-lg overflow-hidden">
                 <div class="p-8 text-gray-100">
-                    <h3 class="text-3xl font-bold text-rose-600 mb-6">Horarios Disponibles</h3>
+                    <h3 class="text-3xl font-bold text-rose-600 mb-6">Horaris Disponibles</h3>
                     @if ($esdeveniment->horaris && $esdeveniment->horaris->count() > 0)
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             @foreach ($esdeveniment->horaris->sortBy('data_hora') as $horari)
@@ -160,7 +160,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-center text-gray-400 py-8">No hay horarios disponibles para este evento.</p>
+                        <p class="text-center text-gray-400 py-8">No hi ha horaris disponibles.</p>
                     @endif
                 </div>
             </div>
