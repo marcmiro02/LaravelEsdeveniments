@@ -6,7 +6,7 @@
 
             <!-- Title and Actions -->
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-3xl font-bold text-rose-600">{{ __('Listado de Usuarios') }}</h3>
+                <h3 class="text-3xl font-bold text-rose-600">{{ __('Listat Usuaris') }}</h3>
                 <a href="{{ route('users.create') }}" 
                    class="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
                     <span class="mr-2">👤</span> Afegir Usuari
@@ -38,17 +38,17 @@
 
             <!-- Table -->
             @if ($users->isEmpty())
-                <p class="text-center text-lg text-gray-400">No se han encontrado usuarios.</p>
+                <p class="text-center text-lg text-gray-400">No hi ha usuaris.</p>
             @else
                 <table class="w-full table-auto text-left">
                     <thead>
                         <tr class="border-b border-gray-700">
                             <th class="px-4 py-2 text-lg font-medium">Foto</th>
-                            <th class="px-4 py-2 text-lg font-medium">Nombre</th>
+                            <th class="px-4 py-2 text-lg font-medium">Nom</th>
                             <th class="px-4 py-2 text-lg font-medium">Rol</th>
                             <th class="px-4 py-2 text-lg font-medium">Empresa</th>
                             <th class="px-4 py-2 text-lg font-medium">ID</th>
-                            <th class="px-4 py-2 text-lg font-medium">Acciones</th>
+                            <th class="px-4 py-2 text-lg font-medium">Accions</th>
                         </tr>
                     </thead>
                     <tbody>

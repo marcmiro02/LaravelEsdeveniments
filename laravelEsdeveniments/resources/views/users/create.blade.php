@@ -60,14 +60,6 @@
                             value="{{ old('adreca') }}" required>
                 </div>
 
-                <!-- Tarjeta bancaria -->
-                <div class="mb-4">
-                    <label for="targeta_bancaria" class="block text-lg font-medium text-gray-100">Tarjeta bancaria</label>
-                    <input type="text" name="targeta_bancaria" id="targeta_bancaria" 
-                            class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
-                            value="{{ old('targeta_bancaria') }}" required>
-                </div>
-
                 <!-- Fecha de nacimiento -->
                 <div class="mb-4">
                     <label for="data_naixement" class="block text-lg font-medium text-gray-100">Data de naixement</label>
