@@ -68,14 +68,14 @@
 
                 <!-- Password -->
                 <div>
-                    <x-input-label for="password" :value="__('Contrasneya')" />
+                    <x-input-label for="password" :value="__('Contrasenya')" />
                     <x-text-input id="password" class="block mt-1 w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" type="password" name="password" required autocomplete="new-password" />
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
                 <!-- Confirm Password -->
                 <div>
-                    <x-input-label for="password_confirmation" :value="__('Confirma la contrasneya')" />
+                    <x-input-label for="password_confirmation" :value="__('Confirma la contrasenya')" />
                     <x-text-input id="password_confirmation" class="block mt-1 w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" type="password" name="password_confirmation" required autocomplete="new-password" />
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                 </div>
