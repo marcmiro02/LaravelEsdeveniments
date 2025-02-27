@@ -27,6 +27,7 @@
                                     {{ $empresa->nom_empresa }}
                                 </option>
                             @endforeach
+                            <option value="CLIENT" {{ $empresaId == 'CLIENT' ? 'selected' : '' }}>Clients</option>
                         </select>
                         <button type="submit" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
@@ -65,7 +66,7 @@
                                     <!-- Ver Usuario -->
                                     <a href="{{ route('users.show', $user->id) }}" 
                                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                                        Ver
+                                        Veure
                                     </a>
                                 </td>
                             </tr>

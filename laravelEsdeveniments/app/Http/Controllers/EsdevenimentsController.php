@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Horari;
 use Illuminate\Support\Facades\Session;
+use App\Models\Reserves;
+use App\Models\Qr;
 
 class EsdevenimentsController extends Controller
 {
@@ -152,10 +154,16 @@ class EsdevenimentsController extends Controller
     public function destroy($id_esdeveniment)
     {
         $esdeveniment = Esdeveniments::findOrFail($id_esdeveniment);
+
+        Reserves::where('id_esdeveniment', $esdeveniment->id_esdeveniment)->delete();
+        Horari::where('id_esdeveniment', $esdeveniment->id_esdeveniment)->delete();
+        Qr::where('id_esdeveniment', $esdeveniment->id_esdeveniment)->delete();
+
         $esdeveniment->delete();
 
         return redirect()->route('esdeveniments.index')->with('success', 'Esdeveniment eliminat correctament');
     }
+
 
     public function mostrarEsdeveniment($id_esdeveniment)
     {

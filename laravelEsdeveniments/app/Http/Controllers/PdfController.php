@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Empreses;
 use Illuminate\Support\Facades\Session;
 use App\Models\Reserves;
+use App\Models\Horari;
+use App\Models\Sales;
 
 class PdfController extends Controller
 {
@@ -40,6 +42,7 @@ class PdfController extends Controller
 
         $empresa = $esdeveniment->empresa;
         $entradasData = [];
+
         $qrCodes = []; // Guardaremos los QR generados aquí
 
         foreach ($selectedEntrades as $entrada) {
@@ -123,6 +126,7 @@ class PdfController extends Controller
         if (!$esdeveniment) {
             throw new \Exception('El evento no existe.');
         }
+        $sala = Sales::find($esdeveniment->id_sala); // ✅ CORRECTO (esto devuelve un objeto Sales)
 
         $imprimir_ticket = session()->has('imprimir_ticket');
         $dataTriada = session('fecha_seleccionada');
@@ -135,6 +139,29 @@ class PdfController extends Controller
 
         $empresa = $esdeveniment->empresa;
         $entradasData = [];
+
+        // ✅ Buscamos el horario del evento en la fecha seleccionada
+        $horari = Horari::where('id_esdeveniment', $esdeveniment->id_esdeveniment)
+                        ->where('data_hora', $dataTriada)
+                        ->first();
+
+        if ($horari) {
+            // ✅ Aseguramos que no es NULL antes de incrementar
+            if (is_null($horari->entrades_comprades)) {
+                $horari->entrades_comprades = 0;
+            }
+
+            // ✅ Incrementamos en 1 las entradas compradas
+            $horari->increment('entrades_comprades', $quantitat);
+            // ✅ Recuperamos el aforo de la sala
+            $aforament = $sala->aforament;
+
+            // ✅ Si hemos alcanzado el aforo máximo, eliminamos el horario
+            if ($horari->entrades_comprades >= $aforament) {
+                $horari->delete();
+            }
+        }
+
         $qrCodes = []; // Guardaremos los QR generados aquí
 
         for ($i = 0; $i < $quantitat; $i++) {       

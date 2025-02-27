@@ -14,6 +14,7 @@ class Horari extends Model
 
     protected $fillable = [
         'data_hora',
+        'entrades_comprades',
         'id_esdeveniment',
     ];
 

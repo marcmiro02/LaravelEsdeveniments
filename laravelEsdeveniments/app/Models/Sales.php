@@ -76,4 +76,9 @@ class Sales extends Model
     {
         return $this->belongsTo(TipusSala::class, 'id_tipus_sala');
     }
+
+    public function esdeveniments()
+    {
+        return $this->hasMany(Esdeveniments::class, 'id_sala', 'id_sala');
+    }
 }

@@ -134,14 +134,22 @@ class SalesController extends Controller
 
     public function destroy($id_sala)
     {
+        $sala = Sales::findOrFail($id_sala);
+    
+        // Verificar si la sala tiene eventos asociados
+        if ($sala->esdeveniments()->exists()) {
+            return redirect()->route('sales.index')->with('error', 'No es pot eliminar la sala perquè té esdeveniments associats.');
+        }
+    
         // Eliminar los asientos de la sala
         Seients::where('id_sala', $id_sala)->delete();
-
+    
         // Eliminar la sala
-        Sales::destroy($id_sala);
-
+        $sala->delete();
+    
         return redirect()->route('sales.index')->with('success', 'Sala i seients eliminats correctament.');
     }
+    
 
     public function escollirSala()
     {

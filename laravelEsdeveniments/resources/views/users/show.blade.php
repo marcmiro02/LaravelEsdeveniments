@@ -69,7 +69,7 @@
             <div class="mt-8 flex justify-center space-x-4">
                 <!-- Volver Button -->
                 <a href="{{ route('users.index') }}" class="inline-flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded transition-colors">
-                    Volver
+                    Tornar
                 </a>
 
                 <!-- Editar Button -->

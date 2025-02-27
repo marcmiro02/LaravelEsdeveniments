@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Str;
+use App\Models\PdfModel;
+use App\Models\Qr;
+use App\Models\Reserves;
 
 class UsersController extends Controller
 {
@@ -18,49 +21,66 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
+        // Comprobamos si el usuario tiene el permiso 'isSuperadmin'
         if (Auth::user()->can('isSuperadmin')) {
-            $empresas = Empreses::all();
-            $empresaId = $request->get('empresa_id', null);
-    
-            if ($empresaId) {
-                $users = User::with(['role', 'empresa'])->where('id_empresa', $empresaId)->get();
+            $empresaId = $request->get('empresa_id', null); // Obtener el filtro de empresa
+
+            // Si se selecciona CLIENT, filtrar por usuarios con rol CLIENT (id_rol = 5)
+            if ($empresaId === 'CLIENT') {
+                $users = User::with(['role', 'empresa'])
+                            ->where('rol', 5) // Filtrar por rol CLIENT
+                            ->get();
             } else {
-                $users = User::with(['role', 'empresa'])->get();
+                // Si no es CLIENT, se filtra por empresa_id normal
+                $users = User::with(['role', 'empresa'])
+                            ->when($empresaId, function ($query, $empresaId) {
+                                return $query->where('id_empresa', $empresaId);
+                            })
+                            ->get();
             }
-    
+
+            // Obtener todas las empresas para mostrarlas en el filtro
+            $empresas = Empreses::all();
+            
             return view('users.index', compact('users', 'empresas', 'empresaId'));
         }
-    
+
+        // Caso de 'isAdmin'
         if (Auth::user()->can('isAdmin')) {
             $empresaId = Auth::user()->id_empresa;
             $users = User::with(['role', 'empresa'])
                 ->where('id_empresa', $empresaId)
-                ->whereIn('rol_id', [3, 4])
+                ->whereIn('rol_id', [3, 4]) // Limitar solo a los roles 3 y 4
                 ->get();
-    
+
             return view('users.index', compact('users', 'empresaId'));
         }
-    
+
+        // Caso de 'isSubadmin'
         if (Auth::user()->can('isSubadmin')) {
             $empresaId = Auth::user()->id_empresa;
             $users = User::with(['role', 'empresa'])
                 ->where('id_empresa', $empresaId)
-                ->where('rol_id', 4)
+                ->where('rol_id', 4) // Limitar a rol 4
                 ->get();
-    
+
             return view('users.index', compact('users', 'empresaId'));
         }
 
+        // Caso de 'isUser'
         if (Auth::user()->can('isUser')) {
             $users = User::with(['role'])
                 ->where('id', Auth::id())
                 ->get();
-    
+
             return view('users.index', compact('users'));
         }
-    
+
+        // Si el usuario no tiene permisos
         return redirect()->route('inici')->with('error', 'No tienes permisos para acceder a esta página.');
     }
+
+
 
     /**
      * Show the form for creating a new user.
@@ -97,7 +117,6 @@ class UsersController extends Controller
             'nom_usuari' => ['required', 'string', 'max:255', 'unique:users,nom_usuari'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'adreca' => ['required', 'string', 'max:255'],
-            'targeta_bancaria' => ['required', 'string', 'max:255'],
             'data_naixement' => ['required', 'date'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
@@ -131,7 +150,6 @@ class UsersController extends Controller
             'nom_usuari' => $validatedData['nom_usuari'],
             'email' => $validatedData['email'],
             'adreca' => $validatedData['adreca'],
-            'targeta_bancaria' => $validatedData['targeta_bancaria'],
             'data_naixement' => $validatedData['data_naixement'],
             'password' => Hash::make($validatedData['password']),
             'rol' => $validatedData['rol_id'],
@@ -248,10 +266,11 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        // Si es Subadmin, solo puede eliminar usuarios de su empresa
-        if (Auth::user()->can('isSubadmin') && $user->id_empresa != Auth::user()->id_empresa) {
-            return redirect()->route('users.index')->with('error', 'No tienes permisos para eliminar este usuario.');
-        }
+        Qr::where('id_usuari', $user->id)->delete();
+        
+        PdfModel::where('id_usuari', $user->id)->delete();
+
+        Reserves::where('id_usuari', $user->id)->delete();
     
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');

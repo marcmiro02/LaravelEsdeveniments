@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empreses;
+use App\Models\Esdeveniments;
 use Illuminate\Http\Request;
+use App\Models\Sales;
+use App\Models\User;
 
 class EmpresesController extends Controller
 {
@@ -114,6 +117,11 @@ class EmpresesController extends Controller
     public function destroy($id_empresa)
     {
         $empresa = Empreses::findOrFail($id_empresa);
+        
+        Esdeveniments::where('id_empresa', $empresa->id_empresa)->delete();
+        Sales::where('id_empresa', $empresa->id_empresa)->delete();
+        User::where('id_empresa', $empresa->id_empresa)->delete();
+        
         $empresa->delete();
 
         return redirect()->route('empreses.index')->with('success', 'Empresa eliminada correctamente');
