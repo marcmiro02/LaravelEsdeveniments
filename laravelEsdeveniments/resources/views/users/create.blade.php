@@ -97,11 +97,11 @@
                     <select name="rol_id" id="rol_id" 
                             class="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-600 text-white" 
                             required>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id_rol }}" {{ old('rol_id') == $role->id_rol ? 'selected' : '' }}>
-                                {{ $role->nom_rol }}
-                            </option>
-                        @endforeach
+                            @for ($i = 0; $i <= 1; $i++)
+                                <option value="{{ $roles[$i]->id_rol }}" {{ old('rol_id') == $roles[$i]->id_rol ? 'selected' : '' }}>
+                                    {{ $roles[$i]->nom_rol }}
+                                </option>
+                            @endfor
                     </select>
                 </div>
 
