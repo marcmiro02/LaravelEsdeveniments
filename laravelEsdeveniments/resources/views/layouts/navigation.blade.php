@@ -9,7 +9,7 @@
                 <!-- Logo -->   
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('welcome') }}">
-                        <img src="{{ asset('img/Logos/Fosc_sense_bg.png') }}" alt="" class="block h-9 w-auto fill-current text-gray-200">  
+                        <img src="{{ asset('img/Logos/Fosc_sense_bg.png') }}" alt="" class="block w-auto fill-current text-gray-200" style="height: 5rem;">                    
                     </a>
                 </div>
                 
