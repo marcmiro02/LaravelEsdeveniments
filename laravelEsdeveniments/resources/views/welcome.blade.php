@@ -5,7 +5,7 @@
             <div class="relative bg-gradient-to-r from-black to-gray-900 overflow-hidden shadow-2xl sm:rounded-lg mb-8 h-96 lg:h-[700px] xl:h-[900px] 2xl:h-[1000px]">
                 <img src="{{ asset('img/Banners/OSCURIDAD.png') }}" alt="Banner" class="absolute inset-0 w-full h-full object-cover object-bottom">
                 <div class="absolute bottom-0 left-0 p-8 text-white bg-black bg-opacity-10">
-                    <h1 class="text-5xl font-bold mb-4">DAM EVENT PLANNER</h1>
+                    <h1 class="text-5xl font-bold mb-4">DAM ESDEVENIMENTS</h1>
                     <p class="text-xl mb-4">Descobreix els millors esdeveniments i empreses organitzadores</p>
                 </div>
             </div>
